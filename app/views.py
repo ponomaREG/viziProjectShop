@@ -46,7 +46,7 @@ def loginUser():
     
     userID = User.validateUserAndReturnUserID(email,password)
     if(userID != -1):
-        flask_login.login_user(load_user(userID))
+        flask_login.login_user(load_user(userID),remember=True)
         return jsonify({'status':1})
     else:
         return jsonify({'status':0})
