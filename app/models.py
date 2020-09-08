@@ -1,5 +1,5 @@
 from app import db
-from utils import md5helper
+from utils import md5helper, sqlQueryHelper
 
 
 
@@ -60,23 +60,15 @@ class User:
 class Product:
 
     @staticmethod
-    def getAllProfuctsFilteredByRate(page):
+    def __prepareProducts(cursor):
+        allRows = cursor.fetchall()
         result = {}
-        try:
-            cursor = db.execute('select * from Товар order by rate DESC LIMIT 5 OFFSET {};'.format(5*page))
-            allRows = cursor.fetchall()
-        except:
-            result['status'] = 1
-            result['message'] = "Runtime error while executing sql query"
+        if(len(allRows) == 0):
+            result['status'] = 2
+            result['message'] = "Empty data"
             result['data'] = []
             cursor.close()
             return result
-        # if(len(allRows) == 0):
-        #     result['status'] = 2
-        #     result['message'] = "Empty data"
-        #     result['data'] = []
-        #     cursor.close()
-        #     return result
         result['data'] = []
         for rw in allRows:
             rowDict = {
@@ -90,6 +82,31 @@ class Product:
         result['message'] = "OK"
         cursor.close()
         return result
+
+    @staticmethod
+    def getAllProfuctsFilteredByRate(page):
+        result = {}
+        try:
+            cursor = db.execute('select * from Товар order by rate DESC LIMIT 5 OFFSET {};'.format(5*page))
+        except:
+            result['status'] = 1
+            result['message'] = "Runtime error while executing sql query"
+            result['data'] = []
+            cursor.close()
+            return result
+        return Product.__prepareProducts(cursor)
+
+    @staticmethod
+    def getAllProductsFilteredByTags(tags):
+        result = {}
+        try:
+            cursor = db.execute(sqlQueryHelper.buildSqlQueryByTags('select * from Товар',tags))
+        except:
+            result['status'] = 1
+            result['message'] = "Runtime error while executing sql query"
+            result['data'] = []
+            return result
+        return Product.__prepareProducts(cursor)
 
 
 # class Cart:
