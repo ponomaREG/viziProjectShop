@@ -13,7 +13,10 @@ def test():
 
 @app.route('/user',methods=["GET"])
 def userTEsT():
-    return jsonify(User.getInfo(1))
+    if(flask_login.current_user is not None) and (flask_login.current_user.is_authenticated):
+        return jsonify(User.getInfo(flask_login.current_user.userID))
+    else:
+        return jsonify({"status":"Not authenticated"})
 
 @app.route('/books/<int:page>',methods=["GET"])
 def testBooks(page):
@@ -61,7 +64,3 @@ def logoutUser():
 @flask_login.login_required
 def checkEmail():
     return jsonify({'email':flask_login.current_user.email})
-
-        
-
-#TODO:Flask login

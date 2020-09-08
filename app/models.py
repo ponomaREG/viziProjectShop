@@ -205,7 +205,5 @@ class Cart:
         result['message'] = 'OK'
         return result
 
-# class Cart:
-#     pass
 
         
