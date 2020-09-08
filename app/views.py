@@ -12,4 +12,7 @@ def test():
 def userTEsT():
     return jsonify(User.getInfo(1))
 
+@app.route('/books/<int:page>',methods=["GET"])
+def testBooks(page):
+    return jsonify(Product.getAllProfuctsFilteredByRate(page))
 #TODO:Flask login

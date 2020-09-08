@@ -24,6 +24,7 @@ class User:
             'password_hash':row[6]}
         result['status'] = 0
         result['message'] = 'OK'
+        cursor.close()
         return result
 
     @staticmethod
@@ -54,5 +55,46 @@ class User:
             return result
         result['status'] = 0
         result['message'] = 'OK'
-        return result    
+        return result
+
+class Product:
+
+    @staticmethod
+    def getAllProfuctsFilteredByRate(page):
+        result = {}
+        try:
+            cursor = db.execute('select * from Товар order by rate DESC LIMIT 5 OFFSET {};'.format(5*page))
+            allRows = cursor.fetchall()
+        except:
+            result['status'] = 1
+            result['message'] = "Runtime error while executing sql query"
+            result['data'] = []
+            cursor.close()
+            return result
+        # if(len(allRows) == 0):
+        #     result['status'] = 2
+        #     result['message'] = "Empty data"
+        #     result['data'] = []
+        #     cursor.close()
+        #     return result
+        result['data'] = []
+        for rw in allRows:
+            rowDict = {
+                'title':rw[1],'desc':rw[2],
+                'rate':rw[7],'cost':rw[4],
+                'quantity':rw[5],'tags':rw[6]
+                }
+            result['data'].append(rowDict)
+        result['status'] = 0
+        result['count'] = len(allRows)
+        result['message'] = "OK"
+        cursor.close()
+        return result
+
+
+# class Cart:
+#     pass
+# class Product:
+#     pass
+
         
