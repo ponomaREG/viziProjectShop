@@ -1,6 +1,9 @@
 from flask import jsonify, request
 from app import app
+from app import login_manager
 from app.models import *
+import flask_login
+
 
 
 
@@ -27,6 +30,38 @@ def testBooksByTags():
 @app.route('/cart',methods=['GET'])
 def testGetCartOfUser():
     user = request.args.get('userID',default=1,type=int)
-    print(user)
     return jsonify(Cart.getCartOfUser(user))
+
+@app.route('/flasklogin/check',methods = ['GET'])
+def checkFlaskLogin():
+    if flask_login.current_user.is_authenticated:
+        return jsonify({'status':1})
+    else:
+        return jsonify({'status':0})
+
+@app.route('/flasklogin/login',methods=['GET'])
+def loginUser():
+    email = request.args.get('email',type=str)
+    password = request.args.get('password',type=str)
+    
+    userID = User.validateUserAndReturnUserID(email,password)
+    if(userID != -1):
+        flask_login.login_user(load_user(userID))
+        return jsonify({'status':1})
+    else:
+        return jsonify({'status':0})
+
+@app.route('/flasklogin/logout',methods = ["GET"])
+@flask_login.login_required
+def logoutUser():
+    flask_login.logout_user()
+    return jsonify({'status':1})
+
+@app.route('/flasklogin/email',methods = ['GET'])
+@flask_login.login_required
+def checkEmail():
+    return jsonify({'email':flask_login.current_user.email})
+
+        
+
 #TODO:Flask login

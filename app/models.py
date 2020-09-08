@@ -1,10 +1,43 @@
 from app import db
 from utils import md5helper, sqlQueryHelper
+from app import login_manager
+from flask_login import UserMixin
 
 
 
+@login_manager.user_loader
+def load_user(userID):
+    cursor = db.execute('select * from Покупатель where id = {};'.format(userID))
+    allRows = cursor.fetchall()
+    if(len(allRows) == 0):
+        return None
+    row = allRows[0]
+    return User(row[0],row[4],row[6])
 
-class User:
+class User(UserMixin):
+    userID = -1
+    email = None
+    password_hash = None
+
+    def __init__(self,userID,email,password_hash):
+        self.userID = userID
+        self.email = email
+        self.password_hash = password_hash
+    
+
+    def is_active(self):
+        return True
+    
+    def is_authenticated(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.userID)
+
+
     
     @staticmethod
     def getInfo(value,column='id'):
@@ -56,6 +89,31 @@ class User:
         result['status'] = 0
         result['message'] = 'OK'
         return result
+    
+    @staticmethod
+    def validateUser(email,password):
+        cursor = db.execute(
+            'select * from Покупатель where email \
+             = "{}" and password_hash = "{}"'.format(email,md5helper.ecnrypt(password))
+            )
+        allRows = cursor.fetchall()
+        if(len(allRows) == 0):
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def validateUserAndReturnUserID(email,password):
+        cursor = db.execute(
+            'select * from Покупатель where email \
+             = "{}" and password_hash = "{}"'.format(email,md5helper.ecnrypt(password))
+            )
+        allRows = cursor.fetchall()
+        if(len(allRows) == 0):
+            return -1
+        else:
+            return allRows[0][0]
+    
 
 class Product:
 
