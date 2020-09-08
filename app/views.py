@@ -23,4 +23,10 @@ def testBooksByTags():
     if(len(tagsArray) == 0):
         return jsonify({'status':3,'message':'Empty array of tags(','data':[]})
     return jsonify(Product.getAllProductsFilteredByTags(tagsArray))
+
+@app.route('/cart',methods=['GET'])
+def testGetCartOfUser():
+    user = request.args.get('userID',default=1,type=int)
+    print(user)
+    return jsonify(Cart.getCartOfUser(user))
 #TODO:Flask login

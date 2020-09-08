@@ -109,9 +109,45 @@ class Product:
         return Product.__prepareProducts(cursor)
 
 
+class Cart:
+
+
+    @staticmethod
+    def getCartOfUser(userID):
+        result = {}
+        try:
+            cursor = db.execute(
+                'select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale \
+                as "Total" from Товар as pr \
+                inner join Корзина as cart on pr.id == product_id \
+                and user_id = {};'.format(userID))
+            allRows = cursor.fetchall()
+        except:
+            result['status'] = 1
+            result['message'] = 'SQL runtime error'
+            result['data'] = []
+            cursor.close()
+            return result
+        if(len(allRows) == 0):
+            result['status'] = 2
+            result['message'] = 'Empty cart'
+            result['data'] = []
+            cursor.close()
+            return result
+        result['data'] = []
+        result['count'] = len(allRows)
+        for row in allRows:
+            result['data'].append(
+                {
+                    'total':row[3],'count':row[2],
+                    'cost':row[1],'title':row[0]
+                }
+            )
+        result['status'] = 0
+        result['message'] = 'OK'
+        return result
+
 # class Cart:
-#     pass
-# class Product:
 #     pass
 
         
