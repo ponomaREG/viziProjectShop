@@ -229,6 +229,20 @@ class Cart:
     @staticmethod
     def addItemInCartOfUser(userID,productID):
         result = {}
+        
+        cursor = db.execute(
+            'select * from Товар where id = {};'.format(productID)
+        )
+        row = cursor.fetchone()
+        if(row is None):
+            result['status'] = 7
+            result['message'] = 'No such product'
+            return result
+        if(row[5] == 0):
+            result['status'] = 8
+            result['message'] = 'Zero quantity of called product'
+            return result
+        quantityOfProduct = row[5]
         try:
             cursor = db.execute(
                 'select * from Корзина where product_id = {} and user_id = {};'.format(productID,userID)
@@ -237,7 +251,12 @@ class Cart:
             result['status'] = 1
             result['message'] = 'SQL Runtime error'
             return result
-        if(len(cursor.fetchall()) > 0):
+        row = cursor.fetchone()
+        if(row is not None):
+            if(row[2] >= quantityOfProduct):
+                result['status'] = 6
+                result['message'] = 'Not enough products'
+                return result
             try:
                 db.execute(
                     'update Корзина set count = count + 1 \
