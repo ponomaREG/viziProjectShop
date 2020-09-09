@@ -1,7 +1,11 @@
 from flask import jsonify, request
 from app import app
 from app import login_manager
-from app.models import *
+from app.model import *
+from app.models.User import User
+from app.models.Product import Product
+from app.models.Cart import Cart
+from app.models.Order import Order
 import flask_login
 
 
