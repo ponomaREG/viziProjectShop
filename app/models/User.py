@@ -27,6 +27,28 @@ class User(UserMixin):
         return str(self.userID)
 
 
+    @staticmethod
+    def registerUser(email,password,last_name,first_name,birthdate):
+        result = {}
+        cursor = db.execute('select * from Покупатель where email="{}";'.format(email))
+        if(cursor.fetchone() is not None):
+            result['status'] = 1
+            result['message'] = 'User with same email already exists'
+            cursor.close()
+            return result
+        cursor.close()
+        cursor = db.execute(
+            'insert into Покупатель("email","last_name","first_name","birthdate","password_hash") \
+                values("{}","{}","{}","{}","{}")'.format(
+                    email,last_name,first_name,birthdate,md5helper.ecnrypt(password))
+                )
+        db.commit()
+        result["status"] = 0
+        result["message"] = "OK"
+        result["userID"] = cursor.lastrowid
+        cursor.close()
+        return result
+        
     
     @staticmethod
     def getInfo(value,column='id'):

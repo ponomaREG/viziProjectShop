@@ -60,6 +60,26 @@ def loginUser():
     else:
         return jsonify({'status':0})
 
+@app.route('/flasklogin/register',methods=["GET"])
+def registerUser():
+    if flask_login.current_user.is_authenticated:
+        return jsonify({'status':2,'message':"you already auth"})
+    else:
+        email = request.args.get('email')
+        password = request.args.get('password')
+        birthdate = request.args.get('birthdate')
+        first_name = request.args.get('first_name')
+        last_name= request.args.get('last_name')
+
+        result = {}
+        resultRegisterOperation = User.registerUser(email,password,last_name,first_name,birthdate)
+        if(resultRegisterOperation["status"] == 1):
+            return jsonify(resultRegisterOperation)
+        flask_login.login_user(load_user(resultRegisterOperation["userID"]),remember=True)
+        result['status'] = 0
+        result['message'] = 'OK'
+        return jsonify(result)
+
 @app.route('/flasklogin/logout',methods = ["GET"])
 @flask_login.login_required
 def logoutUser():
