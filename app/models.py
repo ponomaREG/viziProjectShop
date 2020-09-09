@@ -171,6 +171,19 @@ class Cart:
 
 
     @staticmethod
+    def countTotalCostOfUser(userID):
+        cursor = db.execute('select pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
+                as "Total" from Товар as pr \
+                inner join Корзина as cart on pr.id == product_id \
+                and user_id = {};'.format(userID))
+        allRows = cursor.fetchall()
+        total = 0.0
+        for row in allRows:
+            total += row[2]
+        cursor.close()
+        return total
+
+    @staticmethod
     def removeItemInCartOfUser(userID,productID):
         result = {}
         try:
@@ -292,9 +305,14 @@ class Cart:
 
 class Order:
     #TODO CHECK COUNT / ADDRESSES!!!!!!!
+
+
+
+
     @staticmethod
     def addNewOrder(userID):
         result = {}
+        
         try:
             cursor = db.execute('select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
                 as "Total" from Товар as pr \
@@ -312,12 +330,25 @@ class Order:
             result['message'] = 'SQL runtime error'
             result['data'] = []
             return result
-        total = 0.0
+
+        
+        try:
+            lastrowid = db.execute('insert into Заказ("user_id","status","total") values({},{},{});'.format(
+                    userID,
+                    0,
+                    Cart.countTotalCostOfUser(userID))).lastrowid
+            db.commit()
+        except:
+            result['status'] = 4
+            result['message'] = 'SQL runtime error'
+            result['data'] = []
+            cursor.close()
+            return result
+        
         for row in allRows:
-            total += row[3]
             try:
                 db.execute('insert into Забронированная_книга \
-                    values({},{},{})'.format(userID,row[4],row[2]))
+                    values({},{},{})'.format(userID,row[4],row[2],lastrowid))
                 #db.commit()
                 db.execute('delete from Корзина where \
                     user_id = {} and product_id = {};'.format(userID,row[4]))
@@ -328,18 +359,7 @@ class Order:
                 result['data'] = []
                 cursor.close()
                 return result  
-        try:
-            db.execute('insert into Заказ("user_id","status","total") values({},{},{});'.format(
-                    userID,
-                    0,
-                    total))
-            db.commit()
-        except:
-            result['status'] = 4
-            result['message'] = 'SQL runtime error'
-            result['data'] = []
-            cursor.close()
-            return result
+
         result['status'] = 0
         result['message'] = 'OK'
         result['data'] = []
