@@ -171,6 +171,88 @@ class Cart:
 
 
     @staticmethod
+    def removeItemInCartOfUser(userID,productID):
+        result = {}
+        try:
+            cursor = db.execute(
+                'select * from Корзина where product_id = {} and user_id = {};'.format(productID,userID)
+            )
+        except:
+            result['status'] = 1
+            result['message'] = 'SQL Runtime error'
+            return result
+        allRows = cursor.fetchall()
+        if(len(allRows)>0):
+            if(allRows[0][2]>1):
+                try:
+                    db.execute('update Корзина set count = count - 1 where \
+                    product_id = {} and user_id = {};'.format(productID,userID))
+                    db.commit()
+                    cursor.close()
+                except:
+                    result['status'] = 2
+                    result['message'] = 'SQL Runtime error'
+                    return result
+                result['status'] = 0
+                result['message'] = 'OK'
+                return result
+            try:
+                db.execute('delete from Корзина where \
+                    product_id = {} and user_id = {};'.format(productID,userID))
+                db.commit()
+                cursor.close()
+            except:
+                result['status'] = 3
+                result['message'] = 'SQL Runtime error'
+                return result
+            result['status'] = 0
+            result['message'] = 'OK'
+            return result
+        result['status'] = 4
+        result['message'] = 'Not found item'
+        return result
+
+
+    @staticmethod
+    def addItemInCartOfUser(userID,productID):
+        result = {}
+        try:
+            cursor = db.execute(
+                'select * from Корзина where product_id = {} and user_id = {};'.format(productID,userID)
+            )
+        except:
+            result['status'] = 1
+            result['message'] = 'SQL Runtime error'
+            return result
+        if(len(cursor.fetchall()) > 0):
+            try:
+                db.execute(
+                    'update Корзина set count = count + 1 \
+                    where product_id = {} and user_id = {}'.format(productID,userID))
+                db.commit()
+                cursor.close()
+            except:
+                result['status'] = 2
+                result['message'] = 'SQL Runtime error'
+                return result
+            result['status'] = 0
+            result['message'] = 'Inc count'
+            return result
+        try:
+            db.execute('insert into Корзина values({},{},1)'.format(userID,productID))
+            db.commit()
+            cursor.close()
+        except:
+            result['status'] = 3
+            result['message'] = 'SQL Runtime error'
+            return result
+        result['status'] = 0
+        result['message'] = 'Add new values'
+        return result
+        
+
+
+    @staticmethod
     def getCartOfUser(userID):
         result = {}
         try:

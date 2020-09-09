@@ -32,8 +32,10 @@ def testBooksByTags():
 
 @app.route('/cart',methods=['GET'])
 def testGetCartOfUser():
-    user = request.args.get('userID',default=1,type=int)
-    return jsonify(Cart.getCartOfUser(user))
+    if(flask_login.current_user is not None) and (flask_login.current_user.is_authenticated):
+        return jsonify(Cart.getCartOfUser(flask_login.current_user.userID))
+    else:
+        return jsonify({'message':'No auth'})
 
 @app.route('/flasklogin/check',methods = ['GET'])
 def checkFlaskLogin():
@@ -64,3 +66,22 @@ def logoutUser():
 @flask_login.login_required
 def checkEmail():
     return jsonify({'email':flask_login.current_user.email})
+
+
+@app.route('/cart/add',methods=['GET'])
+def addItemsInCart():
+    productID = request.args.get('product',type=int)
+    if(flask_login.current_user.is_authenticated):
+        return jsonify(Cart.addItemInCartOfUser(flask_login.current_user.userID,productID))
+    else:
+        return jsonify({'message':'Not auth'})
+
+@app.route('/cart/remove')
+def removeItemInCart():
+    productID = request.args.get('product',type=int)
+    if(flask_login.current_user.is_authenticated):
+        return jsonify(Cart.removeItemInCartOfUser(flask_login.current_user.userID,productID))
+    else:
+        return jsonify({'message':'Not auth'})
+    
+    
