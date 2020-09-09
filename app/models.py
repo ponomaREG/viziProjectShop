@@ -1,5 +1,5 @@
 from app import db
-from utils import md5helper, sqlQueryHelper
+from utils import md5helper, sqlQueryHelper, dateHelper
 from app import login_manager
 from flask_login import UserMixin
 
@@ -257,7 +257,7 @@ class Cart:
         result = {}
         try:
             cursor = db.execute(
-                'select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale \
+                'select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
                 as "Total" from Товар as pr \
                 inner join Корзина as cart on pr.id == product_id \
                 and user_id = {};'.format(userID))
@@ -276,6 +276,7 @@ class Cart:
             return result
         result['data'] = []
         result['count'] = len(allRows)
+        totalCost = 0.0
         for row in allRows:
             result['data'].append(
                 {
@@ -283,9 +284,65 @@ class Cart:
                     'cost':row[1],'title':row[0]
                 }
             )
+            totalCost += row[3]
         result['status'] = 0
         result['message'] = 'OK'
+        result['totalCost'] = totalCost
         return result
 
-
+class Order:
+    #TODO CHECK COUNT / ADDRESSES!!!!!!!
+    @staticmethod
+    def addNewOrder(userID):
+        result = {}
+        try:
+            cursor = db.execute('select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
+                as "Total" from Товар as pr \
+                inner join Корзина as cart on pr.id == product_id \
+                and user_id = {};'.format(userID))
+            allRows = cursor.fetchall()
+            if(len(allRows) == 0):
+                result['status'] = 2
+                result['message'] = 'Empty cart'
+                result['data'] = []
+                cursor.close()
+                return result
+        except:
+            result['status'] = 1
+            result['message'] = 'SQL runtime error'
+            result['data'] = []
+            return result
+        total = 0.0
+        for row in allRows:
+            total += row[3]
+            try:
+                db.execute('insert into Забронированная_книга \
+                    values({},{},{})'.format(userID,row[4],row[2]))
+                #db.commit()
+                db.execute('delete from Корзина where \
+                    user_id = {} and product_id = {};'.format(userID,row[4]))
+                db.commit()
+            except:
+                result['status'] = 3
+                result['message'] = 'SQL runtime error'
+                result['data'] = []
+                cursor.close()
+                return result  
+        try:
+            db.execute('insert into Заказ("user_id","status","total") values({},{},{});'.format(
+                    userID,
+                    0,
+                    total))
+            db.commit()
+        except:
+            result['status'] = 4
+            result['message'] = 'SQL runtime error'
+            result['data'] = []
+            cursor.close()
+            return result
+        result['status'] = 0
+        result['message'] = 'OK'
+        result['data'] = []
+        cursor.close()
+        return result
         

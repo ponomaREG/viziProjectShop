@@ -68,6 +68,13 @@ def checkEmail():
     return jsonify({'email':flask_login.current_user.email})
 
 
+@app.route('/order/add',methods=['GET'])
+def addNewOrder():
+    if(flask_login.current_user.is_authenticated):
+        return jsonify(Order.addNewOrder(flask_login.current_user.userID))
+    else:
+        return jsonify({'message':'Not auth'})
+
 @app.route('/cart/add',methods=['GET'])
 def addItemsInCart():
     productID = request.args.get('product',type=int)
@@ -80,7 +87,8 @@ def addItemsInCart():
 def removeItemInCart():
     productID = request.args.get('product',type=int)
     if(flask_login.current_user.is_authenticated):
-        return jsonify(Cart.removeItemInCartOfUser(flask_login.current_user.userID,productID))
+        return jsonify(Cart.removeItemInCartOfUser
+        (flask_login.current_user.userID,productID))
     else:
         return jsonify({'message':'Not auth'})
     
