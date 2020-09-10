@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, redirect, url_for, render_template
 from app import app
 from app import login_manager
 from app.model import *
@@ -9,111 +9,54 @@ from app.models.Order import Order
 import flask_login
 
 
-
-
-@app.route('/',methods=["GET"])
-def test():
-    return jsonify({"status":"1"})
-
-@app.route('/user',methods=["GET"])
-def userTEsT():
-    if(flask_login.current_user is not None) and (flask_login.current_user.is_authenticated):
-        return jsonify(User.getInfo(flask_login.current_user.userID))
-    else:
-        return jsonify({"status":"Not authenticated"})
-
-@app.route('/books/<int:page>',methods=["GET"])
-def testBooks(page):
-    return jsonify(Product.getAllProfuctsFilteredByRate(page))
-
-@app.route('/books/tags',methods=["GET"])
-def testBooksByTags():
-    tags = request.args.get('tags',type=str)
-    tagsArray = tags.split(',')
-    if(len(tagsArray) == 0):
-        return jsonify({'status':3,'message':'Empty array of tags(','data':[]})
-    return jsonify(Product.getAllProductsFilteredByTags(tagsArray))
-
-@app.route('/cart',methods=['GET'])
-def testGetCartOfUser():
-    if(flask_login.current_user is not None) and (flask_login.current_user.is_authenticated):
-        return jsonify(Cart.getCartOfUser(flask_login.current_user.userID))
-    else:
-        return jsonify({'message':'No auth'})
-
-@app.route('/flasklogin/check',methods = ['GET'])
-def checkFlaskLogin():
-    if flask_login.current_user.is_authenticated:
-        return jsonify({'status':1})
-    else:
-        return jsonify({'status':0})
-
-@app.route('/flasklogin/login',methods=['GET'])
-def loginUser():
-    email = request.args.get('email',type=str)
-    password = request.args.get('password',type=str)
     
-    userID = User.validateUserAndReturnUserID(email,password)
-    if(userID != -1):
-        flask_login.login_user(load_user(userID),remember=True)
-        return jsonify({'status':1})
-    else:
-        return jsonify({'status':0})
+    
 
-@app.route('/flasklogin/register',methods=["GET"])
-def registerUser():
-    if flask_login.current_user.is_authenticated:
-        return jsonify({'status':2,'message':"you already auth"})
+@app.route("/login",methods = ['GET','POST'])
+def loginUser():
+    if(flask_login.current_user.is_authenticated):
+        return redirect(url_for('userInfo'))
+    if(request.method == 'POST'):
+        email = request.form.get('email',type=str)
+        password = request.form.get('password',type=str)
+        userID = User.validateUserAndReturnUserID(email,password)
+        if(userID != -1):
+            flask_login.login_user(load_user(userID),remember=True)
+            return redirect(url_for('userInfo'))
+        else:
+            return render_template('login.html',error = "Not found")
     else:
-        email = request.args.get('email')
-        password = request.args.get('password')
-        birthdate = request.args.get('birthdate')
-        first_name = request.args.get('first_name')
-        last_name= request.args.get('last_name')
+        return render_template('login.html')
 
-        result = {}
-        resultRegisterOperation = User.registerUser(email,password,last_name,first_name,birthdate)
+@app.route('/registration',methods=['GET','POST'])
+def registrationUser():
+    if(flask_login.current_user.is_authenticated):
+        return redirect(url_for('userInfo'))
+    if(request.method == 'POST'):
+        email = request.form.get('email',type=str)
+        pswd = request.form.get('pswd',type=str)
+        pswd2 = request.form.get('pswd2',type=str)
+        first_name = request.form.get('firstName',type=str)
+        last_name = request.form.get('lastName',type=str)
+        birthdate = request.form.get('birthDate')
+        if(pswd != pswd2):
+            return render_template('registration.html',error = 'Password mismatch')
+        resultRegisterOperation = User.registerUser(email,pswd,last_name,first_name,birthdate)
         if(resultRegisterOperation["status"] == 1):
-            return jsonify(resultRegisterOperation)
+            return render_template('registration.html',error = 'User already exists')
         flask_login.login_user(load_user(resultRegisterOperation["userID"]),remember=True)
-        result['status'] = 0
-        result['message'] = 'OK'
-        return jsonify(result)
+        return redirect(url_for('userInfo'))
+    else:
+        return render_template('registration.html')
 
-@app.route('/flasklogin/logout',methods = ["GET"])
+
+@app.route('/user',methods=['GET'])
+@flask_login.login_required
+def userInfo():
+    return render_template('check.html',user = flask_login.current_user)
+
+@app.route('/logout',methods=['GET'])
 @flask_login.login_required
 def logoutUser():
     flask_login.logout_user()
-    return jsonify({'status':1})
-
-@app.route('/flasklogin/email',methods = ['GET'])
-@flask_login.login_required
-def checkEmail():
-    return jsonify({'email':flask_login.current_user.email})
-
-
-@app.route('/order/add',methods=['GET'])
-def addNewOrder():
-    if(flask_login.current_user.is_authenticated):
-        return jsonify(Order.addNewOrder(flask_login.current_user.userID))
-    else:
-        return jsonify({'message':'Not auth'})
-
-@app.route('/cart/add',methods=['GET'])
-def addItemsInCart():
-    productID = request.args.get('product',type=int)
-    if(flask_login.current_user.is_authenticated):
-        return jsonify(Cart.addItemInCartOfUser(flask_login.current_user.userID,productID))
-    else:
-        return jsonify({'message':'Not auth'})
-
-@app.route('/cart/remove')
-def removeItemInCart():
-    productID = request.args.get('product',type=int)
-    if(flask_login.current_user.is_authenticated):
-        return jsonify(Cart.removeItemInCartOfUser
-        (flask_login.current_user.userID,productID))
-    else:
-        return jsonify({'message':'Not auth'})
-    
-    
+    return redirect(url_for('loginUser'))
