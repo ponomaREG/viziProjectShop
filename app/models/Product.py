@@ -4,6 +4,14 @@ from utils import sqlQueryHelper
 
 class Product:
 
+    title = None
+    cost_sale = -1.0
+    quantity = -1
+    def __init__(self,title,cost_sale,quantity):
+        self.title = title
+        self.cost_sale = cost_sale
+        self.quantity = quantity
+
     @staticmethod
     def __prepareProducts(cursor):
         allRows = cursor.fetchall()
@@ -28,11 +36,33 @@ class Product:
         cursor.close()
         return result
 
+
     @staticmethod
-    def getAllProfuctsFilteredByRate(page):
+    def getQuantityOfRowsInTable():
         result = {}
         try:
-            cursor = db.execute('select * from Товар order by rate DESC LIMIT 5 OFFSET {};'.format(5*page))
+            cursor = db.execute(
+                'select * from Товар;'
+                )
+        except:
+            result['status'] = 1
+            result['message'] = "Runtime error while executing sql query"
+            result['data'] = []
+            cursor.close()
+            return result
+        result['status'] = 0
+        result['message'] = 'OK'
+        result['count'] = len(cursor.fetchall())
+        cursor.close()
+        return result
+
+    @staticmethod
+    def getAllProfuctsFilteredByRate(page,offset):
+        result = {}
+        try:
+            cursor = db.execute(
+                'select * from Товар order by rate DESC LIMIT {} OFFSET {};'
+                .format(offset,offset*(page-1)))
         except:
             result['status'] = 1
             result['message'] = "Runtime error while executing sql query"

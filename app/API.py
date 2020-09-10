@@ -21,11 +21,11 @@ def userInfoAPI():
     else:
         return jsonify({"status":"Not authenticated"})
 
-@app.route('/books/<int:page>',methods=["GET"])
+@app.route('/api/books/<int:page>',methods=["GET"])
 def testBooks(page):
     return jsonify(Product.getAllProfuctsFilteredByRate(page))
 
-@app.route('/books/tags',methods=["GET"])
+@app.route('/api/books/tags',methods=["GET"])
 def testBooksByTags():
     tags = request.args.get('tags',type=str)
     tagsArray = tags.split(',')
