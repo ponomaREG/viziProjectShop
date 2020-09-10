@@ -1,9 +1,9 @@
 Course project of a store selling books.
 <br>
-Framework: <h3>Flask</h3>
+Framework: Flask
 <br>
-Authentication and authorization: <h3>flask-login</h3>
+Authentication and authorization: flask-login
 <br>
-Database:<h3>SQLite</h3>
+Database:>SQLite
 <br>
 API methods are available for connecting a separate front-end server
