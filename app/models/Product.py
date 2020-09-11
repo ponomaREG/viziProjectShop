@@ -1,5 +1,6 @@
 from app import db
 from utils import sqlQueryHelper
+from utils import tagsHelper
 
 
 class Product:
@@ -82,3 +83,23 @@ class Product:
             result['data'] = []
             return result
         return Product.__prepareProducts(cursor)
+
+    @staticmethod
+    def getAvailableTags():
+        result = {}
+        cursor = db.execute('select tags from Товар;')
+        allRows = cursor.fetchall()
+        cursor.close()
+        if(len(allRows) == 0):
+            result['status'] = 2
+            result['message'] = 'Empty data'
+            return result
+        tagsArrUNIQUE = []
+        for row in allRows:
+            tags = row[0]
+            tagsArr = tagsHelper.makeTagsStrToArray(tags)
+            tagsArrUNIQUE = list(set(tagsArrUNIQUE + tagsArr))
+        result['status'] = 0
+        result['message'] = 'OK'
+        result['data'] = tagsArrUNIQUE
+        return result

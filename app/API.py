@@ -90,6 +90,9 @@ def logoutUserAPI():
 def checkEmail():
     return jsonify({'email':flask_login.current_user.email})
 
+@app.route('/api/tags')
+def getAvailableTagsAPI():
+    return jsonify(Product.getAvailableTags())
 
 @app.route('/order/add',methods=['GET'])
 def addNewOrder():

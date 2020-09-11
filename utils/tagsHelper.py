@@ -10,3 +10,7 @@ def makeArrayOfTagsToStr(tags):
             tagsStr += tag
             tagsStr += ','
         return tagsStr
+
+def makeTagsStrToArray(tagStr):
+    return tagStr.split(',')
+
