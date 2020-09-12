@@ -23,7 +23,7 @@ def userInfoAPI():
 
 @app.route('/api/books/<int:page>',methods=["GET"])
 def testBooks(page):
-    return jsonify(Product.getAllProfuctsFilteredByRate(page))
+    return jsonify(Product.getAllProfuctsFilteredByRate(page,5))
 
 @app.route('/api/books/tags',methods=["GET"])
 def testBooksByTags():
