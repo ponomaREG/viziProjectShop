@@ -1,5 +1,6 @@
 from app import db
 from utils import sqlQueryHelper
+from utils import imageHelper
 from utils import tagsHelper
 
 
@@ -29,7 +30,8 @@ class Product:
             rowDict = {
                 'title':rw[1],'desc':rw[2],
                 'rate':rw[7],'cost':rw[4],
-                'quantity':rw[5],'tags':rw[6],'id':rw[0]
+                'quantity':rw[5],'tags':rw[6],
+                'id':rw[0],'imageLink':imageHelper.makeFullPathToImage(rw[8])
                 }
             result['data'].append(rowDict)
         result['status'] = 0
