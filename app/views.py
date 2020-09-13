@@ -61,13 +61,16 @@ def logoutUser():
     flask_login.logout_user()
     return redirect(url_for('loginUser'))
 
-
 @app.route('/books/<int:page>',methods=["GET"])
 def showBooks(page):
     if(page < 1):
         return render_template('books.html',error = 'Incorrect page',user = flask_login.current_user)
     OFFSET = 12
-    result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
+    userQuerySearch = request.args.get('q',default=None,type=str)
+    if(userQuerySearch is None):
+        result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
+    else:
+        result = Product.getAllProfuctsFilteredByQuery(userQuerySearch,page,OFFSET)
     if(result['status'] == 0):
         countOfRows = Product.getQuantityOfRowsInTable()['count']
         countOfPages = countOfRows // OFFSET
@@ -75,9 +78,17 @@ def showBooks(page):
             countOfPages += 1
         return render_template(
             'books.html', #TODO : IF STATUS
-            products = result['data'],countOfPages = countOfPages,user = flask_login.current_user)
+            products = result['data'],
+            countOfPages = countOfPages,
+            user = flask_login.current_user,
+            q = userQuerySearch)
     elif(result['status'] == 2):
-        return render_template('books.html',error = 'Empty data',user = flask_login.current_user)
+        return render_template('books.html',
+        error = 'Empty data',
+        user = flask_login.current_user,
+        q = userQuerySearch)
     elif(result['status'] == 1):
-        return render_template('books.html',error = 'SQL runtime error',user = flask_login.current_user)
+        return render_template('books.html',
+        error = 'SQL runtime error',
+        user = flask_login.current_user)
     return render_template('books.html',error='ERROR',user = flask_login.current_user)

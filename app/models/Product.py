@@ -76,6 +76,21 @@ class Product:
         return Product.__prepareProducts(cursor)
 
     @staticmethod
+    def getAllProfuctsFilteredByQuery(query,page,offset):
+        result = {}
+        try:
+            cursor = db.execute(
+                'select * from Товар where title like "%{}%" order by rate DESC LIMIT {} OFFSET {};'
+                .format(query,offset,offset*(page-1)))
+        except:
+            result['status'] = 1
+            result['message'] = "Runtime error while executing sql query"
+            result['data'] = []
+            cursor.close()
+            return result
+        return Product.__prepareProducts(cursor)
+
+    @staticmethod
     def getAllProductsFilteredByTags(tags):
         result = {}
         try:
