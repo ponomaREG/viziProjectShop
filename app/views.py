@@ -92,3 +92,20 @@ def showBooks(page):
         error = 'SQL runtime error',
         user = flask_login.current_user)
     return render_template('books.html',error='ERROR',user = flask_login.current_user)
+
+
+@app.route('/books/details/<int:productID>')
+def showDetailsOfBook(productID):
+    details = Product.getDetailsOfProduct(productID)
+    print(details)
+    if(details['status'] == 0):
+        return render_template('shop-details.html',
+        user = flask_login.current_user,details = details['data'][0])
+    elif(details['status'] == 2):
+        return render_template('shop-details.html',
+        user = flask_login.current_user,error = details['message'])
+    elif(details['status'] == 1): #TODO: ERROR
+        return render_template('shop-details.html',
+        user = flask_login.current_user,error = details['message'])
+    else:
+        return redirect(url_for('showBooks',page=1))

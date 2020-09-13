@@ -121,3 +121,31 @@ class Product:
         result['message'] = 'OK'
         result['data'] = tagsArrUNIQUE
         return result
+
+
+    @staticmethod
+    def getDetailsOfProduct(productID):
+        result = {}
+        try:
+            cursor = db.execute('select * from Товар where id = {};'.format(productID))
+        except:
+            result['status'] = 1
+            result['message'] = 'SQL Runtime error'
+            result['data'] = []
+            cursor.close()
+            return result
+        rw = cursor.fetchone()
+        cursor.close()
+        if(rw is None):
+            result['status'] = 2
+            result['message'] = 'Empty data'
+            result['data'] = []
+            cursor.close()
+            return result
+        else:
+            result['status'] = 0
+            result['message'] = 'OK'
+            result['data'] = [{'id':rw[0],'title':rw[1],
+            'desc':rw[2],'cost':rw[4],'quantity':rw[5],
+            'tags':rw[6],'rate':rw[7],'imageLink':imageHelper.makeFullPathToImage(rw[8])}]
+            return result

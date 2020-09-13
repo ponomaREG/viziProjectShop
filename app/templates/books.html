@@ -102,6 +102,7 @@
 </div>
 </div>
 </div>
+
 <div class="container">
 <div class="row">
 <div class="col-lg-3">
@@ -182,15 +183,16 @@
   {% if products %}
   {%  for product in products%}
   <div class="col-lg-3 col-md-4 col-sm-6 mix">
-    <div class="featured__item">
+    <div class="featured__item" >
     <div class="featured__item__pic set-bg" 
     data-setbg="{{ url_for('static',filename = product.imageLink)}}">
+    <a href="{{url_for('showDetailsOfBook',productID=product.id)}}"></a>
     <ul class="featured__item__pic__hover">
     <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
     </ul>
     </div>
     <div class="featured__item__text">
-    <h6><a href="#">{{product.title}}</a></h6>
+    <h6><a href="{{ url_for('showDetailsOfBook',productID=product.id) }}">{{product.title}}</a></h6>
     <h5>{{product.cost}}P</h5>
     </div>
     </div>

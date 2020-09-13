@@ -117,3 +117,8 @@ def removeItemInCart():
         (flask_login.current_user.userID,productID))
     else:
         return jsonify({'message':'Not auth'})
+
+
+@app.route('/api/books/detail/<int:productID>')
+def showDetailsOfBookAPI(productID):
+    return Product.getDetailsOfProduct(productID)
