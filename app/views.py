@@ -22,7 +22,7 @@ def loginUser():
         userID = User.validateUserAndReturnUserID(email,password)
         if(userID != -1):
             flask_login.login_user(load_user(userID),remember=True)
-            return redirect(url_for('userInfo'))
+            return redirect(url_for('showBooks',page=1))
         else:
             return render_template('login.html',error = "Not found")
     else:
@@ -66,7 +66,7 @@ def logoutUser():
 def showBooks(page):
     if(page < 1):
         return render_template('books.html',error = 'Incorrect page',user = flask_login.current_user)
-    OFFSET = 5
+    OFFSET = 12
     result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
     if(result['status'] == 0):
         countOfRows = Product.getQuantityOfRowsInTable()['count']
@@ -75,7 +75,7 @@ def showBooks(page):
             countOfPages += 1
         return render_template(
             'books.html', #TODO : IF STATUS
-            books = result['data'],countOfPages = countOfPages,user = flask_login.current_user)
+            products = result['data'],countOfPages = countOfPages,user = flask_login.current_user)
     elif(result['status'] == 2):
         return render_template('books.html',error = 'Empty data',user = flask_login.current_user)
     elif(result['status'] == 1):

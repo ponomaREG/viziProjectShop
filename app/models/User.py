@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from app import db
+from app.models.Cart import Cart
 from utils import md5helper
 
 
@@ -25,6 +26,13 @@ class User(UserMixin):
 
     def get_id(self):
         return str(self.userID)
+
+    def getTotalCostOfCart(self):
+        return Cart.countTotalCostOfUser(self.userID)
+
+    def getCountOfItemsInCart(self):
+        #TODO:CHECK STATUS
+        return Cart.getCountOfItemsInCart(self.userID)["data"][0]
 
 
     @staticmethod

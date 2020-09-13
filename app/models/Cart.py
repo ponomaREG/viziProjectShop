@@ -116,6 +116,27 @@ class Cart:
         return result
         
 
+    @staticmethod
+    def getCountOfItemsInCart(userID):
+        result = {}
+        try:
+            cursor = db.execute(
+                'select COUNT(*) from Корзина where user_id = {};'.format(userID))
+            count = cursor.fetchone()
+            cursor.close()
+            result['status'] = 0
+            result['message'] = 'OK'
+            result['data'] = list(count)
+            print(result['data'])
+            return result
+        except:
+            result['status'] = 1
+            result['message'] = 'SQL runtime error'
+            result['data'] = []
+            print(result['data'])
+            cursor.close()
+            return result
+
 
     @staticmethod
     def getCartOfUser(userID):

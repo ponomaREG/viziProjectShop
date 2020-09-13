@@ -4,11 +4,12 @@ from utils import tagsHelper
 
 
 class Product:
-
+    id = -1
     title = None
     cost_sale = -1.0
     quantity = -1
-    def __init__(self,title,cost_sale,quantity):
+    def __init__(self,title,cost_sale,quantity,id):
+        self.id = id
         self.title = title
         self.cost_sale = cost_sale
         self.quantity = quantity
@@ -28,7 +29,7 @@ class Product:
             rowDict = {
                 'title':rw[1],'desc':rw[2],
                 'rate':rw[7],'cost':rw[4],
-                'quantity':rw[5],'tags':rw[6]
+                'quantity':rw[5],'tags':rw[6],'id':rw[0]
                 }
             result['data'].append(rowDict)
         result['status'] = 0
