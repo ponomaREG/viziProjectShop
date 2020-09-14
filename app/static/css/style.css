@@ -187,6 +187,18 @@ ol {
 	border: none;
 }
 
+.page-btn {
+	font-size: 14px;
+	color: #ffffff;
+	font-weight: 800;
+	text-transform: uppercase;
+	display: inline-block;
+	padding: 13px 30px 12px;
+	background: #7fad39;
+	border: none;
+	border-radius: 50%;
+}
+
 /* Preloder */
 
 #preloder {
@@ -1676,6 +1688,11 @@ ol {
 	min-width: 100%;
 }
 
+.product__details__pic__item__small img {
+	min-width: 30%;
+	max-width: 350px;
+}
+
 .product__details__pic__slider img {
 	cursor: pointer;
 }
@@ -1863,6 +1880,24 @@ ol {
 
 .product__details__tab .product__details__tab__desc p {
 	color: #666666;
+}
+
+
+
+
+/*---------------------
+  PAGE INDICATORS
+-----------------------*/
+
+.pageindicator {
+	font-size: 14px;
+	color: #ffffff;
+	font-weight: 800;
+	text-transform: uppercase;
+	display: inline-block;
+	padding: 13px 30px 12px;
+	background: #7fad39;
+	border: none;
 }
 
 /*---------------------
