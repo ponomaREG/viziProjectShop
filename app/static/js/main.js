@@ -220,5 +220,47 @@
         }
         $button.parent().find('input').val(newVal);
     });
+    
+
+    var shoppingCart = $('.shopping__cart')
+    shoppingCart.on('click', function(){
+        var productID = $(this).attr('id')
+        console.log('click')
+        $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+            console.log(data)
+            if(data.status == 120){
+                window.location.replace('/login')
+            }
+            else if(data.status == 0){
+                var delay = 2000
+                $('#msg_pop').dialog({
+                    autoOpen: false, 
+                    draggable: false,
+                    resizable: false,
+                    height: 200,
+                    width: 300,
+                    modal: false,
+                    position:{my:"right bottom",at:"right bottom-300", of:window}
+                
+                });
+                $('#msg_pop').dialog('open')
+                setTimeout("$('#msg_pop').dialog('close');$('#msg_pop').empty()",delay)
+
+            }
+            else{
+                alert(data.message)
+            }
+
+        })
+    })
+
+    // var shoppingCart = $('.fa fa-shopping-cart');
+    // shoppingCart.css('visibility','hidden')
+    // shoppingCart.on('click',function(){
+        
+    // })
+
+    var shoppingCart = $('.a')
+    
 
 })(jQuery);

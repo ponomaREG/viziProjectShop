@@ -3,7 +3,7 @@ from app import db
 class Cart:
 
 
-    @staticmethod
+    @staticmethod #TODO: REFACTOR
     def countTotalCostOfUser(userID):
         cursor = db.execute('select pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
                 as "Total" from Товар as pr \
@@ -121,7 +121,7 @@ class Cart:
         result = {}
         try:
             cursor = db.execute(
-                'select COUNT(*) from Корзина where user_id = {};'.format(userID))
+                'select SUM(count) from Корзина where user_id = {};'.format(userID))
             count = cursor.fetchone()
             cursor.close()
             result['status'] = 0

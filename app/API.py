@@ -33,12 +33,12 @@ def testBooksByTags():
         return jsonify({'status':3,'message':'Empty array of tags(','data':[]})
     return jsonify(Product.getAllProductsFilteredByTags(tagsArray))
 
-@app.route('/cart',methods=['GET'])
+@app.route('/api/cart',methods=['GET'])
 def testGetCartOfUser():
     if(flask_login.current_user is not None) and (flask_login.current_user.is_authenticated):
         return jsonify(Cart.getCartOfUser(flask_login.current_user.userID))
     else:
-        return jsonify({'message':'No auth'})
+        return jsonify({'message':'No auth','status':120})
 
 @app.route('/flasklogin/check',methods = ['GET'])
 def checkFlaskLogin():
@@ -99,15 +99,15 @@ def addNewOrder():
     if(flask_login.current_user.is_authenticated):
         return jsonify(Order.addNewOrder(flask_login.current_user.userID))
     else:
-        return jsonify({'message':'Not auth'})
+        return jsonify({'message':'Not auth','status':120})
 
-@app.route('/cart/add',methods=['GET'])
+@app.route('/api/cart/add',methods=['GET'])
 def addItemsInCart():
     productID = request.args.get('product',type=int)
     if(flask_login.current_user.is_authenticated):
         return jsonify(Cart.addItemInCartOfUser(flask_login.current_user.userID,productID))
     else:
-        return jsonify({'message':'Not auth'})
+        return jsonify({'message':'Not auth','status':120})
 
 @app.route('/cart/remove')
 def removeItemInCart():
@@ -116,7 +116,7 @@ def removeItemInCart():
         return jsonify(Cart.removeItemInCartOfUser
         (flask_login.current_user.userID,productID))
     else:
-        return jsonify({'message':'Not auth'})
+        return jsonify({'message':'Not auth','status':120})
 
 
 @app.route('/api/books/detail/<int:productID>')
