@@ -12,7 +12,7 @@ import flask_login
 
     
     
-@app.route("/",method=['GET'])
+@app.route("/",methods=['GET'])
 def main():
     return redirect(url_for('showBooks',page=1))
 
