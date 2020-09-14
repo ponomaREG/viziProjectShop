@@ -12,6 +12,9 @@ import flask_login
 
     
     
+@app.route("/",method=['GET'])
+def main():
+    return redirect(url_for('showBooks',page=1))
 
 @app.route("/login",methods = ['GET','POST'])
 def loginUser():
