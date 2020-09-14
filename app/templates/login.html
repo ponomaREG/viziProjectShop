@@ -1,108 +1,138 @@
 <!DOCTYPE html> 
 <html> 
-<style> 
-    /*set border to the form*/ 
-      
-    form { 
-        border: 3px solid #f1f1f1; 
-    } 
-    /*assign full width inputs*/ 
-      
-    input[type=text], 
-    input[type=password] { 
-        width: 100%; 
-        padding: 12px 20px; 
-        margin: 8px 0; 
-        display: inline-block; 
-        border: 1px solid #ccc; 
-        box-sizing: border-box; 
-    } 
-    /*set a style for the buttons*/ 
-      
-    button { 
-        background-color: #4CAF50; 
-        color: white; 
-        padding: 14px 20px; 
-        margin: 8px 0; 
-        border: none; 
-        cursor: pointer; 
-        width: 100%; 
-    } 
-    /* set a hover effect for the button*/ 
-      
-    button:hover { 
-        opacity: 0.8; 
-    } 
-    /*set extra style for the cancel button*/ 
-      
-    .cancelbtn { 
-        width: auto; 
-        padding: 10px 18px; 
-        background-color: #f44336; 
-    } 
-    /*centre the display image inside the container*/ 
-      
-    .imgcontainer { 
-        text-align: center; 
-        margin: 24px 0 12px 0; 
-    } 
-    /*set image properties*/ 
-      
-    img.avatar { 
-        width: 40%; 
-        border-radius: 50%; 
-    } 
-    /*set padding to the container*/ 
-      
-    .container { 
-        padding: 16px; 
-    } 
-    /*set the forgot password text*/ 
-      
-    span.psw { 
-        float: right; 
-        padding-top: 16px; 
-    } 
-    /*set styles for span and cancel button on small screens*/ 
-      
-    @media screen and (max-width: 300px) { 
-        span.psw { 
-            display: block; 
-            float: none; 
-        } 
-        .cancelbtn { 
-            width: 100%; 
-        } 
-    } 
-</style> 
+<style type="text/css">
+    @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 35px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+
+.form .back {
+    color: #b3b3b3;
+    font-size: 13px;
+    text-align: start;
+}
+
+.form .back a {
+  color: #3ec9a6;
+  text-decoration: none;
+}
+
+.form .error {
+    margin: 1px 0 3px;
+    color: #EF3B3A;
+    font-size: 15px;
+}
+.form .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.container:before, .container:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.container .info {
+  margin: 50px auto;
+  text-align: center;
+}
+.container .info h1 {
+  margin: 0 0 15px;
+  padding: 0;
+  font-size: 36px;
+  font-weight: 300;
+  color: #1a1a1a;
+}
+.container .info span {
+  color: #4d4d4d;
+  font-size: 12px;
+}
+.container .info span a {
+  color: #000000;
+  text-decoration: none;
+}
+.container .info span .fa {
+  color: #EF3B3A;
+}
+body {
+  background: #76b852; /* fallback for old browsers */
+  background: -webkit-linear-gradient(right, #76b852, #8DC26F);
+  background: -moz-linear-gradient(right, #76b852, #8DC26F);
+  background: -o-linear-gradient(right, #76b852, #8DC26F);
+  background: linear-gradient(to left, #76b852, #8DC26F);
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;      
+}
+</style>
   
 <body> 
   
-    <h2>Login Form</h2> 
-    <!--Step 1 : Adding HTML-->
-    <form action="/login" method="POST"> 
-        <div class="imgcontainer"> 
-        </div> 
-  
-        <div class="container"> 
-            {% if error %}
-            <p>{{error}}</p>
+    <div class="login-page">
+        <div class="form">
+            <p class="back"><a href="{{ url_for('showBooks',page=1) }}">&larr;Back to main</a></p>
+          <form action="{{ url_for('loginUser')}}" class="login-form" method="POST">
+            <input type="text" placeholder="Email" name="email"/>
+            <input type="password" placeholder="Password" name="password"/>
+            {% if error%}
+                <p class="error">Error:{{ error }}</p>
             {% endif %}
-            <label><b>Username</b></label> 
-            <input type="text" placeholder="Enter Email" name="email" required> 
-  
-            <label><b>Password</b></label> 
-            <input type="password" placeholder="Enter Password" name="password" required> 
-  
-            <button type="submit">Login</button> 
-        </div> 
-        
-    </form> 
-    <div class="container" style="background-color:#f1f1f1">
-        <form action="/registration" method="GET">
-            <button type="submit">Registration</button></form>
-    </div> 
+            <button type="submit">Login</button>
+            <p class="message">Not registered? <a href="{{ url_for('registrationUser') }}">Create an account</a></p>
+          </form>
+        </div>
+      </div>
   
 </body> 
-  
 </html> 
