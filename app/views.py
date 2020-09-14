@@ -6,6 +6,7 @@ from app.models.User import User
 from app.models.Product import Product
 from app.models.Cart import Cart
 from app.models.Order import Order
+from utils import pageHelper
 import flask_login
 
 
@@ -76,12 +77,14 @@ def showBooks(page):
         countOfPages = countOfRows // OFFSET
         if(countOfRows % OFFSET > 0):
             countOfPages += 1
+        countOfPagesRange = pageHelper.getRangeOfPages(countOfPages,page)
         return render_template(
             'books.html', #TODO : IF STATUS
             products = result['data'],
-            countOfPages = countOfPages,
+            countOfPagesRange = countOfPagesRange,
             user = flask_login.current_user,
-            q = userQuerySearch)
+            q = userQuerySearch,
+            currentPage=page)
     elif(result['status'] == 2):
         return render_template('books.html',
         error = 'Empty data',

@@ -22,6 +22,40 @@
 </head>
 <body>
 
+  <style type="text/css">
+    .page-btn {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+    display: inline-block;
+    padding: 3px 10px 3px;
+    background: #78b818;
+    border: none;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 50%;
+  }
+
+  .page-btn-active {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 3px 10px 3px;
+    background: #49681c;
+    border: none;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 50%;
+  }
+  </style>
+
 <div id="preloder">
 <div class="loader"></div>
 </div>
@@ -205,17 +239,18 @@
 </div>
 </div>
 
+{% if countOfPagesRange %}
 <div class="justify-content-center row">
-    <a class="site-btn" href="index.htm">Item 1</a>
-    <a href="page2.htm">Item 2</a>
-    <a href="page3.htm">Item 3</a>
-    <a href="page4.htm">Item 4</a>
-    <a href="page5.htm">Item 5</a>
-    <a href="page6.htm">Item 6</a>
-    <a href="page7.htm">Item 7</a>
+{% for page in countOfPagesRange%}
+    {% if page == currentPage%}
+    <a class="page-btn-active" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+    {% else%}
+    <a class="page-btn" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+    {% endif %}
+{% endfor %}
 </div>
 
-
+{% endif %}
 
 <footer class="footer spad">
 <div class="container">
