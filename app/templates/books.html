@@ -230,7 +230,7 @@
 <div class="header__cart">
 <ul>
   {% if user.is_authenticated%}
-<li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span>{{user.getCountOfItemsInCart()}}</span></a></li>
+<li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span></a></li>
   {% else %}
 <li><a href="{{url_for('loginUser')}}"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
   {% endif %}

@@ -124,9 +124,17 @@ class Cart:
                 'select SUM(count) from Корзина where user_id = {};'.format(userID))
             count = cursor.fetchone()
             cursor.close()
+            print(count[0])
+            if(count[0] is None):
+                print('NONNE')
+                result['status'] = 2
+                result['message'] = 'Empty cart'
+                result['data'] = [0]
+                print(result['data'])
+                return result
             result['status'] = 0
             result['message'] = 'OK'
-            result['data'] = list(count)
+            result['data'] = [count[0]]
             print(result['data'])
             return result
         except:

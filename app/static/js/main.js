@@ -237,7 +237,8 @@
                 document.getElementById('msg_pop').className += ' fadeIn';
                 document.getElementById('msg_pop').style.display='block';
                 setTimeout("document.getElementById('msg_pop').className -= ' fadeIn';$('#msg_pop').fadeOut('slow');", delay);
-
+                var indicator = $('#fa__fa-shopping-bag__indicator__quantity')
+                indicator.text(parseInt(indicator.text()) + 1)
             }
             else{
                 alert(data.message)

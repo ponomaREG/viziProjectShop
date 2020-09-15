@@ -103,7 +103,6 @@ def showBooks(page):
 @app.route('/books/details/<int:productID>')
 def showDetailsOfBook(productID):
     details = Product.getDetailsOfProduct(productID)
-    print(details)
     if(details['status'] == 0):
         return render_template('shop-details.html',
         user = flask_login.current_user,details = details['data'][0])
