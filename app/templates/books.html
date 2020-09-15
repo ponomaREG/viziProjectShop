@@ -138,15 +138,27 @@
 </div>
 <div class="humberger__menu__cart">
 <ul>
-<li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-<li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+<li>
+  <a href="/cart">
+  <i class="fa fa-shopping-bag"></i>
+  {% if user.is_authenticated %}
+   <span id="humberg__fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span>
+   {% else %}
+   <span id="fa__fa-shopping-bag__indicator__quantity">0</span>
+   {% endif %}
+</a>
+</li>
 </ul>
-<div class="header__cart__price">item: <span>$150.00</span></div>
+{% if user.is_authenticated %}
+<div class="header__cart__price">Item: <span id="humberg__header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
+{% else %}
+<div class="header__cart__price">Item: <span>0.0P</span></div>
+{% endif %}
 </div>
 <div class="humberger__menu__widget">
   {% if user.is_authenticated %}
   <div class="header__top__right__auth">
-    <a href="url_for('userInfo')"><i class="fa fa-user"></i> Profile</a>
+    <a href="{{url_for('userInfo')}}"><i class="fa fa-user"></i> Profile</a>
     </div>
   {% else %}
 <div class="header__top__right__auth">
@@ -154,29 +166,7 @@
 </div>
   {% endif %}
 </div>
-<nav class="humberger__menu__nav mobile-menu">
-<ul>
-<li class="active"><a href="./index.html">Home</a></li>
-<li><a href="./shop-grid.html">Shop</a></li>
-<li><a href="#">Pages</a>
-<ul class="header__menu__dropdown">
-<li><a href="./shop-details.html">Shop Details</a></li>
-<li><a href="./shoping-cart.html">Shoping Cart</a></li>
-<li><a href="./checkout.html">Check Out</a></li>
-<li><a href="./blog-details.html">Blog Details</a></li>
-</ul>
-</li>
-<li><a href="./blog.html">Blog</a></li>
-<li><a href="./contact.html">Contact</a></li>
-</ul>
-</nav>
 <div id="mobile-menu-wrap"></div>
-<div class="header__top__right__social">
-<a href="#"><i class="fa fa-facebook"></i></a>
-<a href="#"><i class="fa fa-twitter"></i></a>
-<a href="#"><i class="fa fa-linkedin"></i></a>
-<a href="#"><i class="fa fa-pinterest-p"></i></a>
-</div>
 <div class="humberger__menu__contact">
 <ul>
 <li>Free Shipping for all Order of $99</li>
@@ -236,9 +226,9 @@
   {% endif %}
 </ul>
   {% if user.is_authenticated %}
-<div class="header__cart__price">item: <span>{{user.getTotalCostOfCart()}}P</span></div>
+<div class="header__cart__price">item: <span id="header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
   {% else %}
-<div class="header__cart__price">item: <span>0P</span></div>
+<div class="header__cart__price">item: <span>0.0P</span></div>
 
   {% endif %}
 </div>
@@ -293,7 +283,7 @@
     data-setbg="{{ url_for('static',filename = product.imageLink)}}">
     <a href="{{url_for('showDetailsOfBook',productID=product.id)}}"></a>
     <ul class="featured__item__pic__hover">
-    <li><a class="shopping__cart" id={{product.id}}><i class="fa fa-shopping-cart"></i></a></li>
+    <li><a class="shopping__cart" id={{product.id}} value={{product.cost}}><i class="fa fa-shopping-cart"></i></a></li>
     </ul>
     </div>
     <div class="featured__item__text">

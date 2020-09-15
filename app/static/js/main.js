@@ -225,6 +225,7 @@
     var shoppingCart = $('.shopping__cart')
     shoppingCart.on('click', function(){
         var productID = $(this).attr('id')
+        var cost = $(this).attr('value')
         console.log('click')
         $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
             console.log(data)
@@ -239,6 +240,15 @@
                 setTimeout("document.getElementById('msg_pop').className -= ' fadeIn';$('#msg_pop').fadeOut('slow');", delay);
                 var indicator = $('#fa__fa-shopping-bag__indicator__quantity')
                 indicator.text(parseInt(indicator.text()) + 1)
+                var indicator_humberg = $('#humberg__fa__fa-shopping-bag__indicator__quantity')
+                indicator_humberg.text(parseInt(indicator_humberg.text()) + 1)
+                var indicatorTotalCost = $('#header__cart__price__totalCost')
+                console.log(parseFloat(indicatorTotalCost.text()))
+                console.log(indicatorTotalCost.text())
+                indicatorTotalCost.text((parseFloat(indicatorTotalCost.text()) + parseFloat(cost)).toFixed(1) + "P");
+                var indicatorTotalCostHumberg = $('#humberg__header__cart__price__totalCost')
+                indicatorTotalCostHumberg.text((parseFloat(indicatorTotalCostHumberg.text()) + parseFloat(cost)).toFixed(1)+"P");
+
             }
             else{
                 alert(data.message)
