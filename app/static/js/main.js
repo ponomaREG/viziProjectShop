@@ -232,19 +232,11 @@
                 window.location.replace('/login')
             }
             else if(data.status == 0){
-                var delay = 2000
-                $('#msg_pop').dialog({
-                    autoOpen: false, 
-                    draggable: false,
-                    resizable: false,
-                    height: 200,
-                    width: 300,
-                    modal: false,
-                    position:{my:"right bottom",at:"right bottom-300", of:window}
-                
-                });
-                $('#msg_pop').dialog('open')
-                setTimeout("$('#msg_pop').dialog('close');$('#msg_pop').empty()",delay)
+                var delay = 2000;
+                document.getElementById('msg_pop').style.className -= ' fadeOut'
+                document.getElementById('msg_pop').className += ' fadeIn';
+                document.getElementById('msg_pop').style.display='block';
+                setTimeout("document.getElementById('msg_pop').className -= ' fadeIn';$('#msg_pop').fadeOut('slow');", delay);
 
             }
             else{

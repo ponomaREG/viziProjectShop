@@ -3464,7 +3464,7 @@ ol {
 	background-color: rgba(0, 0, 0, 0.7);
 	display: block;
 	position: fixed;
-	z-index: 99999;
+	z-index: 9998;
 	bottom: 30px;
 	left:30px;
 	width: 250px;
@@ -3515,6 +3515,7 @@ ol {
 		-webkit-animation-timing-function: ease-in-out;     
 		 visibility: visible !important; 
 	}
+	
 	  
 	@keyframes fadeIn {
 		0% {transform: scale(0.7);opacity: 0.5;}
@@ -3523,6 +3524,28 @@ ol {
 	}
 	  
 	@-webkit-keyframes fadeIn {
+		0% {-webkit-transform: scale(0.7);opacity: 0.5;}
+		80% {-webkit-transform: scale(1.1);}       
+		100% {-webkit-transform: scale(1);opacity: 1;}       
+	}
+
+	.fadeOut{
+		animation-name: fadeOut;
+		-webkit-animation-name: fadeOut; 
+		 animation-duration: 0.4s; 
+		-webkit-animation-duration: 0.4s;
+		 animation-timing-function: ease-in-out; 
+		-webkit-animation-timing-function: ease-in-out;     
+		 visibility: visible !important; 
+	}
+
+	@keyframes fadeOut {
+		0% {transform: scale(0.7);opacity: 0.5;}
+		80% {transform: scale(1.1);}       
+		100% {transform: scale(1);opacity: 1;}       
+	}
+	  
+	@-webkit-keyframes fadeOut {
 		0% {-webkit-transform: scale(0.7);opacity: 0.5;}
 		80% {-webkit-transform: scale(1.1);}       
 		100% {-webkit-transform: scale(1);opacity: 1;}       

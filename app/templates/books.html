@@ -54,6 +54,77 @@
     margin-right: 5px;
     border-radius: 50%;
   }
+
+  #msg_pop{
+	background-color:#7fad39;
+	display: none;
+	position: fixed;
+	z-index: 9998;
+	bottom: 30px;
+	left:30px;
+	width: 250px;
+	padding: 10px;
+	color:#fff;
+	font-size:13px;
+	line-height:13px;
+	-webkit-box-shadow: 0px 0px 10px #999;
+	-moz-box-shadow: 0px 0px 10px #999;
+	box-shadow: 0px 0px 10px #7fad39;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	}
+	#msg_pop h4{
+	margin:0;
+  text-align:center;
+  color: #fff;
+	font-size:15px;
+	}
+	 
+	#msg_close{
+	display:block;
+	position:absolute;
+	top:5px;
+	right:10px;
+	line-height:15px;
+	width:16px;
+	height:16px;
+	text-align:center;
+	color:#fff;
+	cursor:pointer;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+	border-radius: 10px;
+	}
+	#msg_close:hover {
+	background-color:#fff;
+	color:#000;
+	}
+	.fadeIn{
+		animation-name: fadeIn;
+		-webkit-animation-name: fadeIn; 
+		 animation-duration: 0.4s; 
+		-webkit-animation-duration: 0.4s;
+		 animation-timing-function: ease-in-out; 
+		-webkit-animation-timing-function: ease-in-out;     
+		 visibility: visible !important; 
+	}
+	  
+	@keyframes fadeIn {
+		0% {transform: scale(0.7);opacity: 0.5;}
+		80% {transform: scale(1.1);}       
+		100% {transform: scale(1);opacity: 1;}       
+	}
+	  
+	@-webkit-keyframes fadeIn {
+		0% {-webkit-transform: scale(0.7);opacity: 0.5;}
+		80% {-webkit-transform: scale(1.1);}       
+		100% {-webkit-transform: scale(1);opacity: 1;}       
+  }
+
+
   </style>
 
 <div id="preloder">
@@ -252,6 +323,9 @@
 
 {% endif %}
 
+<div id="msg_pop">
+  <h4>Успешно добавлено!</h4>
+  </div> 
 <footer class="footer spad">
 <div class="container">
 <div class="row">
@@ -277,13 +351,7 @@ Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/clou
 </div>
 </div>
 </div>
-</div>
-
-<div id="msg_pop">
-  <span class="msg_close" onclick="document.getElementById('msg_pop').style.display='block'; return false;">X</span>
-  <h4>Заголовок</h4>
-  Пример модального окна, всплывающего при загрузке сайта.
-  </div>  
+</div> 
 </footer>
 
 
