@@ -63,37 +63,37 @@
     /*-----------------------
         Categories Slider
     ------------------------*/
-    $(".categories__slider").owlCarousel({
-        loop: true,
-        margin: 0,
-        items: 4,
-        dots: false,
-        nav: true,
-        navText: ["<span class='fa fa-angle-left'><span/>", "<span class='fa fa-angle-right'><span/>"],
-        animateOut: 'fadeOut',
-        animateIn: 'fadeIn',
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true,
-        responsive: {
+    // $(".categories__slider").owlCarousel({
+    //     loop: true,
+    //     margin: 0,
+    //     items: 4,
+    //     dots: false,
+    //     nav: true,
+    //     navText: ["<span class='fa fa-angle-left'><span/>", "<span class='fa fa-angle-right'><span/>"],
+    //     animateOut: 'fadeOut',
+    //     animateIn: 'fadeIn',
+    //     smartSpeed: 1200,
+    //     autoHeight: false,
+    //     autoplay: true,
+    //     responsive: {
 
-            0: {
-                items: 1,
-            },
+    //         0: {
+    //             items: 1,
+    //         },
 
-            480: {
-                items: 2,
-            },
+    //         480: {
+    //             items: 2,
+    //         },
 
-            768: {
-                items: 3,
-            },
+    //         768: {
+    //             items: 3,
+    //         },
 
-            992: {
-                items: 4,
-            }
-        }
-    });
+    //         992: {
+    //             items: 4,
+    //         }
+    //     }
+    // });
 
 
     $('.hero__categories__all').on('click', function(){
@@ -103,61 +103,61 @@
     /*--------------------------
         Latest Product Slider
     ----------------------------*/
-    $(".latest-product__slider").owlCarousel({
-        loop: true,
-        margin: 0,
-        items: 1,
-        dots: false,
-        nav: true,
-        navText: ["<span class='fa fa-angle-left'><span/>", "<span class='fa fa-angle-right'><span/>"],
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true
-    });
+    // $(".latest-product__slider").owlCarousel({
+    //     loop: true,
+    //     margin: 0,
+    //     items: 1,
+    //     dots: false,
+    //     nav: true,
+    //     navText: ["<span class='fa fa-angle-left'><span/>", "<span class='fa fa-angle-right'><span/>"],
+    //     smartSpeed: 1200,
+    //     autoHeight: false,
+    //     autoplay: true
+    // });
 
     /*-----------------------------
         Product Discount Slider
     -------------------------------*/
-    $(".product__discount__slider").owlCarousel({
-        loop: true,
-        margin: 0,
-        items: 3,
-        dots: true,
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true,
-        responsive: {
+    // $(".product__discount__slider").owlCarousel({
+    //     loop: true,
+    //     margin: 0,
+    //     items: 3,
+    //     dots: true,
+    //     smartSpeed: 1200,
+    //     autoHeight: false,
+    //     autoplay: true,
+    //     responsive: {
 
-            320: {
-                items: 1,
-            },
+    //         320: {
+    //             items: 1,
+    //         },
 
-            480: {
-                items: 2,
-            },
+    //         480: {
+    //             items: 2,
+    //         },
 
-            768: {
-                items: 2,
-            },
+    //         768: {
+    //             items: 2,
+    //         },
 
-            992: {
-                items: 3,
-            }
-        }
-    });
+    //         992: {
+    //             items: 3,
+    //         }
+    //     }
+    // });
 
     /*---------------------------------
         Product Details Pic Slider
     ----------------------------------*/
-    $(".product__details__pic__slider").owlCarousel({
-        loop: true,
-        margin: 20,
-        items: 4,
-        dots: true,
-        smartSpeed: 1200,
-        autoHeight: false,
-        autoplay: true
-    });
+    // $(".product__details__pic__slider").owlCarousel({
+    //     loop: true,
+    //     margin: 20,
+    //     items: 4,
+    //     dots: true,
+    //     smartSpeed: 1200,
+    //     autoHeight: false,
+    //     autoplay: true
+    // });
 
     /*-----------------------
 		Price Range Slider
@@ -203,30 +203,74 @@
 		Quantity change
 	--------------------- */
     var proQty = $('.pro-qty');
-    proQty.prepend('<span class="dec qtybtn">-</span>');
-    proQty.append('<span class="inc qtybtn">+</span>');
+    var productID = parseInt(proQty.attr('value'))
+    var cost = parseFloat($('.product__details__price').text()).toFixed(1)
+    // proQty.prepend('<span class="dec qtybtn">-</span>');
+    // proQty.append('<span class="inc qtybtn">+</span>');
     proQty.on('click', '.qtybtn', function () {
         var $button = $(this);
         var oldValue = $button.parent().find('input').val();
         if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
+            $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+            if(data.status == 120){
+                window.location.replace('/login')
+            }else if(data.status == 0){
+                var newVal = parseFloat(oldValue) + 1;
+                $button.parent().find('input').val(newVal);
+                updateIndicators(1,cost)
+            }else{
+                alert(data.message)
+            }
+            })
         } else {
             // Don't allow decrementing below zero
             if (oldValue > 0) {
+                $.getJSON('http://localhost:5000/api/cart/remove','product='+productID,function(data){
+            if(data.status == 120){
+                window.location.replace('/login')
+            }else if(data.status == 0){
                 var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
+                $button.parent().find('input').val(newVal);
+                updateIndicators(-1,-cost)
+                if(oldValue == 1){
+                    proQty.css('display','none')
+                    var buttonAddInCart = $('#primary__btn__add__to__cart')
+                    buttonAddInCart.css('display','inline-block')
+                }
+            }else{
+                alert(data.message)
             }
+            })
+            } else {
+                proQty.css('display','none')
+                var buttonAddInCart = $('#primary__btn__add__to__cart')
+                buttonAddInCart.css('display','inline-block')
+            }
+        
         }
-        $button.parent().find('input').val(newVal);
+    });
+
+
+    var prBtn = $('#primary__btn__add__to__cart')
+    prBtn.on('click',function(){
+        $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+            if(data.status == 120){
+                window.location.replace('/login')
+            }else if(data.status == 0){
+                proQty.find('input').val('1')
+                updateIndicators(1,cost)
+                proQty.css('display','inline-block')
+                prBtn.css('display','none')
+            }else{
+                alert(data.message)
+            }
+            })
     });
     
 
     var shoppingCart = $('.shopping__cart')
     shoppingCart.on('click', function(){
         var productID = $(this).attr('id')
-        var cost = $(this).attr('value')
-        console.log('click')
         $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
             console.log(data)
             if(data.status == 120){
@@ -238,16 +282,8 @@
                 document.getElementById('msg_pop').className += ' fadeIn';
                 document.getElementById('msg_pop').style.display='block';
                 setTimeout("document.getElementById('msg_pop').className -= ' fadeIn';$('#msg_pop').fadeOut('slow');", delay);
-                var indicator = $('#fa__fa-shopping-bag__indicator__quantity')
-                indicator.text(parseInt(indicator.text()) + 1)
-                var indicator_humberg = $('#humberg__fa__fa-shopping-bag__indicator__quantity')
-                indicator_humberg.text(parseInt(indicator_humberg.text()) + 1)
-                var indicatorTotalCost = $('#header__cart__price__totalCost')
-                console.log(parseFloat(indicatorTotalCost.text()))
-                console.log(indicatorTotalCost.text())
-                indicatorTotalCost.text((parseFloat(indicatorTotalCost.text()) + parseFloat(cost)).toFixed(1) + "P");
-                var indicatorTotalCostHumberg = $('#humberg__header__cart__price__totalCost')
-                indicatorTotalCostHumberg.text((parseFloat(indicatorTotalCostHumberg.text()) + parseFloat(cost)).toFixed(1)+"P");
+                var cost = $(this).attr('value')
+                updateIndicators(1,cost)
 
             }
             else{
@@ -257,13 +293,17 @@
         })
     })
 
-    // var shoppingCart = $('.fa fa-shopping-cart');
-    // shoppingCart.css('visibility','hidden')
-    // shoppingCart.on('click',function(){
-        
-    // })
-
-    var shoppingCart = $('.a')
+    function updateIndicators(val,cost){
+                var indicator = $('#fa__fa-shopping-bag__indicator__quantity')
+                indicator.text(parseInt(indicator.text()) + val)
+                var indicator_humberg = $('#humberg__fa__fa-shopping-bag__indicator__quantity')
+                indicator_humberg.text(parseInt(indicator_humberg.text()) + val)
+                var indicatorTotalCost = $('#header__cart__price__totalCost')
+                indicatorTotalCost.text((parseFloat(indicatorTotalCost.text()) + parseFloat(cost)).toFixed(1) + "P");
+                var indicatorTotalCostHumberg = $('#humberg__header__cart__price__totalCost')
+                indicatorTotalCostHumberg.text((parseFloat(indicatorTotalCostHumberg.text()) + parseFloat(cost)).toFixed(1)+"P");
+    }
     
+
 
 })(jQuery);

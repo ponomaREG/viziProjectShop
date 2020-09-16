@@ -3,6 +3,28 @@ from app import db
 class Cart:
 
 
+    @staticmethod
+    def getQuantityOfProductInCart(userID,productID):
+        result = {}
+        print(userID)
+        print(productID)
+        cursor = db.execute(
+            'select count from Корзина where user_id = {} and product_id = {};'.format(userID,productID))
+        row = cursor.fetchone()
+        cursor.close()
+        if(row is None):
+            result['status'] = 2
+            result['message'] = 'Product doesnt exist in cart'
+            result['data'] = {'count':0}
+            return result
+        result['status'] = 0
+        result['message'] = 'OK'
+        result['data'] = {'count':row[0]}
+        return result
+
+
+
+
     @staticmethod #TODO: REFACTOR
     def countTotalCostOfUser(userID):
         cursor = db.execute('select pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \

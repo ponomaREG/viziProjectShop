@@ -104,8 +104,15 @@ def showBooks(page):
 def showDetailsOfBook(productID):
     details = Product.getDetailsOfProduct(productID)
     if(details['status'] == 0):
-        return render_template('shop-details.html',
-        user = flask_login.current_user,details = details['data'][0])
+        if(flask_login.current_user.is_authenticated):
+            return render_template('shop-details.html',
+            user = flask_login.current_user,
+            details = details['data'][0],
+            quantityInCart = Cart.getQuantityOfProductInCart(flask_login.current_user.userID,productID))
+        else:
+            return render_template('shop-details.html',
+            user = flask_login.current_user,
+            details = details['data'][0])
     elif(details['status'] == 2):
         return render_template('shop-details.html',
         user = flask_login.current_user,error = details['message'])

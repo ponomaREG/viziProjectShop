@@ -109,12 +109,12 @@ def addItemsInCart():
     else:
         return jsonify({'message':'Not auth','status':120})
 
-@app.route('/cart/remove')
+@app.route('/api/cart/remove')
 def removeItemInCart():
     productID = request.args.get('product',type=int)
     if(flask_login.current_user.is_authenticated):
-        return jsonify(Cart.removeItemInCartOfUser
-        (flask_login.current_user.userID,productID))
+        return jsonify(Cart.removeItemInCartOfUser(
+            flask_login.current_user.userID,productID))
     else:
         return jsonify({'message':'Not auth','status':120})
 
