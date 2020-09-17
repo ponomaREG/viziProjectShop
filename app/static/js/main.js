@@ -271,6 +271,7 @@
     var shoppingCart = $('.shopping__cart')
     shoppingCart.on('click', function(){
         var productID = $(this).attr('id')
+        var cost = parseFloat($(this).attr('value'))
         $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
             console.log(data)
             if(data.status == 120){
@@ -282,7 +283,6 @@
                 document.getElementById('msg_pop').className += ' fadeIn';
                 document.getElementById('msg_pop').style.display='block';
                 setTimeout("document.getElementById('msg_pop').className -= ' fadeIn';$('#msg_pop').fadeOut('slow');", delay);
-                var cost = $(this).attr('value')
                 updateIndicators(1,cost)
 
             }
@@ -303,6 +303,65 @@
                 var indicatorTotalCostHumberg = $('#humberg__header__cart__price__totalCost')
                 indicatorTotalCostHumberg.text((parseFloat(indicatorTotalCostHumberg.text()) + parseFloat(cost)).toFixed(1)+"P");
     }
+
+
+    var qtyCart = $('.pro-qty-cart')
+
+    qtyCart.on('click','.qtybtn',function(){
+        
+        var $button = $(this)
+        var productID = parseInt($button.parent().attr('value'))
+        var oldValue = parseInt($button.parent().find('input').val())
+        var cost = parseFloat($button.parent().attr('id'))
+        if($button.hasClass('inc')){
+            $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+                if(data.status == 120){
+                    window.location.replace('/login')
+                }else if(data.status == 0){
+                    var newVal = parseFloat(oldValue) + 1;
+                    $button.parent().find('input').val(newVal);
+                    var $total = $('tr#'+productID).find('.shoping__cart__total')
+                    $total.text((parseFloat($total.text())+cost).toFixed(1) + 'P')
+                    var $totalCost = $('.shoping__checkout')
+                    var oldCost = parseFloat($totalCost.find('span').text())
+                    $totalCost.find('span').text(parseFloat((oldCost+cost)).toFixed(1)+'P')
+                    updateIndicators(1,cost)
+            }else{
+                alert(data.message)
+            }
+            })
+        }else{
+            if (oldValue > 0) {
+                $.getJSON('http://localhost:5000/api/cart/remove','product='+productID,function(data){
+            if(data.status == 120){
+                window.location.replace('/login')
+            }else if(data.status == 0){
+                var newVal = oldValue - 1;
+                $button.parent().find('input').val(newVal);
+                var $total = $('tr#'+productID).find('.shoping__cart__total')
+                $total.text((parseFloat($total.text())-cost).toFixed(1) + 'P')
+                var $totalCost = $('.shoping__checkout')
+                $totalCost.find('span').text((parseFloat($totalCost.find('span').text()).toFixed(1)-cost).toFixed(1)+'P')
+                updateIndicators(-1,-cost);
+                if(oldValue == 1){
+                    var container = $('tr#'+productID+' ');
+                    container.css('display','none'); //TODO:CHECK EMPTY CART
+                    if(parseFloat($('#header__cart__price__totalCost').text()) == 0){
+                        $('#primary-btn-checkout').css('display','none')
+                    }
+                }
+            }else{
+                alert(data.message);
+            }
+            })
+            } else {
+                var container = $('td#'+productID);
+                container.css('display','none');
+            }
+        }
+
+        })
+    
     
 
 

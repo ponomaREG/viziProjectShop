@@ -16,6 +16,23 @@ import flask_login
 def main():
     return redirect(url_for('showBooks',page=1))
 
+@app.route('/cart',methods=['GET'])
+def cart():
+    result = {}
+    if flask_login.current_user.is_authenticated:
+        cart = Cart.getCartOfUser(flask_login.current_user.userID) #TODO: CHECK STATUS
+        if(cart['status'] == 0):
+            return render_template('shoping-cart.html',
+            user = flask_login.current_user,
+            productsInCart = cart['data'])
+        else:
+            return render_template('shoping-cart.html',
+            user=flask_login.current_user,
+            error = cart['message'])
+    else:
+        return redirect(url_for('loginUser'))
+
+
 @app.route("/login",methods = ['GET','POST'])
 def loginUser():
     if(flask_login.current_user.is_authenticated):

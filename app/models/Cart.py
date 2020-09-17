@@ -1,4 +1,5 @@
 from app import db
+from utils import imageHelper
 
 class Cart:
 
@@ -173,8 +174,8 @@ class Cart:
         result = {}
         try:
             cursor = db.execute(
-                'select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
-                as "Total" from Товар as pr \
+                'select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id,pr.imageLink \
+                from Товар as pr \
                 inner join Корзина as cart on pr.id == product_id \
                 and user_id = {};'.format(userID))
             allRows = cursor.fetchall()
@@ -195,7 +196,7 @@ class Cart:
         totalCost = 0.0
         for row in allRows:
             result['data'].append(
-                {
+                {   'id':row[4],  'imageLink':imageHelper.makeFullPathToImage(row[5]),
                     'total':row[3],'count':row[2],
                     'cost':row[1],'title':row[0]
                 }
