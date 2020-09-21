@@ -1,6 +1,7 @@
 from app import db
 from app.models.Cart import Cart
 from app.models.Address import Address
+from app.models.Product import Product
 
 
 class Order:
@@ -10,16 +11,8 @@ class Order:
 
 
     @staticmethod
-    def addNewOrder(userID,district,flat,porch='',house,floor,street):
+    def addNewOrder(userID,district,flat,house,floor,street,porch=''):
         result = {}
-        cursor = db.execute('select * from Покупатель where id = {};'.format(userID))
-        user = cursor.fetchone()
-        if(user[3] is None):
-            result['status'] = 10
-            result['message'] = 'Empty address'
-            cursor.close()
-            return result
-        cursor.close()
         try:
             cursor = db.execute('select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
                 as "Total" from Товар as pr \
@@ -51,8 +44,8 @@ class Order:
             lastrowid = db.execute('insert into Заказ("user_id","status","total","address_id") values({},{},{},{});'.format(
                     userID,
                     0,
-                    Cart.countTotalCostOfUser(userID)),
-                    lastrowidAddress).lastrowid
+                    Cart.countTotalCostOfUser(userID),
+                    lastrowidAddress)).lastrowid
             db.commit()
         except:
             result['status'] = 4
@@ -60,7 +53,7 @@ class Order:
             result['data'] = []
             cursor.close()
             return result
-        
+        data = Cart.getCartOfUser(userID)['data']
         for row in allRows:
             try:
                 db.execute('insert into Забронированная_книга \
@@ -77,7 +70,7 @@ class Order:
                 return result   
         result['status'] = 0
         result['message'] = 'OK'
-        result['data'] = []
+        result['data'] = data
         cursor.close()
         return result
         

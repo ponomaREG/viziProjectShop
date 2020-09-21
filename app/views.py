@@ -32,6 +32,27 @@ def checkout():
     else:
         return redirect(url_for('loginUser'))
         
+@app.route('/order/new',methods=['GET','POST'])
+def newOrder():
+    if(flask_login.current_user.is_authenticated):
+        if(request.method == 'POST'):
+            district = request.form.get('district')
+            street = request.form.get('street')
+            flat = request.form.get('flat',type=str,default = '')
+            floor = request.form.get('floor',type=str,default = '')
+            porch = request.form.get('porch',type=str,default = '')
+            house = request.form.get('house')
+
+            newOrder = Order.addNewOrder(flask_login.current_user.userID,district,
+            flat,house,floor,street,porch)
+            if(newOrder['status'] == 0):
+                return render_template('order.html',user = flask_login.current_user,orderProducts = newOrder['data'])
+            else:
+                return render_template('order.html',user = flask_login.current_user,error = newOrder['message'])
+        else:
+            return redirect(url_for('main'))
+    else:
+        return redirect(url_for('loginUser'))
 
 @app.route('/cart',methods=['GET'])
 def cart():
