@@ -13,4 +13,6 @@ def load_user(userID):
     if(len(allRows) == 0):
         return None
     row = allRows[0]
-    return User(row[0],row[4],row[6])
+    return User(userID = row[0],email = row[4],
+    password_hash = row[6],last_name=row[1],
+    first_name =row[2] ,birthdate = row[5])

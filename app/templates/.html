@@ -142,7 +142,7 @@
     <!-- Header Section End -->
 
     <!-- Hero Section Begin -->
-    <section class="hero">
+    <s<section class="hero">
         <div class="container">
         <div class="row">
         <div class="col-lg-9">
@@ -179,10 +179,11 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Checkout</h2>
+                        <h2>Vegetable’s Package</h2>
                         <div class="breadcrumb__option">
                             <a href="./index.html">Home</a>
-                            <span>Checkout</span>
+                            <a href="./index.html">Vegetables</a>
+                            <span>Vegetable’s Package</span>
                         </div>
                     </div>
                 </div>
@@ -191,95 +192,118 @@
     </section> -->
     <!-- Breadcrumb Section End -->
 
-    <!-- Checkout Section Begin -->
-    <section class="checkout spad">
+    <!-- Product Details Section Begin -->
+    
+    <section class="product-details spad">
         <div class="container">
-        {% if error %}
-            <h4>{{ error }}</h4>
-        {% else %}   
-            <div class="checkout__form">
-                <h4>Billing Details</h4>
-                <form action="#">
-                    <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>First Name<span>*</span></p>
-                                        <input type="text" value="{{ user.first_name }}" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
-                                        <input type="text"  value="{{ user.last_name }}" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add" required>
-                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)" required>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Town/City<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country/State<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Postcode / ZIP<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
-                                        <input type="text" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input type="text" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <div class="checkout__input">
-                                <p>Account Password<span>*</span></p>
-                                <input type="text">
-                            </div> -->
-                            <div class="checkout__input">
-                                <p>Order notes<span>*</span></p>
-                                <input type="text"
-                                    placeholder="Notes about your order, e.g. special notes for delivery.">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h4>Your Order</h4>
-                                <div class="checkout__order__products">Products <span>Total</span></div>
-                                <ul>
-                                    {% for product in productsInCart %}
-                                    <li>{{product.title}}<span>{{ product.total }}</span></li>
-                                    {% endfor %}
-                                </ul>
-                                <!-- <div class="checkout__order__subtotal">Subtotal <span>{{total}}</span></div> -->
-                                <div class="checkout__order__total">Total <span>{{user.getTotalCostOfCart()}}</span></div>
-                                <div class="checkout__input__checkbox">
-                                </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
-                            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__item__small">
+                            {%if not error%}
+                            <img class="product__details__pic__item__small"
+                                src="{{ url_for('static',filename = details.imageLink)}}" alt="">
+                            {% else%}
+                            <img class="product__details__pic__item__small"
+                                src="{{ url_for('static',filename = 'img/book/placeholder.jpg')}}" alt="">
+                            {% endif%}
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__text">
+                        {% if error%}
+                        <h3>{{ error }}</h3>
+                        {% else%}
+                        <h3>{{ details.title}}</h3>
+                        {% endif %}
+                        <!-- <div class="product__details__rating hidden">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <span>(18 reviews)</span>
+                        </div> -->
+                        {% if error%}
+                        <div class="product__details__price">{{ error }}</div>
+                        {% else%}
+                        <div class="product__details__price">{{ details.cost}}P</div>
+                        {% endif %}
+
+                        {% if error%}
+                        <p>{{ error }}</p>
+                        {% else%}
+                        <p>{{details.desc}}</p>
+                        {% endif %}
+                        {% if user.is_authenticated%}
+                            {% if quantityInCart.status == 0 %}
+                            <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div class="pro-qty"  value='{{ details.id }}'>
+                                        <span class="dec qtybtn">-</span><input type="text" value="{{quantityInCart.data.count }}" disabled><span class="inc qtybtn">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="primary-btn" id="primary__btn__add__to__cart" style="display:none">ADD TO CART</p>
+                            {% else %}
+                            <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div style="display:none" class="pro-qty"  value='{{ details.id }}'>
+                                        <span class="dec qtybtn">-</span><input type="text" value="{{ quantityInCart.data.count }}" disabled><span class="inc qtybtn">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="primary-btn" id="primary__btn__add__to__cart">ADD TO CART</p>
+                            {% endif %}
+                        {% else %}
+                            <a href="/login" class="primary-btn" id="primary-btn">ADD TO CART</a>
+                        {% endif %}
+                        <ul>
+                            {% if error%}
+                            <li>{{ error }}</li>
+                            {% else%}
+                            <li><b>Quantity</b> <span>{{details.quantity}}</span></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                                    aria-selected="true">Tags</a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                                    aria-selected="false">Information</a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <div class="product__details__tab__desc">
+                                    <h6>Products tags</h6>
+                                    {% if error%}
+                                    <p>{{ error }}</p>
+                                    {% else%}
+                                    <p>{{ details.tags}}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                <div class="product__details__tab__desc">
+                                    <h6>Products Infomation</h6>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endif %}
         </div>
     </section>
-    <!-- Checkout Section End -->
+    <!-- Product Details Section End -->
+
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
@@ -320,7 +344,6 @@
     <script src="{{url_for('static',filename='js/mixitup.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
 
- 
 
 </body>
 

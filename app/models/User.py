@@ -6,13 +6,19 @@ from utils import md5helper
 
 class User(UserMixin):
     userID = -1
+    first_name = None
+    last_name = None
+    birthdate = None
     email = None
     password_hash = None
 
-    def __init__(self,userID,email,password_hash):
+    def __init__(self,userID,email,password_hash,last_name,first_name,birthdate):
         self.userID = userID
         self.email = email
         self.password_hash = password_hash
+        self.first_name = first_name
+        self.last_name = last_name
+        self.birthdate = birthdate
     
 
     def is_active(self):

@@ -94,9 +94,10 @@ def checkEmail():
 def getAvailableTagsAPI():
     return jsonify(Product.getAvailableTags())
 
-@app.route('/order/add',methods=['GET'])
+@app.route('/api/order/add',methods=['GET'])
 def addNewOrder():
     if(flask_login.current_user.is_authenticated):
+        
         return jsonify(Order.addNewOrder(flask_login.current_user.userID))
     else:
         return jsonify({'message':'Not auth','status':120})

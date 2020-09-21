@@ -1,5 +1,6 @@
 from app import db
 from app.models.Cart import Cart
+from app.models.Address import Address
 
 
 class Order:
@@ -9,7 +10,7 @@ class Order:
 
 
     @staticmethod
-    def addNewOrder(userID):
+    def addNewOrder(userID,district,flat,porch='',house,floor,street):
         result = {}
         cursor = db.execute('select * from Покупатель where id = {};'.format(userID))
         user = cursor.fetchone()
@@ -37,12 +38,21 @@ class Order:
             result['data'] = []
             return result
 
+        try:
+            lastrowidAddress = Address.addNewAddress(district,house,floor,flat,porch,street)
+        except:
+                result['status'] = 3
+                result['message'] = 'SQL runtime error'
+                result['data'] = []
+                cursor.close()
+                return result 
         
         try:
-            lastrowid = db.execute('insert into Заказ("user_id","status","total") values({},{},{});'.format(
+            lastrowid = db.execute('insert into Заказ("user_id","status","total","address_id") values({},{},{},{});'.format(
                     userID,
                     0,
-                    Cart.countTotalCostOfUser(userID))).lastrowid
+                    Cart.countTotalCostOfUser(userID)),
+                    lastrowidAddress).lastrowid
             db.commit()
         except:
             result['status'] = 4
@@ -64,8 +74,7 @@ class Order:
                 result['message'] = 'SQL runtime error'
                 result['data'] = []
                 cursor.close()
-                return result  
-
+                return result   
         result['status'] = 0
         result['message'] = 'OK'
         result['data'] = []

@@ -14,7 +14,24 @@ import flask_login
     
 @app.route("/",methods=['GET'])
 def main():
-    return redirect(url_for('showBooks',page=1))
+    return redirect(url_for('showBooksDefault'))
+
+@app.route('/checkout',methods=['GET'])
+def checkout():
+    if(flask_login.current_user.is_authenticated):
+        cart = Cart.getCartOfUser(flask_login.current_user.userID) #TODO: CHECK STATUS
+        if(cart['status'] == 0):
+            return render_template('checkout.html',
+            user = flask_login.current_user,
+            productsInCart=cart['data'])
+        elif(cart['status'] == 2):
+            return render_template('checkout.htlm',
+            user = flask_login.current_user,
+            error = cart['message']
+            )
+    else:
+        return redirect(url_for('loginUser'))
+        
 
 @app.route('/cart',methods=['GET'])
 def cart():
@@ -27,7 +44,7 @@ def cart():
             productsInCart = cart['data'])
         else:
             return render_template('shoping-cart.html',
-            user=flask_login.current_user,
+            user = flask_login.current_user,
             error = cart['message'])
     else:
         return redirect(url_for('loginUser'))
@@ -81,6 +98,10 @@ def userInfo():
 def logoutUser():
     flask_login.logout_user()
     return redirect(url_for('loginUser'))
+
+@app.route('/books',methods = ['GET'])
+def showBooksDefault():
+    return showBooks(1)
 
 @app.route('/books/<int:page>',methods=["GET"])
 def showBooks(page):
