@@ -225,7 +225,7 @@
         } else {
             // Don't allow decrementing below zero
             if (oldValue > 0) {
-                $.getJSON('http://localhost:5000/api/cart/remove','product='+productID,function(data){
+                $.getJSON('/api/cart/remove','product='+productID,function(data){
             if(data.status == 120){
                 window.location.replace('/login')
             }else if(data.status == 0){
@@ -253,7 +253,7 @@
 
     var prBtn = $('#primary__btn__add__to__cart')
     prBtn.on('click',function(){
-        $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+        $.getJSON('/api/cart/add','product='+productID,function(data){
             if(data.status == 120){
                 window.location.replace('/login')
             }else if(data.status == 0){
@@ -272,7 +272,7 @@
     shoppingCart.on('click', function(){
         var productID = $(this).attr('id')
         var cost = parseFloat($(this).attr('value'))
-        $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+        $.getJSON('/api/cart/add','product='+productID,function(data){
             console.log(data)
             if(data.status == 120){
                 window.location.replace('/login')
@@ -314,7 +314,7 @@
         var oldValue = parseInt($button.parent().find('input').val())
         var cost = parseFloat($button.parent().attr('id'))
         if($button.hasClass('inc')){
-            $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+            $.getJSON('/api/cart/add','product='+productID,function(data){
                 if(data.status == 120){
                     window.location.replace('/login')
                 }else if(data.status == 0){
@@ -332,7 +332,7 @@
             })
         }else{
             if (oldValue > 0) {
-                $.getJSON('http://localhost:5000/api/cart/remove','product='+productID,function(data){
+                $.getJSON('/api/cart/remove','product='+productID,function(data){
             if(data.status == 120){
                 window.location.replace('/login')
             }else if(data.status == 0){

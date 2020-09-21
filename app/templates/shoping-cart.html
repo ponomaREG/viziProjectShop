@@ -173,7 +173,7 @@
     <!-- Header Section End -->
 
     <!-- Hero Section Begin -->
-    <s<section class="hero">
+    <section class="hero">
         <div class="container">
         <div class="row">
         <div class="col-lg-9">
@@ -291,7 +291,7 @@
                         </ul>
                         {% if not error %}
                         {% if not productsInCart|length == 0 %}
-                        <a href="#" class="primary-btn" id="primary-btn-checkout">PROCEED TO CHECKOUT</a>
+                        <a href="/checkout" class="primary-btn" id="primary-btn-checkout">PROCEED TO CHECKOUT</a>
                         {% endif %}
                         {% else %}
                         <h3>{{error}}</h3>
