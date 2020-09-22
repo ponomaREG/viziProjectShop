@@ -7,6 +7,17 @@ from app.models.Product import Product
 class Order:
     #TODO  ADDRESSES!!!!!!!
 
+    @staticmethod
+    def getOrdersOfUser(userID):
+        result = {}
+        cursor = db.execute('select * from Заказ as ord inner join Адрес as addr where ord.address_id == addr.id;'.format(userID))
+        allRows = cursor.fetchall()
+        cursor.close()
+        data = []
+        for row im allRows:
+            data.append({'id':row[0]},'date':row[2],
+            'status':row[3],'total':row[4],'address':row[5])
+
 
 
 
