@@ -2,10 +2,11 @@ from app import db
 from app.models.Cart import Cart
 from app.models.Address import Address
 from app.models.Product import Product
+from utils import imageHelper
+from utils import emailSender
 
 
 class Order:
-    #TODO  ADDRESSES!!!!!!!
 
     @staticmethod
     def getOrdersOfUser(userID):
@@ -14,15 +15,38 @@ class Order:
         allRows = cursor.fetchall()
         cursor.close()
         data = []
-        for row im allRows:
-            data.append({'id':row[0]},'date':row[2],
-            'status':row[3],'total':row[4],'address':row[5])
+        if(len(allRows) == 0):
+            result['status'] = 2
+            result['message'] = 'Empty cart'
+            result['data'] = []
+            return result
+        for row in allRows:
+            data.append({'id':row[0],'date':row[2],
+            'status':row[3],'total':row[4],'address':row[5]})
+        result['status'] = 0
+        result['message'] = 'OK'
+        result['data'] = data
+        return result
+
+    @staticmethod
+    def getDetailsOfOrder(orderID):
+        result = {}
+        cursor = db.execute("select pr.id,pr.imageLink,pr.title,bk.count,pr.cost_sale*bk.count as 'total' from Забронированная_книга as bk inner join Товар as pr on bk.order_id == {} and pr.id == bk.product_id;".format(orderID))
+        data = []
+        for row in cursor.fetchall():
+            data.append({'id':row[0],'imageLink':imageHelper.makeFullPathToImage(row[1]),
+            'title':row[2],'count':row[3],'total':row[4]})
+        cursor.close()
+        result['status'] = 0
+        result['message'] = 'OK'
+        result['data'] = data
+        return result
 
 
 
 
     @staticmethod
-    def addNewOrder(userID,district,flat,house,floor,street,porch=''):
+    def addNewOrder(userID,district,flat,house,floor,street,porch='',email=''):
         result = {}
         try:
             cursor = db.execute('select pr.title,pr.cost_sale,cart.count,cart.count*pr.cost_sale,pr.id \
@@ -64,7 +88,7 @@ class Order:
             result['data'] = []
             cursor.close()
             return result
-        data = Cart.getCartOfUser(userID)['data']
+        data = {'id':lastrowid,"data":Cart.getCartOfUser(userID)['data']}
         for row in allRows:
             try:
                 db.execute('insert into Забронированная_книга \
@@ -78,10 +102,12 @@ class Order:
                 result['message'] = 'SQL runtime error'
                 result['data'] = []
                 cursor.close()
-                return result   
+                return result
         result['status'] = 0
         result['message'] = 'OK'
         result['data'] = data
         cursor.close()
+        if(email is not None):
+            emailSender.EmailSender.sendEmailTo([email],orderDetails=result['data'])
         return result
         

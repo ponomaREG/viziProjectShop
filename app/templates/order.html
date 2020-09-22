@@ -202,8 +202,8 @@
             <h3>{{message}}</h3>
             {% endif %}
             <div class="checkout__form">
-                <h4>Order Details</h4>
-                {% for product in orderProducts %}
+                <h4>Order №{{ orderProducts['id'] }} Details</h4>
+                {% for product in orderProducts['data'] %}
                   <p><h4>{{ product.title }}</h4>: x{{product.count}} = product.total</p>
                 {% endfor %}
             </div>

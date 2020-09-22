@@ -42,9 +42,10 @@ def newOrder():
             floor = request.form.get('floor',type=str,default = '')
             porch = request.form.get('porch',type=str,default = '')
             house = request.form.get('house')
+            email = request.form.get('email',type=str,default='')
 
             newOrder = Order.addNewOrder(flask_login.current_user.userID,district,
-            flat,house,floor,street,porch)
+            flat,house,floor,street,porch,email=email)
             if(newOrder['status'] == 0):
                 return render_template('order.html',user = flask_login.current_user,orderProducts = newOrder['data'])
             else:

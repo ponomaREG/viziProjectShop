@@ -20,17 +20,7 @@ class EmailSender:
         msg['From'] = user
         msg['To'] = recipients[0]
         msg['Subject'] = 'Order №{} details'.format(orderDetails['id'])
-        mess = """
-            Order №{} details
-        """
-        html = """
-            <html>
-            <body>
-                <h1>TEST</h1>
-            </body>
-            </html>
-        """
-        msg.attach(MIMEText(mess,'plain'))
+        html = render_template('order-email.html',order = orderDetails)
         msg.attach(MIMEText(html,'html'))
 
         session = smtplib.SMTP_SSL(server)
@@ -39,6 +29,4 @@ class EmailSender:
         session.sendmail(user,recipients,msg.as_string())
         session.close()
 
-EmailSender.sendEmailTo(['pnmregor@yandex.ru'])
-print(123)
     
