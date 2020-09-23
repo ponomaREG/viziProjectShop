@@ -10,6 +10,10 @@ from utils import pageHelper
 import flask_login
 
 
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return redirect(url_for('loginUser'))
     
     
 @app.route("/",methods=['GET'])
@@ -18,7 +22,6 @@ def main():
 
 @app.route('/checkout',methods=['GET'])
 def checkout():
-    if(flask_login.current_user.is_authenticated):
         cart = Cart.getCartOfUser(flask_login.current_user.userID) #TODO: CHECK STATUS
         if(cart['status'] == 0):
             return render_template('checkout.html',
@@ -29,12 +32,9 @@ def checkout():
             user = flask_login.current_user,
             error = cart['message']
             )
-    else:
-        return redirect(url_for('loginUser'))
         
 @app.route('/order/new',methods=['GET','POST'])
 def newOrder():
-    if(flask_login.current_user.is_authenticated):
         if(request.method == 'POST'):
             district = request.form.get('district')
             street = request.form.get('street')
@@ -52,13 +52,11 @@ def newOrder():
                 return render_template('order.html',user = flask_login.current_user,error = newOrder['message'])
         else:
             return redirect(url_for('main'))
-    else:
-        return redirect(url_for('loginUser'))
 
 @app.route('/cart',methods=['GET'])
+@flask_login.login_required
 def cart():
-    result = {}
-    if flask_login.current_user.is_authenticated:
+        result = {}
         cart = Cart.getCartOfUser(flask_login.current_user.userID) #TODO: CHECK STATUS
         if(cart['status'] == 0):
             return render_template('shoping-cart.html',
@@ -68,8 +66,6 @@ def cart():
             return render_template('shoping-cart.html',
             user = flask_login.current_user,
             error = cart['message'])
-    else:
-        return redirect(url_for('loginUser'))
 
 
 @app.route("/login",methods = ['GET','POST'])
@@ -113,7 +109,7 @@ def registrationUser():
 @app.route('/user',methods=['GET'])
 @flask_login.login_required
 def userInfo():
-    return render_template('check.html',user = flask_login.current_user)
+        return render_template('user-profile.html',user = flask_login.current_user)
 
 @app.route('/logout',methods=['GET'])
 @flask_login.login_required

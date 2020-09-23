@@ -107,7 +107,7 @@ class Order:
         result['message'] = 'OK'
         result['data'] = data
         cursor.close()
-        if(email is not None):
-            emailSender.EmailSender.sendEmailTo([email],orderDetails=result['data'])
+        # if(email is not None):
+        #     emailSender.EmailSender.sendEmailTo([email],orderDetails=result['data'])
         return result
         
