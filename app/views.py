@@ -115,7 +115,7 @@ def userInfo():
 @flask_login.login_required
 def logoutUser():
     flask_login.logout_user()
-    return redirect(url_for('loginUser'))
+    return redirect(url_for('main'))
 
 @app.route('/books',methods = ['GET'])
 def showBooksDefault():

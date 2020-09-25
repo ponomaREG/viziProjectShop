@@ -434,7 +434,7 @@ ol {
 }
 
 .header__menu {
-	padding: 24px 0;
+	
 }
 
 .header__menu ul li {
@@ -449,7 +449,7 @@ ol {
 	left: 0;
 	top: 50px;
 	background: #222222;
-	width: 180px;
+	width: 120px;
 	z-index: 9;
 	padding: 5px 0;
 	-webkit-transition: all, 0.3s;
