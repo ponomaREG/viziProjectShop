@@ -80,7 +80,7 @@ class Product:
         result = {}
         try:
             cursor = db.execute(
-                'select * from Товар where title like "%{}%" order by rate DESC LIMIT {} OFFSET {};'
+                'select * from Товар where title like "%{0}%" or author like "%{0}%" order by rate DESC LIMIT {1} OFFSET {2};'
                 .format(query,offset,offset*(page-1)))
         except:
             result['status'] = 1
