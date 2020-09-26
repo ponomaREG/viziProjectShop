@@ -11,13 +11,13 @@ class Order:
     @staticmethod
     def getOrdersOfUser(userID):
         result = {}
-        cursor = db.execute('select * from Заказ as ord inner join Адрес as addr where ord.address_id == addr.id;'.format(userID))
+        cursor = db.execute('select * from Заказ as ord inner join Адрес as addr where ord.address_id == addr.id and user_id = {};'.format(userID))
         allRows = cursor.fetchall()
         cursor.close()
         data = []
         if(len(allRows) == 0):
             result['status'] = 2
-            result['message'] = 'Empty cart'
+            result['message'] = 'Empty'
             result['data'] = []
             return result
         for row in allRows:

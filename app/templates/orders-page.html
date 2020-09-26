@@ -21,6 +21,37 @@
     <link rel="stylesheet" href="{{url_for('static',filename='css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{url_for('static',filename='css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}" type="text/css">
+    <style type="text/css">
+
+    .pro-qty-cart {
+	width: 140px;
+	height: 50px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	background: #f5f5f5;
+	margin-bottom: 5px;
+}
+
+.pro-qty-cart input {
+	height: 100%;
+	width: 100%;
+	font-size: 16px;
+	color: #6f6f6f;
+	width: 50px;
+	border: none;
+	background: #f5f5f5;
+	text-align: center;
+}
+
+.pro-qty-cart .qtybtn {
+	width: 35px;
+	font-size: 16px;
+	color: #6f6f6f;
+	cursor: pointer;
+	display: inline-block;
+}
+    </style>
 </head>
 
 <body>
@@ -76,74 +107,85 @@
 
     <!-- Header Section Begin -->
     <header class="header">
-        <div class="header__top">
-        <div class="container">
-        <div class="row">
-        <div class="col-lg-6 col-md-6">
-        </div>
-        <div class="col-lg-6 col-md-6">
-        <div class="header__top__right">
-          {% if user.is_authenticated %}
-          <div class="header__top__right__auth">
-            <a href="{{url_for('userInfo')}}"><i class="fa fa-user"></i> Profile</a>
-            </div>
-          {% else %}
-        <div class="header__top__right__auth">
-        <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
-        </div>
-        {% endif %}
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        
-        <div class="container">
-        <div class="row">
-        <div class="col-lg-3">
-        <div class="header__logo">
-        <a href="{{ url_for('showBooks',page=1) }}"><img width="30%" height="30%" src="{{ url_for('static',filename = 'img/logo.png') }}" alt=""></a>
-        </div>
-        </div>
-        <div class="col-lg-3">
-          <div class="header__logo hidden">
-          <a href="./index.html"><img src="img/logo.png" alt=""></a>
-          </div>
-          </div>
-        
-          <div class="col-lg-3">
-            <div class="header__logo hidden">
-            <a href="./index.html"><img src="img/logo.png" alt=""></a>
-            </div>
-            </div>
-        <div class="col-lg-3">
-        <div class="header__cart">
-        <ul>
-          {% if user.is_authenticated%}
-        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span></a></li>
-          {% else %}
-        <li><a href="{{url_for('loginUser')}}"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
-          {% endif %}
-        </ul>
-          {% if user.is_authenticated %}
-        <div class="header__cart__price">item: <span id="header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
-          {% else %}
-        <div class="header__cart__price">item: <span>0.0P</span></div>
-        
-          {% endif %}
+       
+<div class="header__top">
+    <div class="container">
+    <div class="row">
+    <div class="col-lg-6 col-md-6">
+    </div>
+    <div class="col-lg-6 col-md-6">
+    <div class="header__top__right">
+      {% if user.is_authenticated %}
+      <div class="header__top__right__auth">
+        <nav class="header__menu">
+          <ul>
+              <li><a href="#"><span><i class="fa fa-user"></i> Profile</span></a>
+                  <ul class="header__menu__dropdown">
+                    <li><a href="{{ url_for('userInfo')}}">Information</a></li>
+                    <li><a href="#">Orders</a></li>
+                    <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
+                  </ul>
+              </li>
+          </ul>
+      </nav>
+    </div>
+      {% else %}
+    <div class="header__top__right__auth">
+    <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
+    </div>
+    {% endif %}
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div class="container">
+    <div class="row">
+    <div class="col-lg-3">
+    <div class="header__logo">
+    <a href="{{ url_for('showBooks',page=1) }}"><img width="30%" height="30%" src="{{ url_for('static',filename = 'img/logo.png') }}" alt=""></a>
+    </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="header__logo hidden">
+      <a href="./index.html"><img src="img/logo.png" alt=""></a>
+      </div>
+      </div>
+    
+      <div class="col-lg-3">
+        <div class="header__logo hidden">
+        <a href="./index.html"><img src="img/logo.png" alt=""></a>
         </div>
         </div>
-        </div>
-        <div class="humberger__open">
-        <i class="fa fa-bars"></i>
-        </div>
-        </div>
+    <div class="col-lg-3">
+    <div class="header__cart">
+    <ul>
+      {% if user.is_authenticated%}
+    <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span></a></li>
+      {% else %}
+    <li><a href="{{url_for('loginUser')}}"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
+      {% endif %}
+    </ul>
+      {% if user.is_authenticated %}
+    <div class="header__cart__price">item: <span id="header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
+      {% else %}
+    <div class="header__cart__price">item: <span>0.0P</span></div>
+    
+      {% endif %}
+    </div>
+    </div>
+    </div>
+    <div class="humberger__open">
+    <i class="fa fa-bars"></i>
+    </div>
+    </div>
         </header>
     <!-- Header Section End -->
 
     <!-- Hero Section Begin -->
     <section class="hero">
-      <div class="container">
+        <div class="container">
         <div class="row">
         <div class="col-lg-9">
         <div class="hero__search">
@@ -179,10 +221,10 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Checkout</h2>
+                        <h2>Shopping Cart</h2>
                         <div class="breadcrumb__option">
                             <a href="./index.html">Home</a>
-                            <span>Checkout</span>
+                            <span>Shopping Cart</span>
                         </div>
                     </div>
                 </div>
@@ -191,26 +233,69 @@
     </section> -->
     <!-- Breadcrumb Section End -->
 
-    <!-- Checkout Section Begin -->
-    <section class="checkout spad">
+    <!-- Shoping Cart Section Begin -->
+    <section class="shoping-cart spad">
         <div class="container">
-        
-        {% if error %}
-            <h4>{{ error }}</h4>
-        {% else %}   
-            {% if message %}
-            <h3>{{message}}</h3>
-            {% endif %}
-            <div class="checkout__form">
-                <h4>Order №{{ orderProducts['id'] }} Details</h4>
-                {% for product in orderProducts['data'] %}
-                  <p><h4>{{ product.title }}</h4>: x{{product.count}} = product.total</p>
-                {% endfor %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="shoping__product">Orders</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%if not error%}
+                                {% if ordersList|length == 0 %}
+                                <tr><td>Empty</td></tr>
+                                {% else %}
+
+                                {% for order in ordersList %}
+                                <tr>
+                                    <td class="shoping__cart__item">
+                                        
+                                        <h5><a style="text-decoration: none;" href="{{ url_for('showDetailsOfOrder',orderID=order.id)}}">Order№{{ order.id}}</a></h5>
+                                    </td>
+                                    <td class="shoping__cart__price">
+                                        Status is HERE
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <div class="pro-qty-cart">
+                                                {{order.date}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total">
+                                        {{order.total}}P
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {%endif%}
+                                {% else %}
+                                <tr><td>{{error}}</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        {% endif %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__btns">
+                        <a href="{{ url_for('showBooks',page=1) }}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                    </div>
+                </div>
+                
+            </div>
         </div>
     </section>
-    <!-- Checkout Section End -->
+    <!-- Shoping Cart Section End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
@@ -251,7 +336,6 @@
     <script src="{{url_for('static',filename='js/mixitup.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
 
- 
 
 </body>
 

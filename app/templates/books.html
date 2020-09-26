@@ -186,7 +186,7 @@
           </div>
           <ul class='for-toogle' style="display: none;">
               <li><a href="{{ url_for('userInfo')}}">Information</a></li>
-              <li><a href="#">Orders</a></li>
+              <li><a href="{{ url_for('showOrders')}}">Orders</a></li>
               <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
           </ul>
         </div>
@@ -232,7 +232,7 @@
             <li><a href="#"><span><i class="fa fa-user"></i> Profile</span></a>
                 <ul class="header__menu__dropdown">
                   <li><a href="{{ url_for('userInfo')}}">Information</a></li>
-                  <li><a href="#">Orders</a></li>
+                  <li><a href="{{ url_for('showOrders')}}">Orders</a></li>
                   <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
                 </ul>
             </li>

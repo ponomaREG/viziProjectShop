@@ -33,7 +33,23 @@ def checkout():
             error = cart['message']
             )
         
+
+@app.route('/order/<int:orderID>')
+@flask_login.login_required
+def showDetailsOfOrder(orderID):
+    return redirect('/login')
+
+@app.route('/user/orders',methods=['GET'])
+@flask_login.login_required
+def showOrders():
+    orders = Order.getOrdersOfUser(flask_login.current_user.userID)
+    if(orders['status'] == 0):
+        return render_template('orders-page.html',ordersList = orders['data'],user = flask_login.current_user)
+    else:
+        return render_template('orders-page.html',error = orders['message'],user = flask_login.current_user)
+
 @app.route('/order/new',methods=['GET','POST'])
+@flask_login.login_required
 def newOrder():
         if(request.method == 'POST'):
             district = request.form.get('district')
