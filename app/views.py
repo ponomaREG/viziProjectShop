@@ -20,6 +20,11 @@ def unauthorized_handler():
 def main():
     return redirect(url_for('showBooksDefault'))
 
+@app.route('/search')
+def searchAdvanced():
+    availableTags = Product.getAvailableTags()
+    return render_template('advanced-search.html',user=flask_login.current_user,tags = availableTags['data'])
+
 @app.route('/checkout',methods=['GET'])
 def checkout():
         cart = Cart.getCartOfUser(flask_login.current_user.userID) #TODO: CHECK STATUS
@@ -143,10 +148,14 @@ def showBooks(page):
         return render_template('books.html',error = 'Incorrect page',user = flask_login.current_user)
     OFFSET = 12
     userQuerySearch = request.args.get('q',default=None,type=str)
-    if(userQuerySearch is None):
+    tagsFilter = request.args.getlist('tags')
+    if(userQuerySearch is not None):
         result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
-    else:
         result = Product.getAllProfuctsFilteredByQuery(userQuerySearch,page,OFFSET)
+    elif(tagsFilter is not None):
+        result = Product.getAllProductsFilteredByTags(tagsFilter,page,OFFSET)
+    else:
+        result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
     if(result['status'] == 0):
         countOfRows = Product.getQuantityOfRowsInTable()['count']
         countOfPages = countOfRows // OFFSET
@@ -162,7 +171,7 @@ def showBooks(page):
             currentPage=page)
     elif(result['status'] == 2):
         return render_template('books.html',
-        error = 'Empty data',
+        error = 'Not found',
         user = flask_login.current_user,
         q = userQuerySearch)
     elif(result['status'] == 1):

@@ -179,6 +179,7 @@ ol {
 
 .site-btn {
 	font-size: 14px;
+	height: 50px;
 	color: #ffffff;
 	font-weight: 800;
 	text-transform: uppercase;
@@ -2883,6 +2884,10 @@ ol {
 	font-size: 16px;
 	color: #666666;
 	line-height: 26px;
+}
+
+.tag{
+	margin: 10px;
 }
 
 /*---------------------

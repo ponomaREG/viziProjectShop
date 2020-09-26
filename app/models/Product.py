@@ -91,12 +91,12 @@ class Product:
         return Product.__prepareProducts(cursor)
 
     @staticmethod
-    def getAllProductsFilteredByTags(tags):
+    def getAllProductsFilteredByTags(tags,page,offset):
         result = {}
         try:
             cursor = db.execute(sqlQueryHelper.buildSqlQueryByTags('select * from Товар',tags))
         except:
-            result['status'] = 1
+            result['status'] = 3
             result['message'] = "Runtime error while executing sql query"
             result['data'] = []
             return result
