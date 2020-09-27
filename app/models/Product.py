@@ -42,11 +42,11 @@ class Product:
 
 
     @staticmethod
-    def getQuantityOfRowsInTable():
+    def getQuantityOfRowsInTable(query):
         result = {}
         try:
             cursor = db.execute(
-                'select * from Товар;'
+                query
                 )
         except:
             result['status'] = 1
@@ -76,7 +76,7 @@ class Product:
         return Product.__prepareProducts(cursor)
 
     @staticmethod
-    def getAllProfuctsFilteredByQuery(query,page,offset):
+    def getAllProfuctsFilteredByQuery(query,page=-1,offset=-1):
         result = {}
         try:
             cursor = db.execute(
@@ -94,7 +94,8 @@ class Product:
     def getAllProductsFilteredByTags(tags,page,offset):
         result = {}
         try:
-            cursor = db.execute(sqlQueryHelper.buildSqlQueryByTags('select * from Товар',tags))
+            print(sqlQueryHelper.buildSqlQueryByTagsAndPage('select * from Товар',tags,page,offset))
+            cursor = db.execute(sqlQueryHelper.buildSqlQueryByTagsAndPage('select * from Товар',tags,page,offset))
         except:
             result['status'] = 3
             result['message'] = "Runtime error while executing sql query"

@@ -357,9 +357,25 @@
 <div class="justify-content-center row">
 {% for page in countOfPagesRange%}
     {% if page == currentPage%}
-    <a class="page-btn-active" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+      {% if tagsAlreadySearched%}
+      <a class="page-btn-active" href="{{ url_for('showBooks',page=page,tags=tagsAlreadySearched)}}">{{page}}</a>
+      {% else %}
+        {% if q%}
+        <a class="page-btn-active" href="{{ url_for('showBooks',page=page,q=q)}}">{{page}}</a>
+        {% else %}
+        <a class="page-btn-active" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+        {% endif %}
+      {% endif %}
     {% else%}
-    <a class="page-btn" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+    {% if tagsAlreadySearched%}
+    <a class="page-btn" href="{{ url_for('showBooks',page=page,tags=tagsAlreadySearched)}}">{{page}}</a>
+    {% else %}
+      {% if q%}
+      <a class="page-btn" href="{{ url_for('showBooks',page=page,q=q)}}">{{page}}</a>
+      {% else %}
+      <a class="page-btn" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+      {% endif %}
+    {% endif %}
     {% endif %}
 {% endfor %}
 </div>

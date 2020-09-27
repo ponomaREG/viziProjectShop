@@ -8,6 +8,7 @@ from app.models.Cart import Cart
 from app.models.Order import Order
 from utils import pageHelper
 import flask_login
+from utils import sqlQueryHelper, tagsHelper
 
 
 
@@ -146,19 +147,26 @@ def showBooksDefault():
 def showBooks(page):
     if(page < 1):
         return render_template('books.html',error = 'Incorrect page',user = flask_login.current_user)
-    OFFSET = 12
+    OFFSET = 5
     userQuerySearch = request.args.get('q',default=None,type=str)
     tagsFilter = request.args.getlist('tags')
+    tagsFilterStr = None
     if(userQuerySearch is not None):
-        result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
         result = Product.getAllProfuctsFilteredByQuery(userQuerySearch,page,OFFSET)
-    elif(tagsFilter is not None):
+        countOfRows = Product.getQuantityOfRowsInTable(
+            'select * from Товар where title like "%{0}% " \
+            or author like "%{0}%" order by rate;')['count']
+    elif(tagsFilter):
+        countOfRows = Product.getQuantityOfRowsInTable(sqlQueryHelper.buildSqlQueryByTags('select * from Товар',tagsFilter))['count']
         result = Product.getAllProductsFilteredByTags(tagsFilter,page,OFFSET)
+        tagsFilterStr = tagsHelper.makeArrayOfTagsToStr(tagsFilter)
     else:
+        countOfRows = Product.getQuantityOfRowsInTable('select * from Товар order by rate;')['count']
         result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
     if(result['status'] == 0):
-        countOfRows = Product.getQuantityOfRowsInTable()['count']
         countOfPages = countOfRows // OFFSET
+        print('count '+str(countOfPages))
+        print('count of rows'+str(countOfRows))
         if(countOfRows % OFFSET > 0):
             countOfPages += 1
         countOfPagesRange = pageHelper.getRangeOfPages(countOfPages,page)
@@ -168,12 +176,14 @@ def showBooks(page):
             countOfPagesRange = countOfPagesRange,
             user = flask_login.current_user,
             q = userQuerySearch,
-            currentPage=page)
+            currentPage=page,
+            tagsAlreadySearched = tagsFilterStr)
     elif(result['status'] == 2):
         return render_template('books.html',
         error = 'Not found',
         user = flask_login.current_user,
-        q = userQuerySearch)
+        q = userQuerySearch,
+        tagsAlreadySearched = tagsFilterStr)
     elif(result['status'] == 1):
         return render_template('books.html',
         error = 'SQL runtime error',

@@ -6,9 +6,10 @@ def makeArrayOfTagsToStr(tags):
         return ''
     else:
         tagsStr = ''
-        for tag in tags:
-            tagsStr += tag
-            tagsStr += ','
+        for i in range(len(tags)):
+            tagsStr += tags[i]
+            if(i != len(tags)-1):
+                tagsStr += ','
         return tagsStr
 
 def makeTagsStrToArray(tagStr):
