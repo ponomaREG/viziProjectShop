@@ -211,7 +211,7 @@
         var $button = $(this);
         var oldValue = $button.parent().find('input').val();
         if ($button.hasClass('inc')) {
-            $.getJSON('http://localhost:5000/api/cart/add','product='+productID,function(data){
+            $.getJSON('/api/cart/add','product='+productID,function(data){
             if(data.status == 120){
                 window.location.replace('/login')
             }else if(data.status == 0){

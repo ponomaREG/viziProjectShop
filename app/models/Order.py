@@ -4,6 +4,7 @@ from app.models.Address import Address
 from app.models.Product import Product
 from utils import imageHelper
 from utils import emailSender
+from utils import addressBuilder
 
 
 class Order:
@@ -36,6 +37,19 @@ class Order:
         for row in cursor.fetchall():
             data.append({'id':row[0],'imageLink':imageHelper.makeFullPathToImage(row[1]),
             'title':row[2],'count':row[3],'total':row[4]})
+        cursor.close()
+        cursor = db.execute(
+            'select ord.id,addr.*,ord.date,ord.status,ord.total from Заказ as ord  inner join Адрес as addr \
+            where ord.address_id == addr.id and ord.id = {};'.format(orderID))
+        address = cursor.fetchone()
+        result['address'] = {'district':address[2],
+                            'street':address[3],'flat':address[4],'floor':address[5],
+                            'porch':address[6],'house':address[7],'address':addressBuilder.buildAddress(
+                                address[2],address[3],address[4],address[5],
+                                address[6],address[7]
+                            )}
+        result['info'] = {'orderID':address[0],'date':address[8],'status':address[9],
+                            'total':address[10]}
         cursor.close()
         result['status'] = 0
         result['message'] = 'OK'

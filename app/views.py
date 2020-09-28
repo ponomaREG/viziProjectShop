@@ -43,7 +43,18 @@ def checkout():
 @app.route('/order/<int:orderID>')
 @flask_login.login_required
 def showDetailsOfOrder(orderID):
-    return redirect('/login')
+    orderDetails = Order.getDetailsOfOrder(orderID)
+    if(orderDetails['status'] == 0):
+        return render_template('order-page.html',
+        orderInfo = orderDetails['info'],
+        user = flask_login.current_user,
+        data = orderDetails['data'],
+        address = orderDetails['address'])
+    else:
+        return render_template('order-page.html',
+        user = flask_login.current_user,
+        error = orderDetails['message'],
+        orderDetails = orderDetails)
 
 @app.route('/user/orders',methods=['GET'])
 @flask_login.login_required
