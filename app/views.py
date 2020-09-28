@@ -155,7 +155,7 @@ def showBooks(page):
         result = Product.getAllProfuctsFilteredByQuery(userQuerySearch,page,OFFSET)
         countOfRows = Product.getQuantityOfRowsInTable(
             'select * from Товар where title like "%{0}% " \
-            or author like "%{0}%" order by rate;')['count']
+            or author like "%{0}%" order by rate;'.format(userQuerySearch))['count']
     elif(tagsFilter):
         countOfRows = Product.getQuantityOfRowsInTable(sqlQueryHelper.buildSqlQueryByTags('select * from Товар',tagsFilter))['count']
         result = Product.getAllProductsFilteredByTags(tagsFilter,page,OFFSET)
@@ -165,8 +165,6 @@ def showBooks(page):
         result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
     if(result['status'] == 0):
         countOfPages = countOfRows // OFFSET
-        print('count '+str(countOfPages))
-        print('count of rows'+str(countOfRows))
         if(countOfRows % OFFSET > 0):
             countOfPages += 1
         countOfPagesRange = pageHelper.getRangeOfPages(countOfPages,page)
