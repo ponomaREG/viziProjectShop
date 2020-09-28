@@ -32,6 +32,11 @@ class Order:
     @staticmethod
     def getDetailsOfOrder(orderID):
         result = {}
+        if(not Order.checkIfUserHaveOrderWith(orderID)):
+            result['status'] = 30
+            result['message'] = 'Why are you so curious?'
+            result['data'] = []
+            return result
         cursor = db.execute("select pr.id,pr.imageLink,pr.title,bk.count,pr.cost_sale*bk.count as 'total' from Забронированная_книга as bk inner join Товар as pr on bk.order_id == {} and pr.id == bk.product_id;".format(orderID))
         data = []
         for row in cursor.fetchall():
@@ -124,4 +129,11 @@ class Order:
         # if(email is not None):
         #     emailSender.EmailSender.sendEmailTo([email],orderDetails=result['data'])
         return result
+
+    @staticmethod
+    def checkIfUserHaveOrderWith(orderID):
+        cursor = db.execute('select * from Заказ where id == {};'.format(orderID))
+        row = cursor.fetchone()
+        cursor.close()
+        return row is not None
         
