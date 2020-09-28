@@ -12,7 +12,7 @@ class Order:
     @staticmethod
     def getOrdersOfUser(userID):
         result = {}
-        cursor = db.execute('select * from Заказ as ord inner join Адрес as addr where ord.address_id == addr.id and user_id = {};'.format(userID))
+        cursor = db.execute('select * from Заказ as ord inner join Адрес as addr where ord.address_id == addr.id and user_id = {} order by id DESC;'.format(userID))
         allRows = cursor.fetchall()
         cursor.close()
         data = []
