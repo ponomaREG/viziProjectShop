@@ -1,5 +1,8 @@
 <!DOCTYPE html> 
 <html> 
+  <head>
+    <title>Регистрация</title>
+  </head>
 <style type="text/css">
     @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
@@ -128,19 +131,19 @@ body {
   
     <div class="login-page">
         <div class="form">
-            <p class="back"><a href="{{ url_for('showBooks',page=1) }}">&larr;Back to main</a></p>
+            <p class="back"><a href="{{ url_for('showBooks',page=1) }}">&larr;На главную</a></p>
           <form action="{{ url_for('registrationUser') }}" class="register-form" method="POST">
-            <input type="text" placeholder="First name" name="firstName" required/>
-            <input type="text" placeholder="Last name" name="lastName" required/>
-            <input type="password" placeholder="Password" name="pswd" required/>
-            <input type="password" placeholder="Enter your password again" name="pswd2" required/>
-            <input type="text" placeholder="Email address" name="email" required/>
-            BirthDate:<input type="date" placeholder="Birthdate" name="birthDate"/>
+            <input type="text" placeholder="Имя" name="firstName" required/>
+            <input type="text" placeholder="Фамилия" name="lastName" required/>
+            <input type="password" placeholder="Пароль" name="pswd" required/>
+            <input type="password" placeholder="Повторите пароль" name="pswd2" required/>
+            <input type="text" placeholder="Email" name="email" required/>
+            Дата рождения:<input type="date" name="birthDate"/>
             {% if error%}
                 <p class="error">Error:{{ error }}</p>
             {% endif %}
-            <button type="submit">Create</button>
-            <p class="message">Already registered? <a href="{{ url_for('loginUser') }}">Sign In</a></p>
+            <button type="submit">Создать</button>
+            <p class="message">Уже зарегистрированы? <a href="{{ url_for('loginUser') }}">Войти</a></p>
           </form>
         </div>
       </div>

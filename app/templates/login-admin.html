@@ -34,7 +34,7 @@
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
-  background: #4CAF50;
+  background: #1b7980;
   width: 100%;
   border: 0;
   padding: 15px;
@@ -107,11 +107,11 @@
   color: #EF3B3A;
 }
 body {
-  background: #76b852; /* fallback for old browsers */
-  background: -webkit-linear-gradient(right, #76b852, #8DC26F);
-  background: -moz-linear-gradient(right, #76b852, #8DC26F);
-  background: -o-linear-gradient(right, #76b852, #8DC26F);
-  background: linear-gradient(to left, #76b852, #8DC26F);
+  background: #39b9b9;
+  background: -webkit-linear-gradient(right, #39b9b9, #8DC26F);
+  background: -moz-linear-gradient(right,  #39b9b9, #8DC26F);
+  background: -o-linear-gradient(right, #39b9b9, #8DC26F);
+  background: linear-gradient(to left, #39b9b9, #8DC26F);
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;      
@@ -122,6 +122,7 @@ body {
   
     <div class="login-page">
         <div class="form">
+          <p>Панель администратора</p>
             <p class="back"><a href="{{ url_for('showBooks',page=1) }}">&larr;На главную</a></p>
           <form action="{{ url_for('loginUser')}}" class="login-form" method="POST">
             <input type="text" placeholder="Email" name="email"/>
@@ -130,7 +131,6 @@ body {
                 <p class="error">Error:{{ error }}</p>
             {% endif %}
             <button type="submit">Войти</button>
-            <p class="message">Не зарегистрированы? <a href="{{ url_for('registrationUser') }}">Создать аккаунт</a></p>
           </form>
         </div>
       </div>

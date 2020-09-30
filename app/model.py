@@ -13,6 +13,16 @@ def load_user(userID):
     if(len(allRows) == 0):
         return None
     row = allRows[0]
-    return User(userID = row[0],email = row[4],
+    user = User(userID = row[0],email = row[4],
     password_hash = row[6],last_name=row[1],
     first_name =row[2] ,birthdate = row[5])
+    if(checkIfUserAdmin(userID)):
+        user.set_admin(True)
+    return user
+
+
+
+def checkIfUserAdmin(userID):
+    cursor = db.execute('select * from Админ where user_id == {};'.format(userID))
+    user = cursor.fetchone()
+    return user is not None

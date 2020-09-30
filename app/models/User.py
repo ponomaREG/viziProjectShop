@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from app import db
 from app.models.Cart import Cart
 from utils import md5helper
+from utils import validationForm
 
 
 class User(UserMixin):
@@ -11,6 +12,7 @@ class User(UserMixin):
     birthdate = None
     email = None
     password_hash = None
+    is_admin = False
 
     def __init__(self,userID,email,password_hash,last_name,first_name,birthdate):
         self.userID = userID
@@ -30,6 +32,9 @@ class User(UserMixin):
     def is_anonymous(self):
         return False
 
+    def set_admin(self,boolean):
+        self.is_admin = boolean
+
     def get_id(self):
         return str(self.userID)
 
@@ -45,9 +50,14 @@ class User(UserMixin):
     def registerUser(email,password,last_name,first_name,birthdate):
         result = {}
         cursor = db.execute('select * from Покупатель where email="{}";'.format(email))
-        if(cursor.fetchone() is not None):
+        if(cursor.fetchone() is not None):# Проверка,если пользователь с таким email существует
             result['status'] = 1
-            result['message'] = 'User with same email already exists'
+            result['message'] = 'User with same email already exists' 
+            cursor.close()
+            return result
+        if(not validationForm.validationEmail(email)):# Если неправильно введен email
+            result['status'] = 2
+            result['message'] = 'Incorrect email'
             cursor.close()
             return result
         cursor.close()
@@ -55,7 +65,7 @@ class User(UserMixin):
             'insert into Покупатель("email","last_name","first_name","birthdate","password_hash") \
                 values("{}","{}","{}","{}","{}")'.format(
                     email,last_name,first_name,birthdate,md5helper.ecnrypt(password))
-                )
+                ) # Создание нового пользователя
         db.commit()
         result["status"] = 0
         result["message"] = "OK"
@@ -132,9 +142,9 @@ class User(UserMixin):
         cursor = db.execute(
             'select * from Покупатель where email \
              = "{}" and password_hash = "{}"'.format(email,md5helper.ecnrypt(password))
-            )
+            ) # Ищем пользователя в системе
         allRows = cursor.fetchall()
         if(len(allRows) == 0):
             return -1
         else:
-            return allRows[0][0]
+            return allRows[0][0] # Возвращаем ID пользователя

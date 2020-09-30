@@ -111,7 +111,7 @@ class Order:
         for row in allRows:
             try:
                 db.execute('insert into Забронированная_книга \
-                    values({},{},{})'.format(row[4],row[2],lastrowid))
+                    values({},{},{},{})'.format(row[4],row[2],lastrowid,row[1]))
                 #db.commit()
                 db.execute('delete from Корзина where \
                     user_id = {} and product_id = {};'.format(userID,row[4]))

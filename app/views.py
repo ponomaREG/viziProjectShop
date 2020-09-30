@@ -6,6 +6,7 @@ from app.models.User import User
 from app.models.Product import Product
 from app.models.Cart import Cart
 from app.models.Order import Order
+from app.models.Admin import Admin
 from utils import pageHelper
 import flask_login
 from utils import sqlQueryHelper, tagsHelper
@@ -105,44 +106,46 @@ def cart():
 
 @app.route("/login",methods = ['GET','POST'])
 def loginUser():
-    if(flask_login.current_user.is_authenticated):
-        return redirect(url_for('userInfo'))
-    if(request.method == 'POST'):
-        email = request.form.get('email',type=str)
-        password = request.form.get('password',type=str)
-        userID = User.validateUserAndReturnUserID(email,password)
-        if(userID != -1):
-            flask_login.login_user(load_user(userID),remember=True)
-            return redirect(url_for('showBooks',page=1))
+    if(flask_login.current_user.is_authenticated): #Проверяем вошел ли уже пользователь
+        return redirect(url_for('userInfo')) #Перекидываем на страницу профиля
+    if(request.method == 'POST'): # Если метод обращения к url POST
+        email = request.form.get('email',type=str) # Получаем введенный email 
+        password = request.form.get('password',type=str) # Получаем введенный пароль
+        userID = User.validateUserAndReturnUserID(email,password) #Получаем ID пользователя по введенному email и паролю
+        if(userID != -1):# Если пользователь найден
+            flask_login.login_user(load_user(userID),remember=True)#Логиним пользователя в системе
+            return redirect(url_for('showBooks',page=1))# Перекидываем на страницу книг
         else:
-            return render_template('login.html',error = "Not found")
+            return render_template('login.html',error = "Not found")#Выводим страницу логина с ошибкой
     else:
-        return render_template('login.html')
+        return render_template('login.html')# Если метод обращения не POST , то выводим html страницу логина
 
 @app.route('/registration',methods=['GET','POST'])
 def registrationUser():
     if(flask_login.current_user.is_authenticated):
         return redirect(url_for('userInfo'))
     if(request.method == 'POST'):
-        email = request.form.get('email',type=str)
-        pswd = request.form.get('pswd',type=str)
-        pswd2 = request.form.get('pswd2',type=str)
-        first_name = request.form.get('firstName',type=str)
-        last_name = request.form.get('lastName',type=str)
-        birthdate = request.form.get('birthDate')
+        email = request.form.get('email',type=str) # Получаем введенный email пользователя
+        pswd = request.form.get('pswd',type=str) # Получаем введенный пароль пользователя
+        pswd2 = request.form.get('pswd2',type=str) # Получаем введенный 2 пароль пользователя
+        first_name = request.form.get('firstName',type=str) # Получаем введенныое имя пользователя
+        last_name = request.form.get('lastName',type=str) # Получаем введенную фамилию пользователя
+        birthdate = request.form.get('birthDate') # Получаем введенную дата рождения пользователя
         if(pswd != pswd2):
-            return render_template('registration.html',error = 'Password mismatch')
-        resultRegisterOperation = User.registerUser(email,pswd,last_name,first_name,birthdate)
+            return render_template('registration.html',error = 'Password mismatch') # Возвращаем html с ошибкой
+        resultRegisterOperation = User.registerUser(email,pswd,last_name,first_name,birthdate) # Создаем пользователя
         if(resultRegisterOperation["status"] == 1):
-            return render_template('registration.html',error = 'User already exists')
-        flask_login.login_user(load_user(resultRegisterOperation["userID"]),remember=True)
+            return render_template('registration.html',error = 'User already exists') # Возвращаем html с ошибкой
+        elif(resultRegisterOperation['status'] == 2):
+            return render_template('registration.html',error = 'Incorrect email') # Возвращаем html с ошибкой
+        flask_login.login_user(load_user(resultRegisterOperation["userID"]),remember=True) # Авторизируем пользователя
         return redirect(url_for('userInfo'))
     else:
-        return render_template('registration.html')
+        return render_template('registration.html')# Возвращаем html с формой
 
 
 @app.route('/user',methods=['GET'])
-@flask_login.login_required
+@flask_login.login_required # Пример декоратора
 def userInfo():
         return render_template('user-profile.html',user = flask_login.current_user)
 
@@ -223,3 +226,46 @@ def showDetailsOfBook(productID):
         user = flask_login.current_user,error = details['message'])
     else:
         return redirect(url_for('showBooks',page=1))
+
+@app.route('/admin',methods=['GET','POST'])
+def loginAdmin():
+    if(flask_login.current_user.is_authenticated): #Проверяем вошел ли уже пользователь
+        if(flask_login.current_user.is_admin):
+            return render_template('admin-page.html') #Перекидываем на страницу профиля
+        else:
+            return redirect(url_for('main'))
+    else:
+        return redirect(url_for('loginUser'))
+
+@app.route('/admin/stat',methods=['GET','POST'])
+def adminStat():
+    # if(flask_login.current_user.is_admin):
+        if(request.method == 'POST'):
+            date_b = request.form.get('date_b')
+            date_e = request.form.get('date_e')
+            method = request.form.get('method',default=1,type=int)
+            resultStat = None
+            if(method == 3):
+                resultStat=Admin.getAllIncomeByPeriod(date_b,date_e)
+            elif(method == 2):
+                resultStat = Admin.getRatingPopularityOfBooksByPeriod(date_b,date_e)
+            elif(method == 1):
+                resultStat = Admin.getAllOrdersByPeriod(date_b,date_e)
+            if resultStat is not None:
+                return render_template('admin-stat.html',date_e = date_e,date_b=date_b,resultStat = resultStat)
+            else:
+                return '<h1>STAT</h1>'
+        else:
+            return render_template('admin-stat.html')
+
+        
+
+@app.route('/admin/add',methods=['GET'])
+def adminAddNew():
+    if(flask_login.current_user.is_admin):
+        return "<h1>ADD NEW</h1>"
+
+
+
+
+
