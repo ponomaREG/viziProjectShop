@@ -30,11 +30,16 @@ class Order:
         return result
 
     @staticmethod
-    def getDetailsOfOrder(orderID):
+    def getDetailsOfOrder(userID,orderID):
         result = {}
-        if(not Order.checkIfUserHaveOrderWith(orderID)):
+        if(not Order.checkIfUserHaveOrderWith(userID,orderID)):
             result['status'] = 30
             result['message'] = 'Why are you so curious?'
+            result['data'] = []
+            return result
+        if(not Order.checkIfOrderExists):
+            result['status'] = 40
+            result['message'] = 'Not founded'
             result['data'] = []
             return result
         cursor = db.execute("select pr.id,pr.imageLink,pr.title,bk.count,pr.cost_sale*bk.count as 'total' from Забронированная_книга as bk inner join Товар as pr on bk.order_id == {} and pr.id == bk.product_id;".format(orderID))
@@ -131,7 +136,14 @@ class Order:
         return result
 
     @staticmethod
-    def checkIfUserHaveOrderWith(orderID):
+    def checkIfUserHaveOrderWith(userID,orderID):
+        cursor = db.execute('select * from Заказ where user_id == {} and id = {};'.format(userID,orderID))
+        row = cursor.fetchone()
+        cursor.close()
+        return row is not None
+
+    @staticmethod
+    def checkIfOrderExists(orderID):
         cursor = db.execute('select * from Заказ where id == {};'.format(orderID))
         row = cursor.fetchone()
         cursor.close()

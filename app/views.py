@@ -46,14 +46,14 @@ def checkout():
 @app.route('/order/<int:orderID>')
 @flask_login.login_required
 def showDetailsOfOrder(orderID):
-    orderDetails = Order.getDetailsOfOrder(orderID)
+    orderDetails = Order.getDetailsOfOrder(flask_login.current_user.userID,orderID)
     if(orderDetails['status'] == 0):
         return render_template('order-page.html',
         orderInfo = orderDetails['info'],
         user = flask_login.current_user,
         data = orderDetails['data'],
         address = orderDetails['address'])
-    elif(orderDetails['status'] == 30):
+    elif(orderDetails['status'] == 30 or orderDetails['status'] == 40):
         return redirect(url_for('main'))
     else:
         return render_template('order-page.html',
@@ -240,8 +240,9 @@ def loginAdmin():
         return redirect(url_for('loginUser'))
 
 @app.route('/admin/stat',methods=['GET','POST'])
+@flask_login.login_required
 def adminStat():
-    # if(flask_login.current_user.is_admin):
+    if(flask_login.current_user.is_admin):
         if(request.method == 'POST'):
             date_b = request.form.get('date_b')
             date_e = request.form.get('date_e')
@@ -264,12 +265,15 @@ def adminStat():
 
         else:
             return render_template('admin-stat.html')
+    else:
+        return redirect(url_for('loginUser'))
 
         
 
 @app.route('/admin/add',methods=['GET','POST'])
+@flask_login.login_required
 def adminAddNew():
-    # if(flask_login.current_user.is_admin):
+    if(flask_login.current_user.is_admin):
         if(request.method == 'GET'):
             return render_template('admin-add.html')
         else:
@@ -287,17 +291,13 @@ def adminAddNew():
                     filename = secure_filename(file.filename)
                     filePath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
                     file.save(filePath)
-                else:
-                    print(2)
-            else:
-                print(1)
-
-
             result = Admin.insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,filename,tags)
             if(result['status'] == 0):
                 return render_template('admin-add.html',message = 'Added!',productID = result['data'][0])
             else:
                 return render_template('admin-add.html',message = 'No added(')
+    else:
+        return redirect(url_for('loginUser'))
 
 
 
