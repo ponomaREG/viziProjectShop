@@ -28,10 +28,11 @@ class Product:
         result['data'] = []
         for rw in allRows:
             rowDict = {
-                'title':rw[1],'desc':rw[2],
+                'title':rw[9]+' - '+rw[1],'desc':rw[2],
                 'rate':rw[7],'cost':rw[4],
                 'quantity':rw[5],'tags':rw[6],
-                'id':rw[0],'imageLink':imageHelper.makeFullPathToImage(rw[8])
+                'id':rw[0],'imageLink':imageHelper.makeFullPathToImage(rw[8]),
+                'author':rw[9],'bookTitle':rw[1]
                 }
             result['data'].append(rowDict)
         result['status'] = 0
@@ -146,7 +147,7 @@ class Product:
         else:
             result['status'] = 0
             result['message'] = 'OK'
-            result['data'] = [{'id':rw[0],'title':rw[1],
+            result['data'] = [{'id':rw[0],'title':rw[9] + ' - '+ rw[1],
             'desc':rw[2],'cost':rw[4],'quantity':rw[5],
             'tags':rw[6],'rate':rw[7],'imageLink':imageHelper.makeFullPathToImage(rw[8])}]
             return result

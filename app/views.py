@@ -10,6 +10,8 @@ from app.models.Admin import Admin
 from utils import pageHelper
 import flask_login
 from utils import sqlQueryHelper, tagsHelper
+from werkzeug.utils import secure_filename
+import os
 
 
 
@@ -245,25 +247,58 @@ def adminStat():
             date_e = request.form.get('date_e')
             method = request.form.get('method',default=1,type=int)
             resultStat = None
+
             if(method == 3):
                 resultStat=Admin.getAllIncomeByPeriod(date_b,date_e)
             elif(method == 2):
                 resultStat = Admin.getRatingPopularityOfBooksByPeriod(date_b,date_e)
             elif(method == 1):
                 resultStat = Admin.getAllOrdersByPeriod(date_b,date_e)
+            elif(method == 4):
+                resultStat = Admin.getCountOfOrderByPeriod(date_b,date_e)
+            
             if resultStat is not None:
                 return render_template('admin-stat.html',date_e = date_e,date_b=date_b,resultStat = resultStat)
             else:
-                return '<h1>STAT</h1>'
+                return render_template('admin-stat.html',date_e = date_e,date_b = date_b)
+
         else:
             return render_template('admin-stat.html')
 
         
 
-@app.route('/admin/add',methods=['GET'])
+@app.route('/admin/add',methods=['GET','POST'])
 def adminAddNew():
-    if(flask_login.current_user.is_admin):
-        return "<h1>ADD NEW</h1>"
+    # if(flask_login.current_user.is_admin):
+        if(request.method == 'GET'):
+            return render_template('admin-add.html')
+        else:
+            title = request.form.get('title')
+            author = request.form.get('author')
+            desc = request.form.get('desc')
+            cost_purchase = request.form.get('cost_purchase',type = float)
+            cost_sale = request.form.get('cost_sale',type = float)
+            quantity = request.form.get('quantity',type=int)
+            tags = request.form.get('tags')
+            filename = app.config['PLACEHOLDER_NAME']
+            if 'image' in request.files:
+                file = request.files['image']
+                if(file.filename != ''):
+                    filename = secure_filename(file.filename)
+                    filePath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+                    file.save(filePath)
+                else:
+                    print(2)
+            else:
+                print(1)
+
+
+            result = Admin.insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,filename,tags)
+            if(result['status'] == 0):
+                return render_template('admin-add.html',message = 'Added!',productID = result['data'][0])
+            else:
+                return render_template('admin-add.html',message = 'No added(')
+
 
 
 

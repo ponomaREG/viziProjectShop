@@ -28,6 +28,25 @@ class Admin:
 
 
     @staticmethod
+    def insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,imageName,tags):
+        cursor = db.execute('insert into Товар("title","author","desc","cost_sale","cost_purchase","quantity","imageLink","tags","rate") \
+            values("{}","{}","{}",{},{},{},"{}","{}",0.0)'.format(title,author,desc,cost_sale,cost_purchase,quantity,imageName,tags))
+        db.commit()
+        lastrowid = cursor.lastrowid
+        cursor.close()
+        result = {}
+        if(lastrowid>0):
+            result['status'] = 0
+            result['message'] = 'OK'
+            result['data'] = [lastrowid,]
+        else:
+            result['status'] = 125
+            result['message'] = 'Not > 0'
+            result['data'] = []
+        return result
+
+
+    @staticmethod
     def getAllIncomeByPeriod(date_b,date_e):
         return Admin.__makeResultResponse('select sum(total) as "total" from Заказ where date>="{}" and date<= "{}";'.format(date_b,date_e))
 
@@ -39,3 +58,8 @@ class Admin:
     @staticmethod
     def getAllOrdersByPeriod(date_b,date_e):
         return Admin.__makeResultResponse("select * from Заказ where date>='{}' and date<= '{}';".format(date_b,date_e))
+
+    @staticmethod
+    def getCountOfOrderByPeriod(date_b,date_e):
+        return Admin.__makeResultResponse("select count(*) as 'count' from Заказ where date>='{}' and date<= '{}';".format(date_b,date_e))
+
