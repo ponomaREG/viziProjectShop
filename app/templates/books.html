@@ -203,124 +203,10 @@
 </div>
 </div>
 
-<!-- <script>
-  $(function(){
-      $(".header").load("templates/header.html"); 
-    });
-    $(function(){
-      $(".hero").load("templates/hero.html"); 
-    });
-    $(function(){
-      $(".footer").load("templates/footer.html"); 
-    });
-</script> -->
-<header class="header">
-  
-<div class="header__top">
-  <div class="container">
-  <div class="row">
-  <div class="col-lg-6 col-md-6">
-  </div>
-  <div class="col-lg-6 col-md-6">
-  <div class="header__top__right">
-    {% if user.is_authenticated %}
-    <div class="header__top__right__auth">
-      <nav class="header__menu">
-        <ul>
-            <li><a href="#"><span><i class="fa fa-user"></i> Profile</span></a>
-                <ul class="header__menu__dropdown">
-                  <li><a href="{{ url_for('userInfo')}}">Information</a></li>
-                  <li><a href="{{ url_for('showOrders')}}">Orders</a></li>
-                  <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-  </div>
-    {% else %}
-  <div class="header__top__right__auth">
-  <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
-  </div>
-  {% endif %}
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  
-  <div class="container">
-  <div class="row">
-  <div class="col-lg-3">
-  <div class="header__logo">
-  <a href="{{ url_for('showBooks',page=1) }}"><img width="30%" height="30%" src="{{ url_for('static',filename = 'img/logo.png') }}" alt=""></a>
-  </div>
-  </div>
-  <div class="col-lg-3">
-    <div class="header__logo hidden">
-    <a href="./index.html"><img src="img/logo.png" alt=""></a>
-    </div>
-    </div>
-  
-    <div class="col-lg-3">
-      <div class="header__logo hidden">
-      <a href="./index.html"><img src="img/logo.png" alt=""></a>
-      </div>
-      </div>
-  <div class="col-lg-3">
-  <div class="header__cart">
-  <ul>
-    {% if user.is_authenticated%}
-  <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span></a></li>
-    {% else %}
-  <li><a href="{{url_for('loginUser')}}"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
-    {% endif %}
-  </ul>
-    {% if user.is_authenticated %}
-  <div class="header__cart__price">item: <span id="header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
-    {% else %}
-  <div class="header__cart__price">item: <span>0.0P</span></div>
-  
-    {% endif %}
-  </div>
-  </div>
-  </div>
-  <div class="humberger__open">
-  <i class="fa fa-bars"></i>
-  </div>
-  </div>
-</header>
+{% include 'base/header.html' %}
 
 
-<section class="hero">
-  <div class="container">
-    <div class="row">
-    <div class="col-lg-12">
-    <div class="hero__search">
-    <div class="hero__search__form">
-    <form action="{{ url_for('showBooks',page=1) }}" method="GET">
-      {% if q%}
-    <input name="q" type="text" placeholder="What do yo u need?" value = "{{ q }}">
-      {%else %}
-    <input name="q" type="text" placeholder="What do yo u need?">
-      {% endif %}
-    <button type="submit" class="site-btn">SEARCH</button>
-    </form>
-    </div>
-    <a class="site-btn" href="{{ url_for('searchAdvanced')}}">ADVANCED SEARCH</a>
-    <div class="hero__search__phone">
-    <div class="hero__search__phone__icon">
-    <i class="fa fa-phone"></i>
-    </div>
-    <div class="hero__search__phone__text">
-    <h5>8(800)555-35-35</h5>
-    <span>support 24/7 time</span>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-</section>
+{% include 'base/hero.html' %}
 
 
 <section class="featured spad">
@@ -383,33 +269,8 @@
 <div id="msg_pop">
   <h4>Успешно добавлено!</h4>
   </div> 
-<footer class="footer spad">
-  <div class="container">
-    <div class="row">
-    <div class="col-lg-3 col-md-6 col-sm-6">
-    <div class="footer__about">
-     <div class="footer__about__logo">
-    <a href="{{ url_for('showBooks',page = 1)}}"><img width=20% height=20% src="{{ url_for('static',filename='img/logo.png') }}" alt=""></a>
-    </div>
-    <ul>
-    <li>12 liniya VO, 51</li>
-    <li>Phone: 8(800)-555-35-35</li>
-    </ul>
-    </div>
-    </div>
-    </div>
-    <div class="row">
-    <div class="col-lg-12">
-    <div class="footer__copyright">
-    <div class="footer__copyright__text"><p>
-    Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="baea7c064f6a573d1522ee04-text/javascript">document.write(new Date().getFullYear());</script> All rights reserved
-    </p></div>
-    <div class="footer__copyright__payment"><img src="img/payment-item.png" alt=""></div>
-    </div>
-    </div>
-    </div>
-    </div> 
-</footer>
+
+{% include 'base/footer.html' %}
 
 
 
