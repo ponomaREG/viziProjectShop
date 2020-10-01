@@ -42,7 +42,6 @@ class User(UserMixin):
         return Cart.countTotalCostOfUser(self.userID)
 
     def getCountOfItemsInCart(self):
-        print(Cart.getCountOfItemsInCart(self.userID)["data"][0])
         return Cart.getCountOfItemsInCart(self.userID)["data"][0]
 
 

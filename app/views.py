@@ -53,7 +53,7 @@ def showDetailsOfOrder(orderID):
         user = flask_login.current_user,
         data = orderDetails['data'],
         address = orderDetails['address'])
-    elif(orderDetails['status'] == 30 or orderDetails['status'] == 40):
+    elif(orderDetails['status'] == 3 or orderDetails['status'] == 40):
         return redirect(url_for('main'))
     else:
         return render_template('order-page.html',

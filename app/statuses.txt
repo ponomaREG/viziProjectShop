@@ -7,6 +7,6 @@ STATUSES OF RESPONSE
 4 - Zero quantity
 5 - Not enough products
 
-
+40 - Not founded order
 120 - Not auth
 

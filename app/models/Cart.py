@@ -29,7 +29,7 @@ class Cart:
                 from Товар as pr \
                 inner join Корзина as cart on pr.id == product_id \
                 and user_id = {};'.format(userID))
-        if(row['totalCost']) is None:
+        if(row is None or row['totalCost'] is None):
             return 0.0
         else:
             return float(row['totalCost'])
@@ -75,7 +75,7 @@ class Cart:
     @staticmethod
     def addItemInCartOfUser(userID,productID):
         result = {}
-        
+        print(productID)
         row = SqlExecuter.getOneRowsPacked(
             'select * from Товар where id = {};'.format(productID)
         )
@@ -132,16 +132,16 @@ class Cart:
         try:
             row = SqlExecuter.getOneRowsPacked(
                 'select SUM(count) as "count" from Корзина where user_id = {};'.format(userID))
-            if(row is None):
+            if(row is None or row['count'] is None):
                 result['status'] = 2
                 result['message'] = 'Empty cart'
                 result['data'] = [0]
                 return result
-            if(row['count'] is None):
-                result['status'] = 2
-                result['message'] = 'Empty cart'
-                result['data'] = [0]
-                return result
+            # if(row['count'] is None):
+            #     result['status'] = 2
+            #     result['message'] = 'Empty cart'
+            #     result['data'] = [0]
+            #     return result
             result['status'] = 0
             result['message'] = 'OK'
             result['data'] = [row['count']]
@@ -149,7 +149,7 @@ class Cart:
         except:
             result['status'] = 1
             result['message'] = 'SQL runtime error'
-            result['data'] = []
+            result['data'] = [-1]
             return result
 
 
