@@ -55,23 +55,26 @@ class SqlExecuter:
 
     @staticmethod
     def getAllRowsPacked(query):
-        # try:
+        try:
             rowsAndColumns = SqlExecuter.getAllRowAndColumns(query)
             return SqlExecuter.prepareDataByManyRows(rowsAndColumns['allRows'],rowsAndColumns['columns'])
-        # except:
+        except:
             return None
 
     @staticmethod
     def getOneRowsPacked(query):
-        # try:
+        try:
             rowAndColumns = SqlExecuter.getOneRowAndColumns(query)
             return SqlExecuter.prepareDataByOneRow(rowAndColumns['row'],rowAndColumns['columns'])
-        # except:
+        except:
             return None
 
 
 
     @staticmethod
     def executeModif(query):
-        db.execute(query)
+        cursor = db.execute(query)
         db.commit()
+        lastrowid = cursor.lastrowid
+        cursor.close()
+        return lastrowid
