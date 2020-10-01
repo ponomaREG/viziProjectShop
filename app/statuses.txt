@@ -1,0 +1,10 @@
+STATUSES OF RESPONSE
+
+0 - Success
+1 - SQL Runtime Error
+2 - Empty Response / Not founded
+3 - Denied
+4 - Zero quantity
+5 - Not enough products
+
+
