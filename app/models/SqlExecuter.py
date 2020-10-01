@@ -37,6 +37,8 @@ class SqlExecuter:
 
     @staticmethod
     def prepareDataByOneRow(row,columns):
+        if(row is None or len(row) == 0):
+            return None
         keyword = {}
         for i in range(len(columns)):
             keyword[columns[i]] = row[i]
@@ -44,6 +46,8 @@ class SqlExecuter:
 
     @staticmethod
     def prepareDataByManyRows(allRows,columns):
+        if(allRows is None or len(allRows) == 0):
+            return None
         data = []
         for row in allRows:
             data.append(SqlExecuter.prepareDataByOneRow(row,columns))
@@ -51,18 +55,18 @@ class SqlExecuter:
 
     @staticmethod
     def getAllRowsPacked(query):
-        try:
+        # try:
             rowsAndColumns = SqlExecuter.getAllRowAndColumns(query)
             return SqlExecuter.prepareDataByManyRows(rowsAndColumns['allRows'],rowsAndColumns['columns'])
-        except:
+        # except:
             return None
 
     @staticmethod
     def getOneRowsPacked(query):
-        try:
+        # try:
             rowAndColumns = SqlExecuter.getOneRowAndColumns(query)
             return SqlExecuter.prepareDataByOneRow(rowAndColumns['row'],rowAndColumns['columns'])
-        except:
+        # except:
             return None
 
 

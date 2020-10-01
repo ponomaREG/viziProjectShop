@@ -26,10 +26,13 @@ class Cart:
     @staticmethod #TODO: REFACTOR
     def countTotalCostOfUser(userID):
         row = SqlExecuter.getOneRowsPacked('select SUM(cart.count*pr.cost_sale) as "totalCost" \
-                as "Total" from Товар as pr \
+                from Товар as pr \
                 inner join Корзина as cart on pr.id == product_id \
                 and user_id = {};'.format(userID))
-        return float(row['totalCost'])
+        if(row['totalCost']) is None:
+            return 0.0
+        else:
+            return float(row['totalCost'])
 
     @staticmethod
     def removeItemInCartOfUser(userID,productID):
@@ -38,7 +41,7 @@ class Cart:
             row = SqlExecuter.getOneRowsPacked(
                 'select * from Корзина where product_id = {} and user_id = {};'.format(productID,userID)
             )
-        except:
+        except IndexError:
             result['status'] = 1
             result['message'] = 'SQL Runtime error'
             return result
@@ -47,7 +50,7 @@ class Cart:
                 try:
                     SqlExecuter.executeModif('update Корзина set count = count - 1 where \
                     product_id = {} and user_id = {};'.format(productID,userID))
-                except:
+                except IndexError:
                     result['status'] = 1
                     result['message'] = 'SQL Runtime error'
                     return result
@@ -57,7 +60,7 @@ class Cart:
             try:
                 SqlExecuter.executeModif('delete from Корзина where \
                     product_id = {} and user_id = {};'.format(productID,userID))
-            except:
+            except IndexError:
                 result['status'] = 1
                 result['message'] = 'SQL Runtime error'
                 return result
@@ -134,6 +137,11 @@ class Cart:
                 result['message'] = 'Empty cart'
                 result['data'] = [0]
                 return result
+            if(row['count'] is None):
+                result['status'] = 2
+                result['message'] = 'Empty cart'
+                result['data'] = [0]
+                return result
             result['status'] = 0
             result['message'] = 'OK'
             result['data'] = [row['count']]
@@ -150,19 +158,19 @@ class Cart:
         result = {}
         try:
             data = SqlExecuter.getAllRowsPacked('select (pr.title || " - " || pr.author) as "title",pr.cost_sale as "cost",cart.count,cart.count*pr.cost_sale as "total",pr.id,pr.imageLink,pr.author from Товар as pr inner join Корзина as cart on pr.id == product_id and user_id = {};'.format(userID))
-        except:
+        except IndexError:
             result['status'] = 1
             result['message'] = 'SQL runtime error'
             result['data'] = []
             return result
-        if(len(data) == 0):
+        if(data is None or len(data) == 0):
             result['status'] = 2
             result['message'] = 'Empty cart'
             result['data'] = []
             return result
-        result['data'] = []
+        result['data'] = data
         result['count'] = len(data)
         result['status'] = 0
         result['message'] = 'OK'
-        result['totalCost'] = SqlExecuter.prepareDataByOneRow("select SUM(cart.count*pr.cost_sale) as 'totalCost' from Товар as pr inner join Корзина as cart on pr.id == product_id and user_id = {};".format(userID))['totalCost']
+        result['totalCost'] = SqlExecuter.getOneRowsPacked("select SUM(cart.count*pr.cost_sale) as 'totalCost' from Товар as pr inner join Корзина as cart on pr.id == product_id and user_id = {};".format(userID))['totalCost']
         return result

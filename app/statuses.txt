@@ -8,3 +8,5 @@ STATUSES OF RESPONSE
 5 - Not enough products
 
 
+120 - Not auth
+
