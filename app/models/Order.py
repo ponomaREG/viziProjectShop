@@ -42,6 +42,8 @@ class Order:
             return result
 
         data = SqlExecuter.getAllRowsPacked("select pr.id,pr.imageLink,pr.title,bk.count,pr.cost_sale*bk.count as 'total' from Забронированная_книга as bk inner join Товар as pr on bk.order_id == {} and pr.id == bk.product_id;".format(orderID))
+        for row in data:
+            row['imageLink'] = imageHelper.makeFullPathToImage(row['imageLink'])
         rowAddressPacked = SqlExecuter.getOneRowsPacked(
             "select ord.id as 'orderID',addr.*,ord.date,ord.status,ord.total,(addr.district||' district,'||addr.street||', '||addr.house) as 'address' from Заказ as ord  inner join Адрес as addr \
             where ord.address_id == addr.id and ord.id = {};".format(orderID))

@@ -24,6 +24,8 @@ class Product:
             result['message'] = "Empty data"
             result['data'] = []
             return result
+        for row in allRows:
+            row['imageLink'] = imageHelper.makeFullPathToImage(row['imageLink'])
         result['data'] = allRows
         result['status'] = 0
         result['message'] = 'OK'
@@ -152,6 +154,7 @@ class Product:
             result['data'] = []
             return result
         else:
+            row['imageLink'] = imageHelper.makeFullPathToImage(row['imageLink'])
             result['status'] = 0
             result['message'] = 'OK'
             result['data'] = [row]

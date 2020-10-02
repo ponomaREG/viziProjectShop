@@ -95,8 +95,6 @@ def newOrder():
 @flask_login.login_required
 def cart():
         cart = Cart.getCartOfUser(flask_login.current_user.userID) #TODO: CHECK STATUS
-        print(cart['status'])
-        print('asd')
         if(cart['status'] == 0):
             print('len ' + str(len(cart['data'])))
             return render_template('shoping-cart.html',

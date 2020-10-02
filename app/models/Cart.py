@@ -158,7 +158,7 @@ class Cart:
         result = {}
         try:
             data = SqlExecuter.getAllRowsPacked('select (pr.title || " - " || pr.author) as "title",pr.cost_sale as "cost",cart.count,cart.count*pr.cost_sale as "total",pr.id,pr.imageLink,pr.author from Товар as pr inner join Корзина as cart on pr.id == product_id and user_id = {};'.format(userID))
-        except IndexError:
+        except:
             result['status'] = 1
             result['message'] = 'SQL runtime error'
             result['data'] = []
@@ -168,6 +168,8 @@ class Cart:
             result['message'] = 'Empty cart'
             result['data'] = []
             return result
+        for row in data:
+            row['imageLink'] = imageHelper.makeFullPathToImage(row['imageLink'])
         result['data'] = data
         result['count'] = len(data)
         result['status'] = 0
