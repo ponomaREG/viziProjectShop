@@ -57,7 +57,6 @@ class SqlExecuter:
     def getAllRowsPacked(query):
         try:
             rowsAndColumns = SqlExecuter.getAllRowAndColumns(query)
-            print("test "+str(rowsAndColumns))
             return SqlExecuter.prepareDataByManyRows(rowsAndColumns['allRows'],rowsAndColumns['columns'])
         except:
             return None
@@ -66,7 +65,6 @@ class SqlExecuter:
     def getOneRowsPacked(query):
         # try:
             rowAndColumns = SqlExecuter.getOneRowAndColumns(query)
-            print("ROW AND COLUMNS"+str(rowAndColumns))
             return SqlExecuter.prepareDataByOneRow(rowAndColumns['row'],rowAndColumns['columns'])
         # except:
             return None

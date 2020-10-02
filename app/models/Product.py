@@ -2,6 +2,7 @@ from app import db
 from utils import sqlQueryHelper
 from utils import imageHelper
 from utils import tagsHelper
+from app.models.SqlExecuter import SqlExecuter
 
 
 class Product:
@@ -14,6 +15,19 @@ class Product:
         self.title = title
         self.cost_sale = cost_sale
         self.quantity = quantity
+
+    @staticmethod
+    def __preparePackedProducts(allRows):
+        result = {}
+        if(allRows is None or len(allRows) == 0):
+            result['status'] = 2
+            result['message'] = "Empty data"
+            result['data'] = []
+            return result
+        result['data'] = allRows
+        result['status'] = 0
+        result['message'] = 'OK'
+        return result
 
     @staticmethod
     def __prepareProducts(cursor):
@@ -65,58 +79,55 @@ class Product:
     def getAllProfuctsFilteredByRate(page,offset):
         result = {}
         try:
-            cursor = db.execute(
-                'select * from Товар order by rate DESC LIMIT {} OFFSET {};'
+            
+            allRows = SqlExecuter.getAllRowsPacked(
+                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар order by rate DESC LIMIT {} OFFSET {};'
                 .format(offset,offset*(page-1)))
         except:
             result['status'] = 1
             result['message'] = "Runtime error while executing sql query"
             result['data'] = []
-            cursor.close()
             return result
-        return Product.__prepareProducts(cursor)
+        return Product.__preparePackedProducts(allRows)
 
     @staticmethod
     def getAllProfuctsFilteredByQuery(query,page=-1,offset=-1):
         result = {}
         try:
-            cursor = db.execute(
-                'select * from Товар where title like "%{0}%" or author like "%{0}%" order by rate DESC LIMIT {1} OFFSET {2};'
+            allRows = SqlExecuter.getAllRowsPacked(
+                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар where title like "%{0}%" or author like "%{0}%" order by rate DESC LIMIT {1} OFFSET {2};'
                 .format(query,offset,offset*(page-1)))
         except:
             result['status'] = 1
             result['message'] = "Runtime error while executing sql query"
             result['data'] = []
-            cursor.close()
             return result
-        return Product.__prepareProducts(cursor)
+        return Product.__preparePackedProducts(allRows)
 
     @staticmethod
     def getAllProductsFilteredByTags(tags,page,offset):
         result = {}
         try:
-            print(sqlQueryHelper.buildSqlQueryByTagsAndPage('select * from Товар',tags,page,offset))
-            cursor = db.execute(sqlQueryHelper.buildSqlQueryByTagsAndPage('select * from Товар',tags,page,offset))
+            allRows = SqlExecuter.getAllRowsPacked(sqlQueryHelper.buildSqlQueryByTagsAndPage('select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар',tags,page,offset))
         except:
-            result['status'] = 3
+            result['status'] = 1
             result['message'] = "Runtime error while executing sql query"
             result['data'] = []
             return result
-        return Product.__prepareProducts(cursor)
+        return Product.__preparePackedProducts(allRows)
 
     @staticmethod
     def getAvailableTags():
         result = {}
-        cursor = db.execute('select tags from Товар;')
-        allRows = cursor.fetchall()
-        cursor.close()
-        if(len(allRows) == 0):
+        allRows = SqlExecuter.getAllRowsPacked('select tags from Товар;')
+        if(allRows is None or len(allRows) == 0):
             result['status'] = 2
             result['message'] = 'Empty data'
+            result['data'] = []
             return result
         tagsArrUNIQUE = []
         for row in allRows:
-            tags = row[0]
+            tags = row['tags']
             tagsArr = tagsHelper.makeTagsStrToArray(tags)
             tagsArrUNIQUE = list(set(tagsArrUNIQUE + tagsArr))
         result['status'] = 0
@@ -129,25 +140,19 @@ class Product:
     def getDetailsOfProduct(productID):
         result = {}
         try:
-            cursor = db.execute('select * from Товар where id = {};'.format(productID))
+            row = SqlExecuter.getOneRowsPacked('select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар where id = {};'.format(productID))
         except:
             result['status'] = 1
             result['message'] = 'SQL Runtime error'
             result['data'] = []
-            cursor.close()
             return result
-        rw = cursor.fetchone()
-        cursor.close()
-        if(rw is None):
+        if(row is None):
             result['status'] = 2
             result['message'] = 'Empty data'
             result['data'] = []
-            cursor.close()
             return result
         else:
             result['status'] = 0
             result['message'] = 'OK'
-            result['data'] = [{'id':rw[0],'title':rw[9] + ' - '+ rw[1],
-            'desc':rw[2],'cost':rw[4],'quantity':rw[5],
-            'tags':rw[6],'rate':rw[7],'imageLink':imageHelper.makeFullPathToImage(rw[8])}]
+            result['data'] = [row]
             return result
