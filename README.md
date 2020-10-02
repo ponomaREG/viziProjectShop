@@ -7,3 +7,5 @@ Authentication and authorization: flask-login
 Database:>SQLite
 <br>
 API methods are available for connecting a separate front-end server
+
+http://shop.endofthelist.codes/
