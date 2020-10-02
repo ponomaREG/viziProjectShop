@@ -6,6 +6,9 @@ STATUSES OF RESPONSE
 3 - Denied
 4 - Zero quantity
 5 - Not enough products
+6 - Required field is missing
+7 - Incorrect format of input
+8 - User with same email is already exists
 
 40 - Not founded order
 120 - Not auth

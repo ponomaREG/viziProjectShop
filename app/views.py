@@ -138,9 +138,9 @@ def registrationUser():
         if(pswd != pswd2):
             return render_template('registration.html',error = 'Password mismatch') # Возвращаем html с ошибкой
         resultRegisterOperation = User.registerUser(email,pswd,last_name,first_name,birthdate) # Создаем пользователя
-        if(resultRegisterOperation["status"] == 1):
+        if(resultRegisterOperation["status"] == 8):
             return render_template('registration.html',error = 'User already exists') # Возвращаем html с ошибкой
-        elif(resultRegisterOperation['status'] == 2):
+        elif(resultRegisterOperation['status'] == 7):
             return render_template('registration.html',error = 'Incorrect email') # Возвращаем html с ошибкой
         flask_login.login_user(load_user(resultRegisterOperation["userID"]),remember=True) # Авторизируем пользователя
         return redirect(url_for('userInfo'))
