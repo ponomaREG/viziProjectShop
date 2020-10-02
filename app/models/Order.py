@@ -1,4 +1,4 @@
-from app import db
+
 from app.models.Cart import Cart
 from app.models.Address import Address
 from app.models.Product import Product
@@ -115,7 +115,6 @@ class Order:
 
     @staticmethod
     def checkIfUserHaveOrderWith(userID,orderID):
-        print(SqlExecuter.getOneRowsPacked('select * from Заказ where user_id == {} and id = {};'.format(userID,orderID)))
         return SqlExecuter.getOneRowsPacked('select * from Заказ where user_id == {} and id = {};'.format(userID,orderID)) is not None
 
     @staticmethod

@@ -7,6 +7,7 @@ from app.models.Product import Product
 from app.models.Cart import Cart
 from app.models.Order import Order
 from app.admin.models import *
+from app.admin.views import *
 from utils import pageHelper
 import flask_login
 from utils import sqlQueryHelper, tagsHelper
