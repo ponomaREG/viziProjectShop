@@ -93,7 +93,15 @@
                                         <h5><a style="text-decoration: none;" href="{{ url_for('showDetailsOfOrder',orderID=order.id)}}">Order№{{ order.id}}</a></h5>
                                     </td>
                                     <td class="shoping__cart__price">
-                                        Status is HERE
+                                        {% if order.status == 0 %}
+                                        Formalized
+                                        {% endif %}
+                                        {% if order.status == 1 %}
+                                        Collected
+                                        {% endif %}
+                                        {% if order.status == 2 %}
+                                        Delivered
+                                        {% endif %}
                                     </td>
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">

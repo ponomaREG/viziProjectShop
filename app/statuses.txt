@@ -13,3 +13,8 @@ STATUSES OF RESPONSE
 40 - Not founded order
 120 - Not auth
 
+//ORDER STATUSES
+0 - Formalized
+1 - Collected
+2 - Delivered
+
