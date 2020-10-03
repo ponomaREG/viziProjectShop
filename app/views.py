@@ -86,7 +86,7 @@ def newOrder():
             newOrder = Order.addNewOrder(flask_login.current_user.userID,district,
             flat,house,floor,street,porch,email=email)
             if(newOrder['status'] == 0):
-                return render_template('order.html',user = flask_login.current_user,orderProducts = newOrder['data'])
+                return render_template('order.html',user = flask_login.current_user,data = newOrder['data']['data'])
             else:
                 return render_template('order.html',user = flask_login.current_user,error = newOrder['message'])
         else:
