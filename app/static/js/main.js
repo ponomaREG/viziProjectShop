@@ -361,6 +361,31 @@
         }
 
         })
+
+
+
+    var ratingBar = $('#rating-bar');
+    var ratingBarButton = $('#rating-bar-submit')
+    var ratingBarStatus = $('#rating-bar-status')
+    ratingBarButton.on('click',function(){
+        console.log(parseInt(ratingBar.attr('value')));
+        console.log(parseInt(ratingBar.val()));
+        console.log(ratingBar.val())
+        $.getJSON('/api/rate',
+        {
+            'productID':parseInt(ratingBar.attr('value')),
+            'mark':parseInt(ratingBar.val())
+        },function(data){
+            console.log(data.status)
+            if(data.status == 120){
+                window.location.replace('/login')
+            }else if(data.status == 0){
+                ratingBarStatus.text('Вы поставили свою оценку')
+            } else if(data.status == 9){
+                ratingBarStatus.text('Вы уже поставили свою оценку')
+            }
+        })
+    })
     
     
 

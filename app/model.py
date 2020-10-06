@@ -8,14 +8,12 @@ from app.models.User import *
 
 @login_manager.user_loader
 def load_user(userID):
-    cursor = db.execute('select * from Покупатель where id = {};'.format(userID))
-    allRows = cursor.fetchall()
-    if(len(allRows) == 0):
+    row = SqlExecuter.getOneRowsPacked('select * from Покупатель where id = {};'.format(userID))
+    if(row is None):
         return None
-    row = allRows[0]
-    user = User(userID = row[0],email = row[4],
-    password_hash = row[6],last_name=row[1],
-    first_name =row[2] ,birthdate = row[5])
+    user = User(userID = row['id'],email = row['email'],
+    password_hash = row['password_hash'],last_name=row['last_name'],
+    first_name =row['first_name'] ,birthdate = row['birthdate'])
     if(checkIfUserAdmin(userID)):
         user.set_admin(True)
     return user
@@ -23,6 +21,4 @@ def load_user(userID):
 
 
 def checkIfUserAdmin(userID):
-    cursor = db.execute('select * from Админ where user_id == {};'.format(userID))
-    user = cursor.fetchone()
-    return user is not None
+    return SqlExecuter.getOneRowsPacked('select * from Админ where user_id == {};'.format(userID)) is not None

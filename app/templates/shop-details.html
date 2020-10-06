@@ -105,8 +105,22 @@
                             <li>{{ error }}</li>
                             {% else%}
                             <li><b>Quantity</b> <span>{{details.quantity}}</span></li>
+                            <li><b>Rate</b> <span>{{details.rate}}/5.0</span></li>
                             {% endif %}
                         </ul>
+                        {% if user.is_authenticated %}
+                        <h3>Rate this product!</h3>
+
+                        <select id="rating-bar" value={{details.id}}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button id="rating-bar-submit">Rate</button>
+                        <p id='rating-bar-status'></p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -156,6 +170,8 @@
     <script src="{{url_for('static',filename='js/jquery.slicknav.js')}}"></script>
     <script src="{{url_for('static',filename='js/mixitup.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
+    <script type="text/javascript" src="http://bseth99.github.io/projects/jquery-ui/ratingbar.js"></script>
+    
 
 
 </body>

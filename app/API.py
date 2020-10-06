@@ -119,6 +119,15 @@ def removeItemInCart():
     else:
         return jsonify({'message':'Not auth','status':120})
 
+@app.route('/api/rate',methods=['GET'])
+def setRate():
+    user = flask_login.current_user
+    if(user.is_authenticated):
+        productID = request.args.get('productID',type=int)
+        mark = request.args.get('mark',type=int)
+        result = Product.addNewRate(user.userID,productID,mark)
+        return jsonify(result)
+    return jsonify({'status':120,'message':'Not auth'})
 
 @app.route('/api/books/detail/<int:productID>')
 def showDetailsOfBookAPI(productID):

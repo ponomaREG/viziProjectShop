@@ -16,6 +16,7 @@ class Product:
         self.cost_sale = cost_sale
         self.quantity = quantity
 
+
     @staticmethod
     def __preparePackedProducts(allRows):
         result = {}
@@ -62,28 +63,29 @@ class Product:
     def getQuantityOfRowsInTable(query):
         result = {}
         try:
-            cursor = db.execute(
-                query
-                )
+            row = SqlExecuter.getOneRowsPacked(query)
         except:
             result['status'] = 1
             result['message'] = "Runtime error while executing sql query"
             result['data'] = []
-            cursor.close()
             return result
-        result['status'] = 0
-        result['message'] = 'OK'
-        result['count'] = len(cursor.fetchall())
-        cursor.close()
+        if(row is not None):
+            result['status'] = 0
+            result['message'] = 'OK'
+            result['count'] = row['count']
+        else:
+            result['status'] = 2
+            result['message'] = 'Not founded'
+            result['count'] = 0
         return result
 
     @staticmethod
-    def getAllProfuctsFilteredByRate(page,offset):
+    def getAllProfuctsFilteredById(page,offset):
         result = {}
         try:
             
             allRows = SqlExecuter.getAllRowsPacked(
-                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар order by rate DESC LIMIT {} OFFSET {};'
+                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар order by id DESC LIMIT {} OFFSET {};'
                 .format(offset,offset*(page-1)))
         except:
             result['status'] = 1
@@ -97,7 +99,7 @@ class Product:
         result = {}
         try:
             allRows = SqlExecuter.getAllRowsPacked(
-                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар where title like "%{0}%" or author like "%{0}%" order by rate DESC LIMIT {1} OFFSET {2};'
+                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар where title like "%{0}%" or author like "%{0}%" order by id DESC LIMIT {1} OFFSET {2};'
                 .format(query,offset,offset*(page-1)))
         except:
             result['status'] = 1
@@ -139,10 +141,37 @@ class Product:
 
 
     @staticmethod
+    def addNewRate(userID,productID,mark):
+        result = {}
+        row = SqlExecuter.getOneRowsPacked('select * from Рейтинг where user_id = {} and product_id = {};'.format(userID,productID))
+        if(row is not None):
+            result['status'] = 9
+            result['message'] = 'User already set mark'
+            result['data'] = []
+            return result
+        lastrowid = SqlExecuter.executeModif('insert into Рейтинг values({},{},{});'.format(productID,userID,mark))
+        if(lastrowid != -1):
+            result['status'] = 0
+            result['message'] = 'OK'
+            result['data'] = lastrowid
+        else:
+            result['status'] = 1
+            result['message'] = 'SQL Runtime error'
+            result['data'] = []
+        return result
+
+
+    @staticmethod
+    def getRateOfProduct(productID):
+        row = SqlExecuter.getOneRowsPacked('select round(coalesce(avg(mark),0),2) as "count" from Рейтинг where product_id == {};'.format(productID))
+        return float(row['count'])
+
+
+    @staticmethod
     def getDetailsOfProduct(productID):
         result = {}
         try:
-            row = SqlExecuter.getOneRowsPacked('select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар where id = {};'.format(productID))
+            row = SqlExecuter.getOneRowsPacked('select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title",round(avg(rate.mark),2) as "rate" from Товар inner join Рейтинг as rate where id = {};'.format(productID))
         except:
             result['status'] = 1
             result['message'] = 'SQL Runtime error'

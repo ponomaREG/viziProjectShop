@@ -9,6 +9,7 @@ STATUSES OF RESPONSE
 6 - Required field is missing
 7 - Incorrect format of input
 8 - User with same email is already exists
+9 - User already set mark
 
 40 - Not founded order
 120 - Not auth

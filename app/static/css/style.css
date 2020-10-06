@@ -1678,6 +1678,10 @@ ol {
   Shop Details
 -----------------------*/
 
+.star-fg .glyphicon-heart {
+	color: red !important;
+ }
+
 .product-details {
 	padding-top: 80px;
 }

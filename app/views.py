@@ -173,15 +173,15 @@ def showBooks(page):
     if(userQuerySearch is not None):
         result = Product.getAllProfuctsFilteredByQuery(userQuerySearch,page,OFFSET)
         countOfRows = Product.getQuantityOfRowsInTable(
-            'select * from Товар where title like "%{0}% " \
+            'select count(*) as "count" from Товар where title like "%{0}% " \
             or author like "%{0}%" order by rate;'.format(userQuerySearch))['count']
     elif(tagsFilter):
-        countOfRows = Product.getQuantityOfRowsInTable(sqlQueryHelper.buildSqlQueryByTags('select * from Товар',tagsFilter))['count']
+        countOfRows = Product.getQuantityOfRowsInTable(sqlQueryHelper.buildSqlQueryByTags('select count(*) as "count" from Товар',tagsFilter))['count']
         result = Product.getAllProductsFilteredByTags(tagsFilter,page,OFFSET)
         tagsFilterStr = tagsHelper.makeArrayOfTagsToStr(tagsFilter)
     else:
-        countOfRows = Product.getQuantityOfRowsInTable('select * from Товар order by rate;')['count']
-        result = Product.getAllProfuctsFilteredByRate(page,OFFSET)
+        countOfRows = Product.getQuantityOfRowsInTable('select count(*) as "count" from Товар;')['count']
+        result = Product.getAllProfuctsFilteredById(page,OFFSET)
     if(result['status'] == 0):
         countOfPages = countOfRows // OFFSET
         if(countOfRows % OFFSET > 0):
@@ -212,6 +212,7 @@ def showBooks(page):
 def showDetailsOfBook(productID):
     details = Product.getDetailsOfProduct(productID)
     if(details['status'] == 0):
+        details['data'][0]['rate']= Product.getRateOfProduct(productID)
         if(flask_login.current_user.is_authenticated):
             return render_template('shop-details.html',
             user = flask_login.current_user,
