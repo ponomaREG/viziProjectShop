@@ -218,6 +218,7 @@ def showDetailsOfBook(productID):
             return render_template('shop-details.html',
             user = flask_login.current_user,
             details = details['data'][0],
+            userMark = flask_login.current_user.getUserMarkTo(productID),
             quantityInCart = Cart.getQuantityOfProductInCart(flask_login.current_user.userID,productID))
         else:
             return render_template('shop-details.html',

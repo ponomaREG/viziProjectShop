@@ -45,6 +45,13 @@ class User(UserMixin):
     def getCountOfItemsInCart(self):
         return Cart.getCountOfItemsInCart(self.userID)["data"][0]
 
+    def getUserMarkTo(self,productID):
+        row = SqlExecuter.getOneRowsPacked('select mark from Рейтинг where user_id = {} and product_id = {};'.format(self.userID,productID))
+        if(row is None):
+            return None
+        else:
+            return float(row['mark'])
+
 
     @staticmethod
     def registerUser(email,password,last_name,first_name,birthdate):

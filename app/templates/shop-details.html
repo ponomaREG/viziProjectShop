@@ -106,9 +106,17 @@
                             {% else%}
                             <li><b>Quantity</b> <span>{{details.quantity}}</span></li>
                             <li><b>Rate</b> <span>{{details.rate}}/5.0</span></li>
+
+                            {% if user.is_authenticated %}
+                            {% if userMark %}
+                            <li><b>Your mark</b><span>{{userMark}}</span></li>
+                            {% endif %}
+                            {% endif %}
+
                             {% endif %}
                         </ul>
                         {% if user.is_authenticated %}
+                        {% if not userMark %}
                         <h3>Rate this product!</h3>
 
                         <select id="rating-bar" value={{details.id}}>
@@ -120,6 +128,8 @@
                         </select>
                         <button id="rating-bar-submit">Rate</button>
                         <p id='rating-bar-status'></p>
+
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
