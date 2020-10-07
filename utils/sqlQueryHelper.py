@@ -11,7 +11,8 @@ def buildSqlQueryByTags(baseSqlQuery,tags):
 def buildSqlQueryByTagsAndPage(baseSqlQuery,tags,page,offset):
     buildedSqlWithoutOffset = buildSqlQueryByTags(baseSqlQuery,tags)
     buildedSqlWithoutOffset = buildedSqlWithoutOffset[:len(buildedSqlWithoutOffset)-1]
-    buildedSqlWithoutOffset += " order by rate DESC LIMIT {0} OFFSET {1};".format(offset,offset*(page-1))
+    buildedSqlWithoutOffset += " order by id DESC LIMIT {0} OFFSET {1};".format(offset,offset*(page-1))
+    print(buildedSqlWithoutOffset)
     return buildedSqlWithoutOffset
 
 
