@@ -1,4 +1,17 @@
 from app import db
+import pymysql
+from pymysql.cursors import DictCursor
+
+
+connection = pymysql.connect(
+    host = 'localhost',
+    user = 'root',
+    password = 'Huyhuyhuy123',
+    db = 'shop',
+    charset = 'utf8',
+    use_unicode = True,
+    cursorclass = DictCursor
+)
 
 
 class SqlExecuter:
@@ -21,19 +34,20 @@ class SqlExecuter:
 
     @staticmethod
     def getOneRowAndColumns(query):
-        cursor = db.execute(query)
-        columns  = [description[0] for description in cursor.description]
+        cursor = connection.cursor()
+        cursor.execute(query)
         row = cursor.fetchone()
         cursor.close()
-        return {'row':row,'columns':columns}
+        return row
 
     @staticmethod
     def getAllRowAndColumns(query):
-        cursor = db.execute(query)
-        columns  = [description[0] for description in cursor.description]
+        cursor = connection.cursor()
+        cursor.execute(query)
         rows = cursor.fetchall()
         cursor.close()
-        return {'allRows':rows,'columns':columns}
+        print(rows)
+        return rows
 
     @staticmethod
     def prepareDataByOneRow(row,columns):
@@ -56,25 +70,23 @@ class SqlExecuter:
     @staticmethod
     def getAllRowsPacked(query):
         try:
-            rowsAndColumns = SqlExecuter.getAllRowAndColumns(query)
-            return SqlExecuter.prepareDataByManyRows(rowsAndColumns['allRows'],rowsAndColumns['columns'])
+            return SqlExecuter.getAllRowAndColumns(query)
         except:
             return None
 
     @staticmethod
     def getOneRowsPacked(query):
-        # try:
-            rowAndColumns = SqlExecuter.getOneRowAndColumns(query)
-            return SqlExecuter.prepareDataByOneRow(rowAndColumns['row'],rowAndColumns['columns'])
-        # except:
+        try:
+            return SqlExecuter.getOneRowAndColumns(query)
+        except:
             return None
 
 
 
     @staticmethod
     def executeModif(query):
-        cursor = db.execute(query)
-        db.commit()
+        cursor = connection.cursor()
+        cursor.execute(query)
         lastrowid = cursor.lastrowid
         cursor.close()
         return lastrowid

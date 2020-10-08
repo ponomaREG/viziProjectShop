@@ -179,7 +179,6 @@ def showBooks(page):
         countOfRows = Product.getQuantityOfRowsInTable(sqlQueryHelper.buildSqlQueryByTags('select count(*) as "count" from Товар',tagsFilter))['count']
         result = Product.getAllProductsFilteredByTags(tagsFilter,page,OFFSET)
         tagsFilterStr = tagsHelper.makeArrayOfTagsToStr(tagsFilter)
-        print(result)
     else:
         countOfRows = Product.getQuantityOfRowsInTable('select count(*) as "count" from Товар;')['count']
         result = Product.getAllProfuctsFilteredById(page,OFFSET)

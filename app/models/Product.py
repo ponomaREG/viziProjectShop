@@ -85,7 +85,7 @@ class Product:
         try:
             
             allRows = SqlExecuter.getAllRowsPacked(
-                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар order by id DESC LIMIT {} OFFSET {};'
+                'select *,cost_sale as "cost",concat(book_title," - ",author) as "title" from Товар order by id DESC LIMIT {} OFFSET {};'
                 .format(offset,offset*(page-1)))
         except:
             result['status'] = 1
