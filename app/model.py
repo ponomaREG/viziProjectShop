@@ -21,4 +21,4 @@ def load_user(userID):
 
 
 def checkIfUserAdmin(userID):
-    return SqlExecuter.getOneRowsPacked('select * from Админ where user_id == {};'.format(userID)) is not None
+    return SqlExecuter.getOneRowsPacked('select * from Админ where user_id = {};'.format(userID)) is not None

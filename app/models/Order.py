@@ -83,7 +83,7 @@ class Order:
                 return result 
         
         try:
-            lastrowid = SqlExecuter.executeModif('insert into Заказ("user_id","status","total","address_id") values({},{},{},{});'.format(
+            lastrowid = SqlExecuter.executeModif('insert into Заказ(`user_id`,`status`,`total`,`address_id`) values({},{},{},{});'.format(
                     userID,
                     0,
                     Cart.countTotalCostOfUser(userID),

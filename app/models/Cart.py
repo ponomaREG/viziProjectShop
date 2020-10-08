@@ -28,7 +28,7 @@ class Cart:
     def countTotalCostOfUser(userID):
         row = SqlExecuter.getOneRowsPacked('select SUM(cart.count*pr.cost_sale) as "totalCost" \
                 from Товар as pr \
-                inner join Корзина as cart on pr.id == product_id \
+                inner join Корзина as cart on pr.id = product_id \
                 and user_id = {};'.format(userID))
         if(row is None or row['totalCost'] is None):
             return 0.0

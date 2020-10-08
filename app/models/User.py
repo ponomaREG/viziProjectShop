@@ -67,7 +67,7 @@ class User(UserMixin):
             return result
 
         lastrowid = SqlExecuter.executeModif(
-            'insert into Покупатель("email","last_name","first_name","birthdate","password_hash") \
+            'insert into Покупатель(`email`,`last_name`,`first_name`,`birthdate`,`password_hash`) \
                 values("{}","{}","{}","{}","{}")'.format(
                     email,last_name,first_name,birthdate,md5helper.ecnrypt(password))
                 )
