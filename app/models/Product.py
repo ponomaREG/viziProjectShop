@@ -99,7 +99,7 @@ class Product:
         result = {}
         try:
             allRows = SqlExecuter.getAllRowsPacked(
-                'select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар where title like "%{0}%" or author like "%{0}%" order by id DESC LIMIT {1} OFFSET {2};'
+                'select *,cost_sale as "cost",concat(book_title," - ",author) as "title" from Товар where book_title like "%{0}%" or author like "%{0}%" order by id DESC LIMIT {1} OFFSET {2};'
                 .format(query,offset,offset*(page-1)))
         except:
             result['status'] = 1
@@ -112,7 +112,7 @@ class Product:
     def getAllProductsFilteredByTags(tags,page,offset):
         result = {}
         try:
-            allRows = SqlExecuter.getAllRowsPacked(sqlQueryHelper.buildSqlQueryByTagsAndPage('select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title" from Товар',tags,page,offset))
+            allRows = SqlExecuter.getAllRowsPacked(sqlQueryHelper.buildSqlQueryByTagsAndPage('select *,cost_sale as "cost",concat(book_title," - ",author) as "title" from Товар',tags,page,offset))
         except:
             result['status'] = 1
             result['message'] = "Runtime error while executing sql query"
@@ -163,7 +163,7 @@ class Product:
 
     @staticmethod
     def getRateOfProduct(productID):
-        row = SqlExecuter.getOneRowsPacked('select round(coalesce(avg(mark),0),2) as "count" from Рейтинг where product_id == {};'.format(productID))
+        row = SqlExecuter.getOneRowsPacked('select round(coalesce(avg(mark),0),2) as "count" from Рейтинг where product_id = {};'.format(productID))
         return float(row['count'])
 
 
@@ -171,7 +171,7 @@ class Product:
     def getDetailsOfProduct(productID):
         result = {}
         try:
-            row = SqlExecuter.getOneRowsPacked('select *,cost_sale as "cost",title as "bookTitle",(title || " - " || author) as "title",round(avg(rate.mark),2) as "rate" from Товар inner join Рейтинг as rate where id = {};'.format(productID))
+            row = SqlExecuter.getOneRowsPacked('select *,cost_sale as "cost",concat(book_title," - ",author) as "title",round(avg(rate.mark),2) as "rate" from Товар inner join Рейтинг as rate where id = {};'.format(productID))
         except:
             result['status'] = 1
             result['message'] = 'SQL Runtime error'

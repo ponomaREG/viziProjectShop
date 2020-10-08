@@ -211,6 +211,7 @@ def showBooks(page):
 @app.route('/books/details/<int:productID>')
 def showDetailsOfBook(productID):
     details = Product.getDetailsOfProduct(productID)
+    print(details)
     if(details['status'] == 0):
         details['data'][0]['rate']= Product.getRateOfProduct(productID)
         if(flask_login.current_user.is_authenticated):

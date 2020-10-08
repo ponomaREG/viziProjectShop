@@ -16,7 +16,7 @@ class Order:
         allRows = SqlExecuter.getAllRowsPacked('select ord.*,addr.district,addr.street,addr.flat,addr.floor,\
         addr.porch,addr.house,address_id as "address" \
         from Заказ as ord inner join Адрес as addr\
-         where ord.address_id == addr.id and user_id = {} order by id DESC;'.format(userID))
+         where ord.address_id = addr.id and user_id = {} order by id DESC;'.format(userID))
         if(allRows is None or len(allRows) == 0):
             result['status'] = 2
             result['message'] = 'Empty response'
@@ -41,12 +41,12 @@ class Order:
             result['data'] = []
             return result
 
-        data = SqlExecuter.getAllRowsPacked("select pr.id,pr.imageLink,pr.title,bk.count,pr.cost_sale*bk.count as 'total' from Забронированная_книга as bk inner join Товар as pr on bk.order_id == {} and pr.id == bk.product_id;".format(orderID))
+        data = SqlExecuter.getAllRowsPacked("select pr.id,pr.imageLink,pr.book_title,bk.count,pr.cost_sale*bk.count as 'total' from Забронированная_книга as bk inner join Товар as pr on bk.order_id = {} and pr.id = bk.product_id;".format(orderID))
         for row in data:
             row['imageLink'] = imageHelper.makeFullPathToImage(row['imageLink'])
         rowAddressPacked = SqlExecuter.getOneRowsPacked(
-            "select ord.id as 'orderID',addr.*,ord.date,ord.status,ord.total,(addr.district||' district,'||addr.street||', '||addr.house) as 'address' from Заказ as ord  inner join Адрес as addr \
-            where ord.address_id == addr.id and ord.id = {};".format(orderID))
+            "select ord.id as 'orderID',addr.*,ord.date,ord.status,ord.total,concat(addr.district,' district,',addr.street,', ',addr.house) as 'address' from Заказ as ord  inner join Адрес as addr \
+            where ord.address_id = addr.id and ord.id = {};".format(orderID))
         result['address'] = rowAddressPacked
         result['info'] = {'orderID':rowAddressPacked['orderID'],'date':rowAddressPacked['date'],'status':rowAddressPacked['status'],
                             'total':rowAddressPacked['total']}
@@ -115,9 +115,9 @@ class Order:
 
     @staticmethod
     def checkIfUserHaveOrderWith(userID,orderID):
-        return SqlExecuter.getOneRowsPacked('select * from Заказ where user_id == {} and id = {};'.format(userID,orderID)) is not None
+        return SqlExecuter.getOneRowsPacked('select * from Заказ where user_id = {} and id = {};'.format(userID,orderID)) is not None
 
     @staticmethod
     def checkIfOrderExists(orderID):
-        return SqlExecuter.getOneRowsPacked('select * from Заказ where id == {};'.format(orderID)) is not None
+        return SqlExecuter.getOneRowsPacked('select * from Заказ where id = {};'.format(orderID)) is not None
         

@@ -8,8 +8,9 @@ class Cart:
     @staticmethod
     def getQuantityOfProductInCart(userID,productID):
         result = {}
-        row = SqlExecuter.getOneRow('select count from Корзина where user_id = {} and product_id = {};'
+        row = SqlExecuter.getOneRowsPacked('select count from Корзина where user_id = {} and product_id = {};'
         .format(userID,productID))
+        print("QUANTITY:" + str(row))
         if(row is None):
             result['status'] = 2
             result['message'] = 'Product doesnt exist in cart'
@@ -17,7 +18,7 @@ class Cart:
             return result
         result['status'] = 0
         result['message'] = 'OK'
-        result['data'] = {'count':row[0]}
+        result['data'] = {'count':row['count']}
         return result
 
 
@@ -157,7 +158,7 @@ class Cart:
     def getCartOfUser(userID):
         result = {}
         try:
-            data = SqlExecuter.getAllRowsPacked('select (pr.title || " - " || pr.author) as "title",pr.cost_sale as "cost",cart.count,cart.count*pr.cost_sale as "total",pr.id,pr.imageLink,pr.author from Товар as pr inner join Корзина as cart on pr.id == product_id and user_id = {};'.format(userID))
+            data = SqlExecuter.getAllRowsPacked('select concat(pr.book_title," - ",pr.author) as "title",pr.cost_sale as "cost",cart.count,cart.count*pr.cost_sale as "total",pr.id,pr.imageLink,pr.author from Товар as pr inner join Корзина as cart on pr.id = product_id and user_id = {};'.format(userID))
         except:
             result['status'] = 1
             result['message'] = 'SQL runtime error'
@@ -174,5 +175,5 @@ class Cart:
         result['count'] = len(data)
         result['status'] = 0
         result['message'] = 'OK'
-        result['totalCost'] = SqlExecuter.getOneRowsPacked("select SUM(cart.count*pr.cost_sale) as 'totalCost' from Товар as pr inner join Корзина as cart on pr.id == product_id and user_id = {};".format(userID))['totalCost']
+        result['totalCost'] = SqlExecuter.getOneRowsPacked("select SUM(cart.count*pr.cost_sale) as 'totalCost' from Товар as pr inner join Корзина as cart on pr.id = product_id and user_id = {};".format(userID))['totalCost']
         return result

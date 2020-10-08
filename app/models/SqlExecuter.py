@@ -88,5 +88,6 @@ class SqlExecuter:
         cursor = connection.cursor()
         cursor.execute(query)
         lastrowid = cursor.lastrowid
+        connection.commit()
         cursor.close()
         return lastrowid
