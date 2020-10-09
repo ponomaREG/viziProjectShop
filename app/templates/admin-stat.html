@@ -29,6 +29,9 @@
         <button type="submit">Submit</button>
     </form>
 
+    {% if message %}
+    <h3>{{message}}</h3>
+    {% else %}
     {% if resultStat%}
         <table>
             <caption>Result</caption>
@@ -49,6 +52,7 @@
             
             {% endfor %}
         </table>
+    {% endif %}
     {% endif %}
   
 </body> 

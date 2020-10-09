@@ -37,7 +37,10 @@ def adminStat():
                 resultStat = Admin.getCountOfOrderByPeriod(date_b,date_e)
             
             if resultStat is not None:
-                return render_template('admin-stat.html',date_e = date_e,date_b=date_b,resultStat = resultStat)
+                if(resultStat['status'] == 3):
+                    return render_template('admin-stat.html',date_e = date_e,date_b = date_b,message = resultStat['message'])
+                elif(resultStat['status'] == 0):
+                    return render_template('admin-stat.html',date_e = date_e,date_b=date_b,resultStat = resultStat)
             else:
                 return render_template('admin-stat.html',date_e = date_e,date_b = date_b)
 

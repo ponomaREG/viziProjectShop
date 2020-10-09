@@ -11,13 +11,14 @@ class Admin:
         cursor = connection.cursor()
         cursor = db.execute(sqlQuery)
         allRows = cursor.fetchall()
+        columns_names = [i[0] for i in cursor.description]
         cursor.close()
-        return allRows
+        return {'data':allRows,'keys':columns_names}
     
     @staticmethod
     def __makeResultResponse(sqlQuery):
         res =  Admin.__executeAndGetAllRowsAndKeys(sqlQuery)
-        if(len(res) == 0):
+        if(len(res['data']) == 0):
             res['status'] = 3
             res['message'] = 'Empty'
             res['data'] = []
