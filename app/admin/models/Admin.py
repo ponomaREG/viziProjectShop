@@ -30,9 +30,10 @@ class Admin:
 
     @staticmethod
     def insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,imageName,tags):
-        cursor = db.execute('insert into Товар(`title`,`author`,`desc`,`cost_sale`,`cost_purchase`,`quantity`,`imageLink`,`tags`,`rate`) \
-            values("{}","{}","{}",{},{},{},"{}","{}",0.0)'.format(title,author,desc,cost_sale,cost_purchase,quantity,imageName,tags))
-        db.commit()
+        cursor = connection.cursor()
+        cursor.execute('insert into Товар(`book_title`,`author`,`description`,`cost_sale`,`cost_purchase`,`quantity`,`imageLink`,`tags`) \
+            values("{}","{}","{}",{},{},{},"{}","{}")'.format(title,author,desc,cost_sale,cost_purchase,quantity,imageName,tags))
+        connection.commit()
         lastrowid = cursor.lastrowid
         cursor.close()
         result = {}
@@ -58,7 +59,7 @@ class Admin:
 
     @staticmethod
     def getAllOrdersByPeriod(date_b,date_e):
-        return Admin.__makeResultResponse("select * from Заказ where date>='{}' and date<= '{}';".format(date_b,date_e))
+        return Admin.__makeResultResponse("select * from Заказ as ord inner join Адрес as addr inner join Покупатель as usr where date>='{}' and date<= '{}' and ord.address_id = addr.id and usr.id = ord.user_id;".format(date_b,date_e))
 
     @staticmethod
     def getCountOfOrderByPeriod(date_b,date_e):
