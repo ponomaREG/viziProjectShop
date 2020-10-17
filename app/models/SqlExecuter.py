@@ -46,7 +46,6 @@ class SqlExecuter:
         cursor.execute(query)
         rows = cursor.fetchall()
         cursor.close()
-        print(rows)
         return rows
 
     @staticmethod

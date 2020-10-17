@@ -1,0 +1,25 @@
+<!DOCTYPE html> 
+<html> 
+  <head><title>Админ-статистика</title></head>
+ 
+  
+<body> 
+    <h3>Columns</h3>
+    
+    <form method="POST" action="{{ url_for('adminGetProductInfo')  }}">
+    <select id="admin-column-select" name="column">
+        {% for column in columnNames %}
+        <option value="{{column['COLUMN_NAME']}}">{{loop.index}}. {{column['COLUMN_NAME']}}</option>
+        {% endfor %}
+    </select>
+    <br>
+
+    Value:<input type="text" name="value">
+    <button type="submit">Submit</button>
+    </form>
+
+
+    {% include 'base/admin-table.html' %}
+  
+</body> 
+</html> 

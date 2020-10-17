@@ -1,0 +1,25 @@
+{% if message %}
+    <h3>{{message}}</h3>
+    {% else %}
+    {% if resultOfResponse %}
+        <table>
+            <caption>Result</caption>
+            <tr>
+                <th>Count</th>
+                {% for key in resultOfResponse['keys'] %}
+                    <th>{{key}}</th>
+                {% endfor %}
+            </tr>
+
+            {% for row in resultOfResponse['data']%}
+            <tr>
+                <th>{{ loop.index }}</th>
+                {% for key in resultOfResponse['keys'] %}
+                <th>{{row[key]}}</th>
+                {% endfor %}
+            </tr>
+            
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% endif %}

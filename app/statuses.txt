@@ -13,6 +13,8 @@ STATUSES OF RESPONSE
 
 40 - Not founded order
 120 - Not auth
+//ADMIN
+130 - Incorrect input data
 
 //ORDER STATUSES
 0 - Formalized

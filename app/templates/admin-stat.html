@@ -29,31 +29,7 @@
         <button type="submit">Submit</button>
     </form>
 
-    {% if message %}
-    <h3>{{message}}</h3>
-    {% else %}
-    {% if resultStat%}
-        <table>
-            <caption>Result</caption>
-            <tr>
-                <th>Count</th>
-                {% for key in resultStat['keys'] %}
-                    <th>{{key}}</th>
-                {% endfor %}
-            </tr>
-
-            {% for row in resultStat['data']%}
-            <tr>
-                <th>{{ loop.index }}</th>
-                {% for i in range(row|length)%}
-                <th>{{row[i]}}</th>
-                {% endfor %}
-            </tr>
-            
-            {% endfor %}
-        </table>
-    {% endif %}
-    {% endif %}
+    {% include 'base/admin-table.html' %}
   
 </body> 
 </html> 

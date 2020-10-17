@@ -40,7 +40,10 @@ def adminStat():
                 if(resultStat['status'] == 3):
                     return render_template('admin-stat.html',date_e = date_e,date_b = date_b,message = resultStat['message'])
                 elif(resultStat['status'] == 0):
-                    return render_template('admin-stat.html',date_e = date_e,date_b=date_b,resultStat = resultStat)
+                    for row in resultStat['data']:
+                        print(12312312312312312)
+                        print(row)
+                    return render_template('admin-stat.html',date_e = date_e,date_b=date_b,resultOfResponse = resultStat)
             else:
                 return render_template('admin-stat.html',date_e = date_e,date_b = date_b)
 
@@ -49,7 +52,22 @@ def adminStat():
     else:
         return redirect(url_for('loginUser'))
 
-        
+@app.route('/admin/product',methods=['GET','POST'])
+@flask_login.login_required
+def adminGetProductInfo():
+     if(flask_login.current_user.is_admin):
+         columnNames = Admin.getColumnsOfTable('Товар')
+         if(request.method == 'GET'):
+             return render_template('admin-product.html',columnNames = columnNames['data'])
+         else:
+             column = request.form.get('column')
+             value = request.form.get('value')
+             resultOfResponseToDB = Admin.getInfoOfBookBy(column,value)
+             if(resultOfResponseToDB['status'] == 0):
+                 return render_template('admin-product.html',resultOfResponse = resultOfResponseToDB,columnNames = columnNames['data'])
+             elif(resultOfResponseToDB['status'] == 3):
+                 return render_template('admin-product.html',message = 'Empty',columnNames = columnNames['data'])
+
 
 @app.route('/admin/add',methods=['GET','POST'])
 @flask_login.login_required
