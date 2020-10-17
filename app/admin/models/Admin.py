@@ -27,21 +27,31 @@ class Admin:
             res['message'] = 'OK'
         return res
 
+
+    @staticmethod
+    def setNewPriceOfBook(productID,price):
+        pass
     @staticmethod
     def setNewQuantityOfBook(productID,quantity):
         result = {}
-        if(quantity<0):
+        if(quantity<0 or productID < 0 ):
             result['status'] = 130
             result['message'] = 'ADMIN:incorrect input data'
             return result
         cursor = connection.cursor()
-        cursor.execute('update Товар set quantity={} where id = {};'.format(quantity,productID))
+        try:
+            cursor.execute('update Товар set quantity={} where id = {};'.format(quantity,productID))
+        except:
+            result['status'] = 130
+            result['message'] = 'ADMIN: sql error because admin entered incorrect input data'
+            return result
         lastrowid = cursor.lastrowid
         cursor.close()
         connection.commit()
         result['status'] = 0
         result['message'] = 'OK'
-        result['lastrowid'] = lastrowid
+        result['data'] = [lastrowid]
+        result['keys'] = ['updated id']
         return result
 
 

@@ -1,12 +1,30 @@
 <!DOCTYPE html> 
 <html> 
   <head><title>Админ-статистика</title></head>
- 
+
   
 <body> 
     <h3>Columns</h3>
     
     <form method="POST" action="{{ url_for('adminGetProductInfo')  }}">
+    <h3>Methods</h3>
+    <input type="radio" id = 1 name="method" value=1 checked>
+    <label for=1>Get info of book</label>
+    <br>
+    <input type="radio" id = 2 name="method" value=2>
+    <label for=2>Set new quantity</label>
+    <br>
+    <div id="method-2-block" hidden>
+      <br>
+      <input id=20 type="number" name="quantity">
+      <label for=20 >New quantity</label>
+      <br>
+      <input id=21 type="number" name="productID">
+      <label for=21 >Product ID</label>
+
+    </div>
+    <br>
+    <div id="method-1-block">
     <select id="admin-column-select" name="column">
         {% for column in columnNames %}
         <option value="{{column['COLUMN_NAME']}}">{{loop.index}}. {{column['COLUMN_NAME']}}</option>
@@ -15,11 +33,31 @@
     <br>
 
     Value:<input type="text" name="value">
+    </div>
     <button type="submit">Submit</button>
     </form>
 
 
     {% include 'base/admin-table.html' %}
+
+    <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
+  <script type="text/javascript">
+  var currentBlock = $('#method-1-block')
+
+  $('input[type=radio][name=method]').change(function() {
+    if (this.value == 1) {
+        currentBlock.hide()
+        currentBlock = $('#method-1-block')
+        currentBlock.show()
+    }
+    else if (this.value == 2) {
+        currentBlock.hide()
+        currentBlock = $('#method-2-block')
+        currentBlock.show()
+    }
+});
+
+</script>
   
 </body> 
 </html> 

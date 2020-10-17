@@ -60,13 +60,28 @@ def adminGetProductInfo():
          if(request.method == 'GET'):
              return render_template('admin-product.html',columnNames = columnNames['data'])
          else:
-             column = request.form.get('column')
-             value = request.form.get('value')
-             resultOfResponseToDB = Admin.getInfoOfBookBy(column,value)
+             method = request.form.get('method',type=int)
+
+             if(method == 1):
+                column = request.form.get('column')
+                value = request.form.get('value')
+                resultOfResponseToDB = Admin.getInfoOfBookBy(column,value)
+             elif(method == 2):
+                quantity = request.form.get('quantity',type = int)
+                productID = request.form.get('productID',type = int)
+                resultOfResponseToDB = Admin.setNewQuantityOfBook(productID,quantity)
+             elif(method == 3):
+                 price = request.form.get('price',type=float)
+                 resultOfResponseToDB = Admin.setNewPriceOfBook(productID,price)
+             else:
+                 return render_template('admin-product.html',columnNames = columnNames['data'],message = 'What the fuck???Method:{}'.format(method))
              if(resultOfResponseToDB['status'] == 0):
                  return render_template('admin-product.html',resultOfResponse = resultOfResponseToDB,columnNames = columnNames['data'])
              elif(resultOfResponseToDB['status'] == 3):
                  return render_template('admin-product.html',message = 'Empty',columnNames = columnNames['data'])
+             elif(resultOfResponseToDB['status'] == 130):
+                 return render_template('admin-product.html',message = resultOfResponseToDB['message'],columnNames = columnNames['data'])
+             
 
 
 @app.route('/admin/add',methods=['GET','POST'])
