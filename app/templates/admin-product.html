@@ -14,12 +14,19 @@
     <input type="radio" id = 2 name="method" value=2>
     <label for=2>Set new quantity</label>
     <br>
+    <input type="radio" id = 3 name="method" value=3>
+    <label for=3>Set new description</label>
+    <br>
+    <input type="radio" id = 4 name="method" value=4>
+    <label for=4>Set new price</label>
+    <br>
+    
     <div id="method-2-block" hidden>
       <br>
-      <input id=20 type="number" name="quantity">
+      <input id=20 type="number" name="quantity" min="0">
       <label for=20 >New quantity</label>
       <br>
-      <input id=21 type="number" name="productID">
+      <input id=21 type="number" name="productID-2">
       <label for=21 >Product ID</label>
 
     </div>
@@ -31,8 +38,29 @@
         {% endfor %}
     </select>
     <br>
+    
 
     Value:<input type="text" name="value">
+    </div>
+
+    <div id="method-4-block" hidden>
+      <br>
+      <input id=40 type="number" step="0.01" name="price" min="0.00">
+      <label for=40 >New price</label>
+      <br>
+      <input id=41 type="number" name="productID-4">
+      <label for=41 >Product ID</label>
+
+    </div>
+
+    <div id="method-3-block" hidden>
+      <br>
+      <input id=30 type="number" name="productID-3" min="0">
+      <label for=30 >Product ID</label>
+      <br>
+      <textarea id=31 name="desc">Enter new desc</textarea>
+      <label for=31 >New desc</label>
+
     </div>
     <button type="submit">Submit</button>
     </form>
@@ -53,6 +81,16 @@
     else if (this.value == 2) {
         currentBlock.hide()
         currentBlock = $('#method-2-block')
+        currentBlock.show()
+    }
+    else if (this.value == 3) {
+        currentBlock.hide()
+        currentBlock = $('#method-3-block')
+        currentBlock.show()
+    }
+    else if (this.value == 4) {
+        currentBlock.hide()
+        currentBlock = $('#method-4-block')
         currentBlock.show()
     }
 });

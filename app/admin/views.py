@@ -68,11 +68,16 @@ def adminGetProductInfo():
                 resultOfResponseToDB = Admin.getInfoOfBookBy(column,value)
              elif(method == 2):
                 quantity = request.form.get('quantity',type = int)
-                productID = request.form.get('productID',type = int)
-                resultOfResponseToDB = Admin.setNewQuantityOfBook(productID,quantity)
+                productID = request.form.get('productID-2',type = int)
+                resultOfResponseToDB = Admin.setNewValueBook(productID,"quantity",quantity)
              elif(method == 3):
+                 desc = request.form.get('desc')
+                 productID = request.form.get('productID-3',type=int)
+                 resultOfResponseToDB = Admin.setNewValueBook(productID,"description",desc)
+             elif(method == 4):
                  price = request.form.get('price',type=float)
-                 resultOfResponseToDB = Admin.setNewPriceOfBook(productID,price)
+                 productID = request.form.get('productID-4',type=int)
+                 resultOfResponseToDB = Admin.setNewValueBook(productID,'cost_sale',price)
              else:
                  return render_template('admin-product.html',columnNames = columnNames['data'],message = 'What the fuck???Method:{}'.format(method))
              if(resultOfResponseToDB['status'] == 0):

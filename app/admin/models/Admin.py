@@ -29,18 +29,17 @@ class Admin:
 
 
     @staticmethod
-    def setNewPriceOfBook(productID,price):
-        pass
-    @staticmethod
-    def setNewQuantityOfBook(productID,quantity):
+    def setNewValueBook(productID,column,value):
         result = {}
-        if(quantity<0 or productID < 0 ):
-            result['status'] = 130
-            result['message'] = 'ADMIN:incorrect input data'
-            return result
         cursor = connection.cursor()
         try:
-            cursor.execute('update Товар set quantity={} where id = {};'.format(quantity,productID))
+            print(column)
+            print(type(column))
+            if(type(value) is int or type(value) is float):
+                cursor.execute('update Товар set {}={} where id = {};'.format(column,value,productID))
+            else:
+                print('update Товар set {}="{}" where id = {};'.format(column,value,productID))
+                cursor.execute('update Товар set {}="{}" where id = {};'.format(column,value,productID))
         except:
             result['status'] = 130
             result['message'] = 'ADMIN: sql error because admin entered incorrect input data'
