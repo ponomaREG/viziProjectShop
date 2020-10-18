@@ -89,18 +89,30 @@
                                 {% for order in ordersList %}
                                 <tr>
                                     <td class="shoping__cart__item">
-                                        
+                                        {% if order.status == 4 or order.status == 5%}
+                                        <h5>Order№{{ order.id}}</h5>
+                                        {% else %}
                                         <h5><a style="text-decoration: none;" href="{{ url_for('showDetailsOfOrder',orderID=order.id)}}">Order№{{ order.id}}</a></h5>
+                                        {% endif %}
                                     </td>
                                     <td class="shoping__cart__price">
                                         {% if order.status == 0 %}
                                         Formalized
                                         {% endif %}
                                         {% if order.status == 1 %}
-                                        Collected
+                                        Confirmed
                                         {% endif %}
                                         {% if order.status == 2 %}
-                                        Delivered
+                                        Received by courier
+                                        {% endif %}
+                                        {% if order.status == 3 %}
+                                        Received by client
+                                        {% endif %}
+                                        {% if order.status == 4 %}
+                                        Canceled by client
+                                        {% endif %}
+                                        {% if order.status == 5 %}
+                                        Canceled by shop
                                         {% endif %}
                                     </td>
                                     <td class="shoping__cart__quantity">

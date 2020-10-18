@@ -121,5 +121,5 @@ class Order:
 
     @staticmethod
     def checkIfOrderExists(orderID):
-        return SqlExecuter.getOneRowsPacked('select * from Заказ where id = {};'.format(orderID)) is not None
+        return SqlExecuter.getOneRowsPacked('select * from Заказ where id = {} and status != 4 and status != 5;'.format(orderID)) is not None
         

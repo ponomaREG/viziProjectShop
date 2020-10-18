@@ -18,6 +18,9 @@ STATUSES OF RESPONSE
 
 //ORDER STATUSES
 0 - Formalized
-1 - Collected
-2 - Delivered
+1 - Confirmed
+2 - Received by courier
+3 - Received by client
+4 - Canceled by client
+5 - Canceled by shop
 
