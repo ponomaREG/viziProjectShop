@@ -51,6 +51,7 @@ class Admin:
         return result
 
 
+
     @staticmethod
     def incQuantityOfBook(productID,quantity):
         result = {}
@@ -66,6 +67,7 @@ class Admin:
         result['status'] = 0
         result['message'] = 'OK'
         result['lastrowid'] = lastrowid
+        result['keys'] = ['updated id']
         return result
 
     @staticmethod
@@ -86,6 +88,7 @@ class Admin:
         lastrowid = cursor.lastrowid
         cursor.close()
         result = {}
+        result['keys'] = ['new id']
         if(lastrowid>0):
             result['status'] = 0
             result['message'] = 'OK'
@@ -116,3 +119,44 @@ class Admin:
     def getCountOfOrderByPeriod(date_b,date_e):
         return Admin.__makeResultResponse("select count(*) as 'count' from Заказ where date>='{}' and date<= '{}';".format(date_b,date_e))
 
+    @staticmethod
+    def getInfoOfOrderBy(orderID):
+        return Admin.__makeResultResponse('select * from Заказ where id = {};'.format(orderID))
+
+    @staticmethod
+    def getOrdersByStatus(status):
+        return Admin.__makeResultResponse('select * from Заказ where status = {};'.format(status))
+        
+    @staticmethod
+    def __unbookedBooksBy(orderID):
+        bookedBooks = Admin.__executeAndGetAllRowsAndKeys('select * from Забронированная_книга where order_id = {};'.format(orderID))
+        cursor = connection.cursor()
+        cursor.execute('delete from Забронированная_книга where order_id = {};'.format(orderID))
+        for row in bookedBooks['data']:
+            cursor.execute('update Товар set quantity=quantity+{} where id = {};'.format(row['count'],row['product_id']))
+        cursor.close()    
+        connection.commit()
+
+    @staticmethod
+    def setNewStatusOfOrder(newStatus,orderID):
+        cursor = connection.cursor()
+        cursor.execute('update Заказ set status = {} where id = {};'.format(newStatus,orderID))
+        lastrowid = cursor.lastrowid
+        cursor.close()
+        if(newStatus == 4 or newStatus == 5):
+            Admin.__unbookedBooksBy(orderID)
+        result = {}
+        result['keys'] = ['updated id']
+        if(lastrowid>0):
+            result['status'] = 0
+            result['message'] = 'OK'
+            result['data'] = [lastrowid,]
+        else:
+            result['status'] = 125
+            result['message'] = 'Not > 0'
+            result['data'] = []
+        return result
+
+    @staticmethod
+    def getBookedBooksBy(orderID):
+        return Admin.__makeResultResponse('select * from Заброннированная_книга where order_id = {};'.format(orderID))

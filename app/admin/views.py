@@ -17,6 +17,56 @@ def loginAdmin():
     else:
         return redirect(url_for('loginUser'))
 
+@app.route('/admin/orders',methods=['GET','POST'])
+@flask_login.login_required
+def adminManageOrders():
+    if(flask_login.current_user.is_admin):
+         if(request.method == 'POST'):
+            method = request.form.get('method',default=1,type=int)
+            if(method == 1 or method == 2):
+                date_b = request.form.get('date_b')
+                date_e = request.form.get('date_e')
+                resultStat = None
+
+                if(method == 1):
+                    resultStat = Admin.getAllOrdersByPeriod(date_b,date_e)
+                elif(method == 2):
+                    resultStat = Admin.getCountOfOrderByPeriod(date_b,date_e)
+                else:
+                    return render_template('admin-manage-orders.html',message = 'Incorrect method')
+                if resultStat is not None:
+                    if(resultStat['status'] == 3):
+                        return render_template('admin-manage-orders.html',date_e = date_e,date_b = date_b,message = resultStat['message'])
+                    elif(resultStat['status'] == 0):
+                        return render_template('admin-manage-orders.html',date_e = date_e,date_b=date_b,resultOfResponse = resultStat)
+                else:
+                    return render_template('admin-manage-orders.html',date_e = date_e,date_b = date_b)
+            elif(method == 3):
+                orderID = request.form.get('orderID-3',type = int)
+                resultStat = Admin.getInfoOfOrderBy(orderID)
+                if(resultStat['status'] == 0):
+                    return render_template('admin-manage-orders.html',resultOfResponse = resultStat)
+                elif(resultStat['status'] == 3):
+                    return render_template('admin-manage-orders.html',message = resultStat['message'])
+            elif(method == 4):
+                status = request.form.get('status',type = int)
+                resultOfResponse = Admin.getOrdersByStatus(status)
+                if(resultOfResponse['status'] == 0):
+                    return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
+                elif(resultOfResponse['status'] == 3):
+                    return render_template('admin-manage-orders.html',message = resultOfResponse['message'])
+            elif(method == 5):
+                newStatus = request.form.get('newStatus',type = int)
+                orderID = request.form.get('orderID-5',type=int)
+                resultOfResponse = Admin.setNewStatusOfOrder(newStatus,orderID)
+                return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
+
+
+         else:
+            return render_template('admin-manage-orders.html')
+    else:
+        return redirect(url_for('main'))
+
 @app.route('/admin/stat',methods=['GET','POST'])
 @flask_login.login_required
 def adminStat():
@@ -27,15 +77,12 @@ def adminStat():
             method = request.form.get('method',default=1,type=int)
             resultStat = None
 
-            if(method == 3):
+            if(method == 1):
                 resultStat=Admin.getAllIncomeByPeriod(date_b,date_e)
             elif(method == 2):
                 resultStat = Admin.getRatingPopularityOfBooksByPeriod(date_b,date_e)
-            elif(method == 1):
-                resultStat = Admin.getAllOrdersByPeriod(date_b,date_e)
-            elif(method == 4):
-                resultStat = Admin.getCountOfOrderByPeriod(date_b,date_e)
-            
+            else:
+                return render_template('admin-stat.html',message = 'Incorrect method')
             if resultStat is not None:
                 if(resultStat['status'] == 3):
                     return render_template('admin-stat.html',date_e = date_e,date_b = date_b,message = resultStat['message'])
