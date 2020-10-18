@@ -6,7 +6,7 @@
 <body> 
     <h3>Columns</h3>
     
-    <form method="POST" action="{{ url_for('adminGetProductInfo')  }}">
+    <form method="POST" action="{{ url_for('adminGetProductInfo')  }}" enctype='multipart/form-data'>
     <h3>Methods</h3>
     <input type="radio" id = 1 name="method" value=1 checked>
     <label for=1>Get info of book</label>
@@ -19,6 +19,9 @@
     <br>
     <input type="radio" id = 4 name="method" value=4>
     <label for=4>Set new price</label>
+    <br>
+    <input type="radio" id = 5 name="method" value=5>
+    <label for=5>Set new image</label>
     <br>
     
     <div id="method-2-block" hidden>
@@ -62,6 +65,15 @@
       <label for=31 >New desc</label>
 
     </div>
+
+    <div id="method-5-block" hidden>
+      <br>
+      <label>Image:</label><input type="file" name='image' accept="image/png,image/jpeg,image/jpg">
+      <input id=50 type="number" name="productID-5" min="0">
+      <label for=50 >Product ID</label>
+      <br>
+    </div>
+
     <button type="submit">Submit</button>
     </form>
 
@@ -73,26 +85,25 @@
   var currentBlock = $('#method-1-block')
 
   $('input[type=radio][name=method]').change(function() {
+    currentBlock.hide()
     if (this.value == 1) {
-        currentBlock.hide()
         currentBlock = $('#method-1-block')
-        currentBlock.show()
     }
     else if (this.value == 2) {
-        currentBlock.hide()
         currentBlock = $('#method-2-block')
-        currentBlock.show()
     }
     else if (this.value == 3) {
-        currentBlock.hide()
         currentBlock = $('#method-3-block')
-        currentBlock.show()
+
     }
     else if (this.value == 4) {
-        currentBlock.hide()
         currentBlock = $('#method-4-block')
-        currentBlock.show()
     }
+    else if (this.value == 5) {
+        currentBlock = $('#method-5-block')
+    }
+    currentBlock.show()
+
 });
 
 </script>

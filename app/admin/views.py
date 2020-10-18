@@ -40,9 +40,6 @@ def adminStat():
                 if(resultStat['status'] == 3):
                     return render_template('admin-stat.html',date_e = date_e,date_b = date_b,message = resultStat['message'])
                 elif(resultStat['status'] == 0):
-                    for row in resultStat['data']:
-                        print(12312312312312312)
-                        print(row)
                     return render_template('admin-stat.html',date_e = date_e,date_b=date_b,resultOfResponse = resultStat)
             else:
                 return render_template('admin-stat.html',date_e = date_e,date_b = date_b)
@@ -78,6 +75,21 @@ def adminGetProductInfo():
                  price = request.form.get('price',type=float)
                  productID = request.form.get('productID-4',type=int)
                  resultOfResponseToDB = Admin.setNewValueBook(productID,'cost_sale',price)
+             elif(method == 5):
+                 productID = request.form.get('productID-5',type=int)
+                 print(request.files)
+                 if 'image' in request.files:
+                    file = request.files['image']
+                    print(file.filename)
+                    if(file.filename != ''):
+                        filename = secure_filename(file.filename)
+                        filePath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+                        file.save(filePath)
+                        resultOfResponseToDB = Admin.setNewValueBook(productID,'imageLink',filename)
+                    else:
+                        return render_template('admin-product.html',columnNames = columnNames['data'],message = 'Image not uploaded 1')
+                 else:
+                     return render_template('admin-product.html',columnNames = columnNames['data'],message = 'Image not uploaded 2')
              else:
                  return render_template('admin-product.html',columnNames = columnNames['data'],message = 'What the fuck???Method:{}'.format(method))
              if(resultOfResponseToDB['status'] == 0):
@@ -110,6 +122,7 @@ def adminAddNew():
                     filename = secure_filename(file.filename)
                     filePath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
                     file.save(filePath)
+
             result = Admin.insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,filename,tags)
             if(result['status'] == 0):
                 return render_template('admin-add.html',message = 'Added!',productID = result['data'][0])

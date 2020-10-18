@@ -33,12 +33,9 @@ class Admin:
         result = {}
         cursor = connection.cursor()
         try:
-            print(column)
-            print(type(column))
             if(type(value) is int or type(value) is float):
                 cursor.execute('update Товар set {}={} where id = {};'.format(column,value,productID))
             else:
-                print('update Товар set {}="{}" where id = {};'.format(column,value,productID))
                 cursor.execute('update Товар set {}="{}" where id = {};'.format(column,value,productID))
         except:
             result['status'] = 130

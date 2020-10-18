@@ -101,6 +101,8 @@ class Order:
                     values({},{},{},{})'.format(row['id'],row['count'],lastrowid,row['cost']))
                 SqlExecuter.executeModif('delete from Корзина where \
                     user_id = {} and product_id = {};'.format(userID,row['id']))
+                SqlExecuter.executeModif('update Товар set quantity = quantity - {} where id = {};'.format(row['count'],row['id']))
+
             except IndexError:
                 result['status'] = 1
                 result['message'] = 'SQL runtime error'
