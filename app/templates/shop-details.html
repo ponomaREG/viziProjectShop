@@ -1,189 +1,168 @@
 <!DOCTYPE html>
 <html lang="zxx">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Booker</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
-
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/font-awesome.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/elegant-icons.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/nice-select.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/jquery-ui.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/owl.carousel.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/slicknav.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}" type="text/css">
-</head>
-
-<body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
-
-    {% include 'base/humberger.html' %}
-
-    {% include 'base/header.html' %}
-
-    {% include 'base/hero.html' %}
-
-    <!-- Product Details Section Begin -->
-    
-    <section class="product-details spad">
-        <div class="container">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Booker</title>
+      <!-- Google Font -->
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+      <!-- Css Styles -->
+      <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/font-awesome.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/elegant-icons.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/nice-select.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/jquery-ui.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/owl.carousel.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/slicknav.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}" type="text/css">
+   </head>
+   <body>
+      <!-- Page Preloder -->
+      <div id="preloder">
+         <div class="loader"></div>
+      </div>
+      {% include 'base/humberger.html' %}
+      {% include 'base/header.html' %}
+      {% include 'base/hero.html' %}
+      <!-- Product Details Section Begin -->
+      <section class="product-details spad">
+         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="product__details__pic">
-                        <div class="product__details__pic__item__small">
-                            {%if not error%}
-                            <img class="product__details__pic__item__small"
-                                src="{{ url_for('static',filename = details.imageLink)}}" alt="">
-                            {% else%}
-                            <img class="product__details__pic__item__small"
-                                src="{{ url_for('static',filename = 'img/book/placeholder.jpg')}}" alt="">
-                            {% endif%}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="product__details__text">
-                        {% if error%}
-                        <h3>{{ error }}</h3>
+               <div class="col-lg-6 col-md-6">
+                  <div class="product__details__pic">
+                     <div class="product__details__pic__item__small">
+                        {%if not error%}
+                        <img class="product__details__pic__item__small"
+                           src="{{ url_for('static',filename = details.imageLink)}}" alt="">
                         {% else%}
-                        <h3>{{ details.title}}</h3>
-                        {% endif %}
-                        <!-- <div class="product__details__rating hidden">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span>(18 reviews)</span>
+                        <img class="product__details__pic__item__small"
+                           src="{{ url_for('static',filename = 'img/book/placeholder.jpg')}}" alt="">
+                        {% endif%}
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-6 col-md-6">
+                  <div class="product__details__text">
+                     {% if error%}
+                     <h3>{{ error }}</h3>
+                     {% else%}
+                     <h3>{{ details.title}}</h3>
+                     {% endif %}
+                     <!-- <div class="product__details__rating hidden">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                        <span>(18 reviews)</span>
                         </div> -->
-                        {% if error%}
-                        <div class="product__details__price">{{ error }}</div>
-                        {% else%}
-                        <div class="product__details__price">{{ details.cost}}P</div>
-                        {% endif %}
-
-                        {% if error%}
-                        <p>{{ error }}</p>
-                        {% else%}
-                        <p>{{details.description}}</p>
-                        {% endif %}
-                        {% if user.is_authenticated%}
-                            {% if quantityInCart.status == 0 %}
-                            <div class="product__details__quantity">
-                                <div class="quantity">
-                                    <div class="pro-qty"  value='{{ details.id }}'>
-                                        <span class="dec qtybtn">-</span><input type="text" value="{{quantityInCart.data.count }}" disabled><span class="inc qtybtn">+</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="primary-btn" id="primary__btn__add__to__cart" style="display:none">ADD TO CART</p>
-                            {% else %}
-                            <div class="product__details__quantity">
-                                <div class="quantity">
-                                    <div style="display:none" class="pro-qty"  value='{{ details.id }}'>
-                                        <span class="dec qtybtn">-</span><input type="text" value="{{ quantityInCart.data.count }}" disabled><span class="inc qtybtn">+</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="primary-btn" id="primary__btn__add__to__cart">ADD TO CART</p>
-                            {% endif %}
-                        {% else %}
-                            <a href="/login" class="primary-btn" id="primary-btn">ADD TO CART</a>
-                        {% endif %}
-                        <ul>
-                            {% if error%}
-                            <li>{{ error }}</li>
-                            {% else%}
-                            <li><b>Quantity</b> <span>{{details.quantity}}</span></li>
-                            <li><b>Rate</b> <span>{{details.rate}}/5.0</span></li>
-
-                            {% if user.is_authenticated %}
-                            {% if userMark %}
-                            <li><b>Your mark</b><span>{{userMark}}</span></li>
-                            {% endif %}
-                            {% endif %}
-
-                            {% endif %}
-                        </ul>
-                        {% if user.is_authenticated %}
-                        {% if not userMark %}
-                        <h3>Rate this product!</h3>
-
-                        <select id="rating-bar" value={{details.id}}>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button id="rating-bar-submit">Rate</button>
-                        <p id='rating-bar-status'></p>
-
-                        {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="product__details__tab">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                    aria-selected="true">Tags</a>
-                            </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-                                    aria-selected="false">Information</a>
-                            </li> -->
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                <div class="product__details__tab__desc">
-                                    <h6>Products tags</h6>
-                                    {% if error%}
-                                    <p>{{ error }}</p>
-                                    {% else%}
-                                    <p>{{ details.tags}}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <!-- <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                <div class="product__details__tab__desc">
-                                    <h6>Products Infomation</h6>
-                                </div>
-                            </div> -->
+                     {% if error%}
+                     <div class="product__details__price">{{ error }}</div>
+                     {% else%}
+                     <div class="product__details__price">{{ details.cost}}P</div>
+                     {% endif %}
+                     {% if error%}
+                     <p>{{ error }}</p>
+                     {% else%}
+                     <p>{{details.description}}</p>
+                     {% endif %}
+                     {% if user.is_authenticated%}
+                     {% if quantityInCart.status == 0 %}
+                     <div class="product__details__quantity">
+                        <div class="quantity">
+                           <div class="pro-qty"  value='{{ details.id }}'>
+                              <span class="dec qtybtn">-</span><input type="text" value="{{quantityInCart.data.count }}" disabled><span class="inc qtybtn">+</span>
+                           </div>
                         </div>
-                    </div>
-                </div>
+                     </div>
+                     <p class="primary-btn" id="primary__btn__add__to__cart" style="display:none">ADD TO CART</p>
+                     {% else %}
+                     <div class="product__details__quantity">
+                        <div class="quantity">
+                           <div style="display:none" class="pro-qty"  value='{{ details.id }}'>
+                              <span class="dec qtybtn">-</span><input type="text" value="{{ quantityInCart.data.count }}" disabled><span class="inc qtybtn">+</span>
+                           </div>
+                        </div>
+                     </div>
+                     <p class="primary-btn" id="primary__btn__add__to__cart">ADD TO CART</p>
+                     {% endif %}
+                     {% else %}
+                     <a href="/login" class="primary-btn" id="primary-btn">ADD TO CART</a>
+                     {% endif %}
+                     <ul>
+                        {% if error%}
+                        <li>{{ error }}</li>
+                        {% else%}
+                        <li><b>Quantity</b> <span>{{details.quantity}}</span></li>
+                        <li><b>Rate</b> <span>{{details.rate}}/5.0</span></li>
+                        {% if user.is_authenticated %}
+                        {% if userMark %}
+                        <li><b>Your mark</b><span>{{userMark}}</span></li>
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}
+                     </ul>
+                     {% if user.is_authenticated %}
+                     {% if not userMark %}
+                     <h3>Rate this product!</h3>
+                     <select id="rating-bar" value={{details.id}}>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                     </select>
+                     <button id="rating-bar-submit">Rate</button>
+                     <p id='rating-bar-status'></p>
+                     {% endif %}
+                     {% endif %}
+                  </div>
+               </div>
+               <div class="col-lg-12">
+                  <div class="product__details__tab">
+                     <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                           <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                              aria-selected="true">Tags</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                           <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                               aria-selected="false">Information</a>
+                           </li> -->
+                     </ul>
+                     <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                           <div class="product__details__tab__desc">
+                              <h6>Products tags</h6>
+                              {% if error%}
+                              <p>{{ error }}</p>
+                              {% else%}
+                              <p>{{ details.tags}}</p>
+                              {% endif %}
+                           </div>
+                        </div>
+                        <!-- <div class="tab-pane" id="tabs-2" role="tabpanel">
+                           <div class="product__details__tab__desc">
+                               <h6>Products Infomation</h6>
+                           </div>
+                           </div> -->
+                     </div>
+                  </div>
+               </div>
             </div>
-        </div>
-    </section>
-    <!-- Product Details Section End -->
-
-
-    {% include 'base/footer.html' %}
-
-    <!-- Js Plugins -->
-    <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/jquery.nice-select.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/jquery-ui.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/jquery.slicknav.js')}}"></script>
-    <script src="{{url_for('static',filename='js/mixitup.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/main.js')}}"></script>
-    <script type="text/javascript" src="http://bseth99.github.io/projects/jquery-ui/ratingbar.js"></script>
-    
-
-
-</body>
-
+         </div>
+      </section>
+      <!-- Product Details Section End -->
+      {% include 'base/footer.html' %}
+      <!-- Js Plugins -->
+      <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/jquery.nice-select.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/jquery-ui.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/jquery.slicknav.js')}}"></script>
+      <script src="{{url_for('static',filename='js/mixitup.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/main.js')}}"></script>
+      <script type="text/javascript" src="http://bseth99.github.io/projects/jquery-ui/ratingbar.js"></script>
+   </body>
 </html>

@@ -1,101 +1,92 @@
 <!DOCTYPE html> 
-<html> 
-  <head><title>Админ-статистика</title></head>
- 
-  
-<body> 
-    <form method="POST" action="{{url_for('adminManageOrders')}}">
-        <div id="period-block">
-        {% if date_e and date_b %}
-        Date_b:<input type="date" name="date_b" value="{{ date_b }}">
-        Date_e:<input type="date" name="date_e" value="{{ date_e }}">
-        {% else %}
-        Date_b:<input type="date" name="date_b">
-        Date_e:<input type="date" name="date_e">
-        {% endif %}
-        <br>
-        </div>
-
-        <div id="order-info-block" hidden>
+<html>
+   <head>
+      <title>Админ-статистика</title>
+   </head>
+   <body>
+      <form method="POST" action="{{url_for('adminManageOrders')}}">
+         <div id="period-block">
+            {% if date_e and date_b %}
+            Date_b:<input type="date" name="date_b" value="{{ date_b }}">
+            Date_e:<input type="date" name="date_e" value="{{ date_e }}">
+            {% else %}
+            Date_b:<input type="date" name="date_b">
+            Date_e:<input type="date" name="date_e">
+            {% endif %}
+            <br>
+         </div>
+         <div id="order-info-block" hidden>
             <br>
             <input id=31 type="number" name="orderID-3">
             <label for=31 >Order ID</label>
-      
-          </div>
-
-          <div id="order-info-by-status-block" hidden>
+         </div>
+         <div id="order-info-by-status-block" hidden>
             <br>
             <select name="status">
-                <option value=0>Оформлен</option>
-                <option value=1>Подтвержден</option>
-                <option value=2>Получено курьером</option>
-                <option value=3>Получено клиентом</option>
-                <option value=4>Отменен по инициативе клиента</option>
-                <option value=5>Отменен по инициативе магазина</option>
+               <option value=0>Оформлен</option>
+               <option value=1>Подтвержден</option>
+               <option value=2>Получено курьером</option>
+               <option value=3>Получено клиентом</option>
+               <option value=4>Отменен по инициативе клиента</option>
+               <option value=5>Отменен по инициативе магазина</option>
             </select>
-          </div>
-
-          <div id="order-set-new-status-block" hidden>
-
-          <br>
+         </div>
+         <div id="order-set-new-status-block" hidden>
+            <br>
             <input id=51 type="number" name="orderID-5">
             <label for=51 >Order ID</label>
             <br>
             <select name="newStatus">
-                <option value=0>Оформлен</option>
-                <option value=1>Подтвержден</option>
-                <option value=2>Получено курьером</option>
-                <option value=3>Получено клиентом</option>
-                <option value=4>Отменен по инициативе клиента</option>
-                <option value=5>Отменен по инициативе магазина</option>
+               <option value=0>Оформлен</option>
+               <option value=1>Подтвержден</option>
+               <option value=2>Получено курьером</option>
+               <option value=3>Получено клиентом</option>
+               <option value=4>Отменен по инициативе клиента</option>
+               <option value=5>Отменен по инициативе магазина</option>
             </select>
-          </div>
-
-        <h4>Methods</h4>
-        <input id = 2 type="radio" name="method" value=2>
-        <label for=2>Get count of order by period</label>
-        <br>
-        <input id = 1 type="radio" name="method" value=1 checked>
-        <label for=1>Get all orders by period</label>
-        <br>
-        <input id = 3 type="radio" name="method" value=3>
-        <label for=3>Get order info</label>
-        <br>
-        <input id = 4 type="radio" name="method" value=4>
-        <label for=4>Get orders by status</label>
-        <br>
-        <input id = 5 type="radio" name="method" value=5>
-        <label for=5>Set new status of order</label>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
-
-    {% include 'base/admin-table.html' %}
-  
-</body> 
-
-<script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
-  <script type="text/javascript">
-  var currentBlock = $('#period-block')
-
-  $('input[type=radio][name=method]').change(function() {
-    currentBlock.hide()
-    if (this.value == 1 || this.value == 2) {
-        currentBlock = $('#period-block')
-    }
-    else if (this.value == 3) {
-        currentBlock = $('#order-info-block')
-
-    }
-    else if (this.value == 4) {
-        currentBlock = $('#order-info-by-status-block')
-    }
-    else if (this.value == 5) {
-        currentBlock = $('#order-set-new-status-block')
-    }
-    currentBlock.show()
-
-});
-
-</script>
-</html> 
+         </div>
+         <h4>Methods</h4>
+         <input id = 2 type="radio" name="method" value=2>
+         <label for=2>Get count of order by period</label>
+         <br>
+         <input id = 1 type="radio" name="method" value=1 checked>
+         <label for=1>Get all orders by period</label>
+         <br>
+         <input id = 3 type="radio" name="method" value=3>
+         <label for=3>Get order info</label>
+         <br>
+         <input id = 4 type="radio" name="method" value=4>
+         <label for=4>Get orders by status</label>
+         <br>
+         <input id = 5 type="radio" name="method" value=5>
+         <label for=5>Set new status of order</label>
+         <br>
+         <button type="submit">Submit</button>
+      </form>
+      {% include 'base/admin-table.html' %}
+   </body>
+   <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
+   <script type="text/javascript">
+      var currentBlock = $('#period-block')
+      
+      $('input[type=radio][name=method]').change(function() {
+        currentBlock.hide()
+        if (this.value == 1 || this.value == 2) {
+            currentBlock = $('#period-block')
+        }
+        else if (this.value == 3) {
+            currentBlock = $('#order-info-block')
+      
+        }
+        else if (this.value == 4) {
+            currentBlock = $('#order-info-by-status-block')
+        }
+        else if (this.value == 5) {
+            currentBlock = $('#order-set-new-status-block')
+        }
+        currentBlock.show()
+      
+      });
+      
+   </script>
+</html>

@@ -1,297 +1,264 @@
-
 <!DOCTYPE html>
 <html lang="zxx">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Booker</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="{{  url_for('static',filename='css/bootstrap.min.css')  }}" type="text/css">
-<link rel="stylesheet" href="{{  url_for('static',filename='css/font-awesome.min.css')  }}" type="text/css">
-<link rel="stylesheet" href="{{  url_for('static',filename='css/elegant-icons.css')  }}" type="text/css">
-<link rel="stylesheet" href="{{  url_for('static',filename='css/nice-select.css')  }}" type="text/css">
-<link rel="stylesheet" href="{{  url_for('static',filename='css/jquery-ui.min.css')  }}" type="text/css">
-<link rel="stylesheet" href="{{  url_for('static',filename='css/owl.carousel.min.css')  }}" type="text/css">
-<link rel="stylesheet" href="{{  url_for('static',filename='css/slicknav.min.css')  }}" type="text/css">
-<link rel="stylesheet" href="{{  url_for('static',filename='css/style.css')  }}" type="text/css">
-</head>
-<body>
-
-  <style type="text/css">
-    .page-btn {
-    font-size: 14px;
-    color: #ffffff;
-    font-weight: 800;
-    text-transform: uppercase;
-    text-align: center;
-    display: inline-block;
-    padding: 3px 10px 3px;
-    background: #78b818;
-    border: none;
-    margin-bottom: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
-    border-radius: 50%;
-  }
-
-  .page-btn-active {
-    font-size: 14px;
-    color: #ffffff;
-    font-weight: 800;
-    text-align: center;
-    text-transform: uppercase;
-    display: inline-block;
-    padding: 3px 10px 3px;
-    background: #49681c;
-    border: none;
-    margin-bottom: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
-    border-radius: 50%;
-  }
-
-  #msg_pop{
-	background-color:#7fad39;
-	display: none;
-	position: fixed;
-	z-index: 9998;
-	bottom: 30px;
-	left:30px;
-	width: 250px;
-	padding: 10px;
-	color:#fff;
-	font-size:13px;
-	line-height:13px;
-	-webkit-box-shadow: 0px 0px 10px #999;
-	-moz-box-shadow: 0px 0px 10px #999;
-	box-shadow: 0px 0px 10px #7fad39;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	}
-	#msg_pop h4{
-	margin:0;
-  text-align:center;
-  color: #fff;
-	font-size:15px;
-	}
-	 
-	#msg_close{
-	display:block;
-	position:absolute;
-	top:5px;
-	right:10px;
-	line-height:15px;
-	width:16px;
-	height:16px;
-	text-align:center;
-	color:#fff;
-	cursor:pointer;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	-ms-border-radius: 10px;
-	-o-border-radius: 10px;
-	border-radius: 10px;
-	}
-	#msg_close:hover {
-	background-color:#fff;
-	color:#000;
-	}
-	.fadeIn{
-		animation-name: fadeIn;
-		-webkit-animation-name: fadeIn; 
-		 animation-duration: 0.4s; 
-		-webkit-animation-duration: 0.4s;
-		 animation-timing-function: ease-in-out; 
-		-webkit-animation-timing-function: ease-in-out;     
-		 visibility: visible !important; 
-	}
-	  
-	@keyframes fadeIn {
-		0% {transform: scale(0.7);opacity: 0.5;}
-		80% {transform: scale(1.1);}       
-		100% {transform: scale(1);opacity: 1;}       
-	}
-	  
-	@-webkit-keyframes fadeIn {
-		0% {-webkit-transform: scale(0.7);opacity: 0.5;}
-		80% {-webkit-transform: scale(1.1);}       
-		100% {-webkit-transform: scale(1);opacity: 1;}       
-  }
-
-  /* .header__menu {
-    
-  } */
-  /* .header__menu ul li .header__menu__dropdown {
-	position: absolute;
-	right: 50px;
-	top: 50px;
-	background: #222222;
-	width: 180px;
-	z-index: 9;
-	padding: 5px 0;
-	-webkit-transition: all, 0.3s;
-	-moz-transition: all, 0.3s;
-	-ms-transition: all, 0.3s;
-	-o-transition: all, 0.3s;
-	transition: all, 0.3s;
-	opacity: 0;
-	visibility: hidden;
-} */
-
-
-  </style>
-
-<div id="preloder">
-<div class="loader"></div>
-</div>
-
-<div class="humberger__menu__overlay"></div>
-<div class="humberger__menu__wrapper">
-<div class="humberger__menu__logo">
-<a href="{{ url_for('showBooks',page = 1)}}"><img src="{{ url_for('static',filename='img/logo.png') }}" alt=""></a>
-</div>
-<div class="humberger__menu__cart">
-<ul>
-<li>
-  <a href="/cart">
-  <i class="fa fa-shopping-bag"></i>
-  {% if user.is_authenticated %}
-   <span id="humberg__fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span>
-   {% else %}
-   <span id="fa__fa-shopping-bag__indicator__quantity">0</span>
-   {% endif %}
-</a>
-</li>
-</ul>
-{% if user.is_authenticated %}
-<div class="header__cart__price">Item: <span id="humberg__header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
-{% else %}
-<div class="header__cart__price">Item: <span>0.0P</span></div>
-{% endif %}
-</div>
-<div class="humberger__menu__widget">
-  {% if user.is_authenticated %}
-  
-  <div class="header__top__right__auth">
-        <div class="hero__categories">
-          <div class="hero__categories__all">
-              <i class="fa fa-bars"></i>
-              <span><i class="fa fa-user"></i> Profile</span>
-          </div>
-          <ul class='for-toogle' style="display: none;">
-              <li><a href="{{ url_for('userInfo')}}">Information</a></li>
-              <li><a href="{{ url_for('showOrders')}}">Orders</a></li>
-              <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
-          </ul>
-        </div>
-    </div>
-  {% else %}
-<div class="header__top__right__auth">
-<a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
-</div>
-  {% endif %}
-</div>
-<div id="mobile-menu-wrap"></div>
-<div class="humberger__menu__contact">
-<ul>
-<li>Free Shipping for all Order of $99</li>
-</ul>
-</div>
-</div>
-
-{% include 'base/header.html' %}
-
-
-{% include 'base/hero.html' %}
-
-
-<section class="featured spad">
-<div class="container">
-<div class="row featured__filter">
-  {% if products %}
-  {%  for product in products%}
-  <div class="col-lg-3 col-md-4 col-sm-6 mix">
-    <div class="featured__item" >
-    <div class="featured__item__pic set-bg" 
-    data-setbg="{{ url_for('static',filename = product.imageLink)}}">
-    <a href="{{url_for('showDetailsOfBook',productID=product.id)}}"></a>
-    <ul class="featured__item__pic__hover">
-    <li><a class="shopping__cart" id={{product.id}} value={{product.cost}}><i class="fa fa-shopping-cart"></i></a></li>
-    </ul>
-    </div>
-    <div class="featured__item__text">
-    <h6><a href="{{ url_for('showDetailsOfBook',productID=product.id) }}">{{product.title}}</a></h6>
-    <h5>{{product.cost}}P</h5>
-    </div>
-    </div>
-    </div>
-
-    {%  endfor %}
-    {% endif %}
-
-
-</div>
-</div>
-
-{% if countOfPagesRange %}
-<div class="justify-content-center row">
-{% for page in countOfPagesRange%}
-    {% if page == currentPage%}
-      {% if tagsAlreadySearched%}
-      <a class="page-btn-active" href="{{ url_for('showBooks',page=page,tags=tagsAlreadySearched)}}">{{page}}</a>
-      {% else %}
-        {% if q%}
-        <a class="page-btn-active" href="{{ url_for('showBooks',page=page,q=q)}}">{{page}}</a>
-        {% else %}
-        <a class="page-btn-active" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
-        {% endif %}
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Booker</title>
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/bootstrap.min.css')  }}" type="text/css">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/font-awesome.min.css')  }}" type="text/css">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/elegant-icons.css')  }}" type="text/css">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/nice-select.css')  }}" type="text/css">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/jquery-ui.min.css')  }}" type="text/css">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/owl.carousel.min.css')  }}" type="text/css">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/slicknav.min.css')  }}" type="text/css">
+      <link rel="stylesheet" href="{{  url_for('static',filename='css/style.css')  }}" type="text/css">
+   </head>
+   <body>
+      <style type="text/css">
+         .page-btn {
+         font-size: 14px;
+         color: #ffffff;
+         font-weight: 800;
+         text-transform: uppercase;
+         text-align: center;
+         display: inline-block;
+         padding: 3px 10px 3px;
+         background: #78b818;
+         border: none;
+         margin-bottom: 10px;
+         margin-left: 5px;
+         margin-right: 5px;
+         border-radius: 50%;
+         }
+         .page-btn-active {
+         font-size: 14px;
+         color: #ffffff;
+         font-weight: 800;
+         text-align: center;
+         text-transform: uppercase;
+         display: inline-block;
+         padding: 3px 10px 3px;
+         background: #49681c;
+         border: none;
+         margin-bottom: 10px;
+         margin-left: 5px;
+         margin-right: 5px;
+         border-radius: 50%;
+         }
+         #msg_pop{
+         background-color:#7fad39;
+         display: none;
+         position: fixed;
+         z-index: 9998;
+         bottom: 30px;
+         left:30px;
+         width: 250px;
+         padding: 10px;
+         color:#fff;
+         font-size:13px;
+         line-height:13px;
+         -webkit-box-shadow: 0px 0px 10px #999;
+         -moz-box-shadow: 0px 0px 10px #999;
+         box-shadow: 0px 0px 10px #7fad39;
+         -webkit-border-radius: 15px;
+         -moz-border-radius: 15px;
+         border-radius: 15px;
+         }
+         #msg_pop h4{
+         margin:0;
+         text-align:center;
+         color: #fff;
+         font-size:15px;
+         }
+         #msg_close{
+         display:block;
+         position:absolute;
+         top:5px;
+         right:10px;
+         line-height:15px;
+         width:16px;
+         height:16px;
+         text-align:center;
+         color:#fff;
+         cursor:pointer;
+         -webkit-border-radius: 10px;
+         -moz-border-radius: 10px;
+         -ms-border-radius: 10px;
+         -o-border-radius: 10px;
+         border-radius: 10px;
+         }
+         #msg_close:hover {
+         background-color:#fff;
+         color:#000;
+         }
+         .fadeIn{
+         animation-name: fadeIn;
+         -webkit-animation-name: fadeIn; 
+         animation-duration: 0.4s; 
+         -webkit-animation-duration: 0.4s;
+         animation-timing-function: ease-in-out; 
+         -webkit-animation-timing-function: ease-in-out;     
+         visibility: visible !important; 
+         }
+         @keyframes fadeIn {
+         0% {transform: scale(0.7);opacity: 0.5;}
+         80% {transform: scale(1.1);}       
+         100% {transform: scale(1);opacity: 1;}       
+         }
+         @-webkit-keyframes fadeIn {
+         0% {-webkit-transform: scale(0.7);opacity: 0.5;}
+         80% {-webkit-transform: scale(1.1);}       
+         100% {-webkit-transform: scale(1);opacity: 1;}       
+         }
+         /* .header__menu {
+         } */
+         /* .header__menu ul li .header__menu__dropdown {
+         position: absolute;
+         right: 50px;
+         top: 50px;
+         background: #222222;
+         width: 180px;
+         z-index: 9;
+         padding: 5px 0;
+         -webkit-transition: all, 0.3s;
+         -moz-transition: all, 0.3s;
+         -ms-transition: all, 0.3s;
+         -o-transition: all, 0.3s;
+         transition: all, 0.3s;
+         opacity: 0;
+         visibility: hidden;
+         } */
+      </style>
+      <div id="preloder">
+         <div class="loader"></div>
+      </div>
+      <div class="humberger__menu__overlay"></div>
+      <div class="humberger__menu__wrapper">
+         <div class="humberger__menu__logo">
+            <a href="{{ url_for('showBooks',page = 1)}}"><img src="{{ url_for('static',filename='img/logo.png') }}" alt=""></a>
+         </div>
+         <div class="humberger__menu__cart">
+            <ul>
+               <li>
+                  <a href="/cart">
+                  <i class="fa fa-shopping-bag"></i>
+                  {% if user.is_authenticated %}
+                  <span id="humberg__fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span>
+                  {% else %}
+                  <span id="fa__fa-shopping-bag__indicator__quantity">0</span>
+                  {% endif %}
+                  </a>
+               </li>
+            </ul>
+            {% if user.is_authenticated %}
+            <div class="header__cart__price">Item: <span id="humberg__header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
+            {% else %}
+            <div class="header__cart__price">Item: <span>0.0P</span></div>
+            {% endif %}
+         </div>
+         <div class="humberger__menu__widget">
+            {% if user.is_authenticated %}
+            <div class="header__top__right__auth">
+               <div class="hero__categories">
+                  <div class="hero__categories__all">
+                     <i class="fa fa-bars"></i>
+                     <span><i class="fa fa-user"></i> Profile</span>
+                  </div>
+                  <ul class='for-toogle' style="display: none;">
+                     <li><a href="{{ url_for('userInfo')}}">Information</a></li>
+                     <li><a href="{{ url_for('showOrders')}}">Orders</a></li>
+                     <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
+                  </ul>
+               </div>
+            </div>
+            {% else %}
+            <div class="header__top__right__auth">
+               <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
+            </div>
+            {% endif %}
+         </div>
+         <div id="mobile-menu-wrap"></div>
+         <div class="humberger__menu__contact">
+            <ul>
+               <li>Free Shipping for all Order of $99</li>
+            </ul>
+         </div>
+      </div>
+      {% include 'base/header.html' %}
+      {% include 'base/hero.html' %}
+      <section class="featured spad">
+      <div class="container">
+         <div class="row featured__filter">
+            {% if products %}
+            {%  for product in products%}
+            <div class="col-lg-3 col-md-4 col-sm-6 mix">
+               <div class="featured__item" >
+                  <div class="featured__item__pic set-bg" 
+                     data-setbg="{{ url_for('static',filename = product.imageLink)}}">
+                     <a href="{{url_for('showDetailsOfBook',productID=product.id)}}"></a>
+                     <ul class="featured__item__pic__hover">
+                        <li><a class="shopping__cart" id={{product.id}} value={{product.cost}}><i class="fa fa-shopping-cart"></i></a></li>
+                     </ul>
+                  </div>
+                  <div class="featured__item__text">
+                     <h6><a href="{{ url_for('showDetailsOfBook',productID=product.id) }}">{{product.title}}</a></h6>
+                     <h5>{{product.cost}}P</h5>
+                  </div>
+               </div>
+            </div>
+            {%  endfor %}
+            {% endif %}
+         </div>
+      </div>
+      {% if countOfPagesRange %}
+      <div class="justify-content-center row">
+         {% for page in countOfPagesRange%}
+         {% if page == currentPage%}
+         {% if tagsAlreadySearched%}
+         <a class="page-btn-active" href="{{ url_for('showBooks',page=page,tags=tagsAlreadySearched)}}">{{page}}</a>
+         {% else %}
+         {% if q%}
+         <a class="page-btn-active" href="{{ url_for('showBooks',page=page,q=q)}}">{{page}}</a>
+         {% else %}
+         <a class="page-btn-active" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+         {% endif %}
+         {% endif %}
+         {% else%}
+         {% if tagsAlreadySearched%}
+         <a class="page-btn" href="{{ url_for('showBooks',page=page,tags=tagsAlreadySearched)}}">{{page}}</a>
+         {% else %}
+         {% if q%}
+         <a class="page-btn" href="{{ url_for('showBooks',page=page,q=q)}}">{{page}}</a>
+         {% else %}
+         <a class="page-btn" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
+         {% endif %}
+         {% endif %}
+         {% endif %}
+         {% endfor %}
+      </div>
       {% endif %}
-    {% else%}
-    {% if tagsAlreadySearched%}
-    <a class="page-btn" href="{{ url_for('showBooks',page=page,tags=tagsAlreadySearched)}}">{{page}}</a>
-    {% else %}
-      {% if q%}
-      <a class="page-btn" href="{{ url_for('showBooks',page=page,q=q)}}">{{page}}</a>
-      {% else %}
-      <a class="page-btn" href="{{ url_for('showBooks',page=page)}}">{{page}}</a>
-      {% endif %}
-    {% endif %}
-    {% endif %}
-{% endfor %}
-</div>
-
-{% endif %}
-
-<div id="msg_pop">
-  <h4>Успешно добавлено!</h4>
-  </div> 
-
-{% include 'base/footer.html' %}
-
-
-
-
-<script src="{{  url_for('static',filename='js/jquery-3.3.1.min.js')  }}" type="text/javascript"></script>
-<script src="{{  url_for('static',filename='js/bootstrap.min.js')  }}" type="text/javascript"></script>
-<script src="{{  url_for('static',filename='js/jquery.nice-select.min.js')  }}" type="text/javascript"></script>
-<script src="{{  url_for('static',filename='js/jquery-ui.min.js')  }}" type="text/javascript"></script>
-<script src="{{  url_for('static',filename='js/jquery.slicknav.js')  }}" type="text/javascript"></script>
-<script src="{{  url_for('static',filename='js/mixitup.min.js')  }}" type="text/javascript"></script>
-<script src="{{  url_for('static',filename='js/owl.carousel.min.js')  }}" type="text/javascript"></script>
-<script src="{{  url_for('static',filename='js/main.js')  }}" type="text/javascript"></script>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13" type="baea7c064f6a573d1522ee04-text/javascript"></script>
-<script type="baea7c064f6a573d1522ee04-text/javascript">
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-23581568-13');
-</script>
-<script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7089c43e/cloudflare-static/rocket-loader.min.js" data-cf-settings="baea7c064f6a573d1522ee04-|49" defer=""></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"rayId":"5d1b2c4d3b588474","version":"2020.9.0","si":10}'></script>
-</body>
+      <div id="msg_pop">
+         <h4>Успешно добавлено!</h4>
+      </div>
+      {% include 'base/footer.html' %}
+      <script src="{{  url_for('static',filename='js/jquery-3.3.1.min.js')  }}" type="text/javascript"></script>
+      <script src="{{  url_for('static',filename='js/bootstrap.min.js')  }}" type="text/javascript"></script>
+      <script src="{{  url_for('static',filename='js/jquery.nice-select.min.js')  }}" type="text/javascript"></script>
+      <script src="{{  url_for('static',filename='js/jquery-ui.min.js')  }}" type="text/javascript"></script>
+      <script src="{{  url_for('static',filename='js/jquery.slicknav.js')  }}" type="text/javascript"></script>
+      <script src="{{  url_for('static',filename='js/mixitup.min.js')  }}" type="text/javascript"></script>
+      <script src="{{  url_for('static',filename='js/owl.carousel.min.js')  }}" type="text/javascript"></script>
+      <script src="{{  url_for('static',filename='js/main.js')  }}" type="text/javascript"></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13" type="baea7c064f6a573d1522ee04-text/javascript"></script>
+      <script type="baea7c064f6a573d1522ee04-text/javascript">
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         
+         gtag('config', 'UA-23581568-13');
+      </script>
+      <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7089c43e/cloudflare-static/rocket-loader.min.js" data-cf-settings="baea7c064f6a573d1522ee04-|49" defer=""></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"rayId":"5d1b2c4d3b588474","version":"2020.9.0","si":10}'></script>
+   </body>
 </html>

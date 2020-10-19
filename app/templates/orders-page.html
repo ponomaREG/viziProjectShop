@@ -1,165 +1,151 @@
 <!DOCTYPE html>
 <html lang="zxx">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Booker</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
-
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/font-awesome.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/elegant-icons.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/nice-select.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/jquery-ui.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/owl.carousel.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/slicknav.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}" type="text/css">
-    <style type="text/css">
-
-    .pro-qty-cart {
-	width: 140px;
-	height: 50px;
-	display: inline-block;
-	position: relative;
-	text-align: center;
-	background: #f5f5f5;
-	margin-bottom: 5px;
-}
-
-.pro-qty-cart input {
-	height: 100%;
-	width: 100%;
-	font-size: 16px;
-	color: #6f6f6f;
-	width: 50px;
-	border: none;
-	background: #f5f5f5;
-	text-align: center;
-}
-
-.pro-qty-cart .qtybtn {
-	width: 35px;
-	font-size: 16px;
-	color: #6f6f6f;
-	cursor: pointer;
-	display: inline-block;
-}
-    </style>
-</head>
-
-<body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
-
-    {% include 'base/humberger.html' %}
-
-    {% include 'base/header.html' %}
-
-    {% include 'base/hero.html' %}
-
-    <!-- Shoping Cart Section Begin -->
-    <section class="shoping-cart spad">
-        <div class="container">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Booker</title>
+      <!-- Google Font -->
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+      <!-- Css Styles -->
+      <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/font-awesome.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/elegant-icons.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/nice-select.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/jquery-ui.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/owl.carousel.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/slicknav.min.css')}}" type="text/css">
+      <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}" type="text/css">
+      <style type="text/css">
+         .pro-qty-cart {
+         width: 140px;
+         height: 50px;
+         display: inline-block;
+         position: relative;
+         text-align: center;
+         background: #f5f5f5;
+         margin-bottom: 5px;
+         }
+         .pro-qty-cart input {
+         height: 100%;
+         width: 100%;
+         font-size: 16px;
+         color: #6f6f6f;
+         width: 50px;
+         border: none;
+         background: #f5f5f5;
+         text-align: center;
+         }
+         .pro-qty-cart .qtybtn {
+         width: 35px;
+         font-size: 16px;
+         color: #6f6f6f;
+         cursor: pointer;
+         display: inline-block;
+         }
+      </style>
+   </head>
+   <body>
+      <!-- Page Preloder -->
+      <div id="preloder">
+         <div class="loader"></div>
+      </div>
+      {% include 'base/humberger.html' %}
+      {% include 'base/header.html' %}
+      {% include 'base/hero.html' %}
+      <!-- Shoping Cart Section Begin -->
+      <section class="shoping-cart spad">
+         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="shoping__cart__table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="shoping__product">Orders</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {%if not error%}
-                                {% if ordersList|length == 0 %}
-                                <tr><td>Empty</td></tr>
-                                {% else %}
-
-                                {% for order in ordersList %}
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        {% if order.status == 4 or order.status == 5%}
-                                        <h5>Order№{{ order.id}}</h5>
-                                        {% else %}
-                                        <h5><a style="text-decoration: none;" href="{{ url_for('showDetailsOfOrder',orderID=order.id)}}">Order№{{ order.id}}</a></h5>
-                                        {% endif %}
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        {% if order.status == 0 %}
-                                        Formalized
-                                        {% endif %}
-                                        {% if order.status == 1 %}
-                                        Confirmed
-                                        {% endif %}
-                                        {% if order.status == 2 %}
-                                        Received by courier
-                                        {% endif %}
-                                        {% if order.status == 3 %}
-                                        Received by client
-                                        {% endif %}
-                                        {% if order.status == 4 %}
-                                        Canceled by client
-                                        {% endif %}
-                                        {% if order.status == 5 %}
-                                        Canceled by shop
-                                        {% endif %}
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty-cart">
-                                                {{order.date}}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        {{order.total}}P
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                {%endif%}
-                                {% else %}
-                                <tr><td>{{error}}</td></tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+               <div class="col-lg-12">
+                  <div class="shoping__cart__table">
+                     <table>
+                        <thead>
+                           <tr>
+                              <th class="shoping__product">Orders</th>
+                              <th>Status</th>
+                              <th>Date</th>
+                              <th>Total</th>
+                              <th></th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {%if not error%}
+                           {% if ordersList|length == 0 %}
+                           <tr>
+                              <td>Empty</td>
+                           </tr>
+                           {% else %}
+                           {% for order in ordersList %}
+                           <tr>
+                              <td class="shoping__cart__item">
+                                 {% if order.status == 4 or order.status == 5%}
+                                 <h5>Order№{{ order.id}}</h5>
+                                 {% else %}
+                                 <h5><a style="text-decoration: none;" href="{{ url_for('showDetailsOfOrder',orderID=order.id)}}">Order№{{ order.id}}</a></h5>
+                                 {% endif %}
+                              </td>
+                              <td class="shoping__cart__price">
+                                 {% if order.status == 0 %}
+                                 Formalized
+                                 {% endif %}
+                                 {% if order.status == 1 %}
+                                 Confirmed
+                                 {% endif %}
+                                 {% if order.status == 2 %}
+                                 Received by courier
+                                 {% endif %}
+                                 {% if order.status == 3 %}
+                                 Received by client
+                                 {% endif %}
+                                 {% if order.status == 4 %}
+                                 Canceled by client
+                                 {% endif %}
+                                 {% if order.status == 5 %}
+                                 Canceled by shop
+                                 {% endif %}
+                              </td>
+                              <td class="shoping__cart__quantity">
+                                 <div class="quantity">
+                                    <div class="pro-qty-cart">
+                                       {{order.date}}
+                                    </div>
+                                 </div>
+                              </td>
+                              <td class="shoping__cart__total">
+                                 {{order.total}}P
+                              </td>
+                           </tr>
+                           {% endfor %}
+                           {%endif%}
+                           {% else %}
+                           <tr>
+                              <td>{{error}}</td>
+                           </tr>
+                           {% endif %}
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="shoping__cart__btns">
-                        <a href="{{ url_for('showBooks',page=1) }}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                    </div>
-                </div>
-                
+               <div class="col-lg-12">
+                  <div class="shoping__cart__btns">
+                     <a href="{{ url_for('showBooks',page=1) }}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                  </div>
+               </div>
             </div>
-        </div>
-    </section>
-    <!-- Shoping Cart Section End -->
-
-    {%  include 'base/footer.html' %}
-
-    <!-- Js Plugins -->
-    <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/jquery.nice-select.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/jquery-ui.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/jquery.slicknav.js')}}"></script>
-    <script src="{{url_for('static',filename='js/mixitup.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/main.js')}}"></script>
-
-
-</body>
-
+         </div>
+      </section>
+      <!-- Shoping Cart Section End -->
+      {%  include 'base/footer.html' %}
+      <!-- Js Plugins -->
+      <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/jquery.nice-select.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/jquery-ui.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/jquery.slicknav.js')}}"></script>
+      <script src="{{url_for('static',filename='js/mixitup.min.js')}}"></script>
+      <script src="{{url_for('static',filename='js/main.js')}}"></script>
+   </body>
 </html>
