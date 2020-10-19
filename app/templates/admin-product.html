@@ -20,6 +20,9 @@
     <input type="radio" id = 4 name="method" value=4>
     <label for=4>Set new price</label>
     <br>
+    <input type="radio" id = 6 name="method" value=6>
+    <label for=6>Set new tags</label>
+    <br>
     <input type="radio" id = 5 name="method" value=5>
     <label for=5>Set new image</label>
     <br>
@@ -66,6 +69,17 @@
 
     </div>
 
+
+    <div id="method-6-block" hidden>
+      <br>
+      <input id=60 type="number" name="productID-6" min="0">
+      <label for=60 >Product ID</label>
+      <br>
+      <input type="text" id=61 name="tags" hint='Enter new tags'></input>
+      <label for=61 >New tags</label>
+
+    </div>
+
     <div id="method-5-block" hidden>
       <br>
       <label>Image:</label><input type="file" name='image' accept="image/png,image/jpeg,image/jpg">
@@ -101,6 +115,9 @@
     }
     else if (this.value == 5) {
         currentBlock = $('#method-5-block')
+    }
+    else if (this.value == 6) {
+        currentBlock = $('#method-6-block')
     }
     currentBlock.show()
 

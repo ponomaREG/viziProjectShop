@@ -122,6 +122,10 @@ def adminGetProductInfo():
                  price = request.form.get('price',type=float)
                  productID = request.form.get('productID-4',type=int)
                  resultOfResponseToDB = Admin.setNewValueBook(productID,'cost_sale',price)
+             elif(method == 6):
+                 tags = request.form.get('tags',type=str)
+                 productID = request.form.get('productID-6',type=int)
+                 resultOfResponseToDB = Admin.setNewValueBook(productID,'tags',tags)
              elif(method == 5):
                  productID = request.form.get('productID-5',type=int)
                  print(request.files)
