@@ -82,9 +82,10 @@ def newOrder():
             porch = request.form.get('porch',type=str,default = '')
             house = request.form.get('house')
             email = request.form.get('email',type=str,default='')
-
+            description = request.form.get('desc',type=str,default='')
+            phone = request.form.get('phone',type=str,default='')
             newOrder = Order.addNewOrder(flask_login.current_user.userID,district,
-            flat,house,floor,street,porch,email=email)
+            flat,house,floor,street,porch,email=email,desc=description,phone=phone)
             if(newOrder['status'] == 0):
                 return render_template('order.html',user = flask_login.current_user,data = newOrder['data']['data'])
             else:
@@ -211,7 +212,6 @@ def showBooks(page):
 @app.route('/books/details/<int:productID>')
 def showDetailsOfBook(productID):
     details = Product.getDetailsOfProduct(productID)
-    print(details)
     if(details['status'] == 0):
         details['data'][0]['rate']= Product.getRateOfProduct(productID)
         if(flask_login.current_user.is_authenticated):

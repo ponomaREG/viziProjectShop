@@ -59,7 +59,7 @@ class Order:
 
 
     @staticmethod
-    def addNewOrder(userID,district,flat,house,floor,street,porch='',email=''):
+    def addNewOrder(userID,district,flat,house,floor,street,porch='',email='',desc = '',phone=''):
         result = {}
         try:
             quantityInCart = Cart.getCountOfItemsInCart(userID)
@@ -83,11 +83,14 @@ class Order:
                 return result 
         
         try:
-            lastrowid = SqlExecuter.executeModif('insert into Заказ(`user_id`,`status`,`total`,`address_id`) values({},{},{},{});'.format(
+            lastrowid = SqlExecuter.executeModif('insert into Заказ(`user_id`,`status`,`total`,`address_id`,`description`,`email`,`phone`) values({},{},{},{},"{}","{}","{}");'.format(
                     userID,
                     0,
                     Cart.countTotalCostOfUser(userID),
-                    lastrowidAddress))
+                    lastrowidAddress,
+                    desc,
+                    email,
+                    phone))
         except IndexError:
             result['status'] = 1
             result['message'] = 'SQL runtime error'

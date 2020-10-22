@@ -121,7 +121,7 @@ class Admin:
 
     @staticmethod
     def getInfoOfOrderBy(orderID):
-        return Admin.__makeResultResponse('select * from Заказ where id = {};'.format(orderID))
+        return Admin.__makeResultResponse('select * from Заказ as ord inner join Адрес as addr where ord.id = {} and address_id = addr.id;'.format(orderID))
 
     @staticmethod
     def getOrdersByStatus(status):

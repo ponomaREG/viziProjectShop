@@ -31,6 +31,9 @@
          <div class="row">
             <div class="col-lg-12">
                <div class="shoping__cart__table">
+                  {% if not error %}
+                  <h3>Заказ оформлен. Скоро с Вами свяжутся наши операторы!</h3>
+                  {% endif %}
                   <table>
                      <thead>
                         <tr>
@@ -48,6 +51,7 @@
                            <td>What?</td>
                         </tr>
                         {% else %}
+
                         {% for product in data %}
                         <tr id={{ product.id }}>
                            <td class="shoping__cart__item">
