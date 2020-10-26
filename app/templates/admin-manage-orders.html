@@ -45,6 +45,11 @@
                <option value=5>Отменен по инициативе магазина</option>
             </select>
          </div>
+         <div id="supplier-add-new" hidden>
+            <br>
+            <input id=61 type="text" name="supplier-name">
+            <label for=61 >Supplier name</label>
+         </div>
          <h4>Methods</h4>
          <input id = 2 type="radio" name="method" value=2>
          <label for=2>Get count of order by period</label>
@@ -60,6 +65,9 @@
          <br>
          <input id = 5 type="radio" name="method" value=5>
          <label for=5>Set new status of order</label>
+         <br>
+         <input id = 6 type="radio" name="method" value=6>
+         <label for=6>Add new supplier</label>
          <br>
          <button type="submit">Submit</button>
       </form>
@@ -83,6 +91,9 @@
         }
         else if (this.value == 5) {
             currentBlock = $('#order-set-new-status-block')
+        }
+        else if (this.value == 6) {
+            currentBlock = $('#supplier-add-new')
         }
         currentBlock.show()
       

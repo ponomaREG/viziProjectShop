@@ -61,7 +61,10 @@ def adminManageOrders():
                 resultOfResponse = Admin.setNewStatusOfOrder(newStatus,orderID,flask_login.current_user.userID)
                 return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
 
-
+            elif(method == 6):
+                supplierName = request.form.get('supplier-name')
+                resultOfResponse = Admin.addNewSupplier(supplierName,flask_login.current_user.userID)
+                return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
          else:
             return render_template('admin-manage-orders.html')
     else:

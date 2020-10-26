@@ -32,6 +32,28 @@ class Admin:
     def getSuppliers():
         return Admin.__makeResultResponse('select * from Поставщик;')
 
+    @staticmethod
+    def addNewSupplier(supplierName,adminID):
+        cursor = connection.cursor()
+        query = 'insert into Поставщик(`company_name`) values("{}");'.format(supplierName)
+        cursor.execute(query)
+        lastrowid = cursor.lastrowid
+        cursor.close()
+        Logger.log(adminID,query)
+        connection.commit()
+        result = {}
+        result['keys'] = ['new id']
+        if(lastrowid > 0):
+            result['data'] = [lastrowid]
+            result['message'] = 'OK'
+            result['status'] = 0
+        else:
+            result['data'] = []
+            result['message'] = 'Not > 0'
+            result['status'] = 125
+        return result
+
+
 
     @staticmethod
     def setNewValueBook(productID,column,value,adminID):
