@@ -10,6 +10,7 @@ STATUSES OF RESPONSE
 7 - Incorrect format of input
 8 - User with same email is already exists
 9 - User already set mark
+10 - Attempt to order product with incorrect quantity
 
 40 - Not founded order
 120 - Not auth

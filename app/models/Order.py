@@ -73,7 +73,17 @@ class Order:
             result['message'] = 'SQL runtime error'
             result['data'] = []
             return result
-
+        cartOfUser = Cart.getCartOfUser(userID)['data']
+        isError = False
+        for row in cartOfUser:
+            product = SqlExecuter.getOneRowsPacked('select * from Товар where id = {};'.format(row['id']))
+            if(product['quantity'] < row['count']):
+                isError = True
+                SqlExecuter.executeModif('delete from Корзина where product_id = {} and user_id = {};'.format(row['id'],userID))
+        if(isError):
+                result['status'] = 10 
+                result['message'] = 'Attempt to order product with incorrect quantity'
+                return result
         try:
             lastrowidAddress = Address.addNewAddress(district,house,floor,flat,porch,street)
         except IndexError:
@@ -96,7 +106,6 @@ class Order:
             result['message'] = 'SQL runtime error'
             result['data'] = []
             return result
-        cartOfUser = Cart.getCartOfUser(userID)['data']
         data = {'id':lastrowid,"data":cartOfUser}
         for row in cartOfUser:
             try:
