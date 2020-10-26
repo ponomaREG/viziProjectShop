@@ -101,8 +101,9 @@ def adminStat():
 def adminGetProductInfo():
      if(flask_login.current_user.is_admin):
          columnNames = Admin.getColumnsOfTable('Товар')
+         suppliers = Admin.getSuppliers()
          if(request.method == 'GET'):
-             return render_template('admin-product.html',columnNames = columnNames['data'])
+             return render_template('admin-product.html',columnNames = columnNames['data'],suppliers=suppliers)
          else:
              method = request.form.get('method',type=int)
 
@@ -136,17 +137,23 @@ def adminGetProductInfo():
                         file.save(filePath)
                         resultOfResponseToDB = Admin.setNewValueBook(productID,'imageLink',filename,flask_login.current_user.userID)
                     else:
-                        return render_template('admin-product.html',columnNames = columnNames['data'],message = 'Image not uploaded 1')
+                        return render_template('admin-product.html',columnNames = columnNames['data'],message = 'Image not uploaded 1',suppliers=suppliers)
                  else:
-                     return render_template('admin-product.html',columnNames = columnNames['data'],message = 'Image not uploaded 2')
+                     return render_template('admin-product.html',columnNames = columnNames['data'],message = 'Image not uploaded 2',suppliers=suppliers)
+             elif(method == 7):
+                 productID = request.form.get('productID-7',type=int)
+                 quantity = request.form.get('quantity-delivery',type=int)
+                 supplierID = request.form.get('supplierID',type=int)
+                 cost_purchase = request.form.get('cost-purchase-delivery',type=float)
+                 resultOfResponseToDB = Admin.addNewDeliveryOfProducts(productID,quantity,cost_purchase,supplierID,flask_login.current_user.userID)
              else:
-                 return render_template('admin-product.html',columnNames = columnNames['data'],message = 'What the fuck???Method:{}'.format(method))
+                 return render_template('admin-product.html',columnNames = columnNames['data'],message = 'What the fuck???Method:{}'.format(method),suppliers=suppliers)
              if(resultOfResponseToDB['status'] == 0):
-                 return render_template('admin-product.html',resultOfResponse = resultOfResponseToDB,columnNames = columnNames['data'])
+                 return render_template('admin-product.html',resultOfResponse = resultOfResponseToDB,columnNames = columnNames['data'],suppliers=suppliers)
              elif(resultOfResponseToDB['status'] == 3):
-                 return render_template('admin-product.html',message = 'Empty',columnNames = columnNames['data'])
+                 return render_template('admin-product.html',message = 'Empty',columnNames = columnNames['data'],suppliers=suppliers)
              elif(resultOfResponseToDB['status'] == 130):
-                 return render_template('admin-product.html',message = resultOfResponseToDB['message'],columnNames = columnNames['data'])
+                 return render_template('admin-product.html',message = resultOfResponseToDB['message'],columnNames = columnNames['data'],suppliers=suppliers)
              
 
 

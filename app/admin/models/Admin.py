@@ -28,6 +28,10 @@ class Admin:
             res['message'] = 'OK'
         return res
 
+    @staticmethod
+    def getSuppliers():
+        return Admin.__makeResultResponse('select * from Поставщик;')
+
 
     @staticmethod
     def setNewValueBook(productID,column,value,adminID):
@@ -71,7 +75,7 @@ class Admin:
         connection.commit()
         result['status'] = 0
         result['message'] = 'OK'
-        result['lastrowid'] = lastrowid
+        result['data'] = [lastrowid]
         result['keys'] = ['updated id']
         return result
 
@@ -81,6 +85,15 @@ class Admin:
         Logger.log(adminID,query)
         return Admin.__makeResultResponse(query)
 
+    @staticmethod
+    def addNewDeliveryOfProducts(productID,quantity,cost_purhase,supplier_id,adminID):
+        query = 'insert into Закупки(`quantity`,`cost_purchase`,`supplier_id`,`product_id`) values({},{},{},{})'.format(quantity,cost_purhase,supplier_id,productID)
+        cursor = connection.cursor()
+        cursor.execute(query)
+        Logger.log(adminID,query)
+        return Admin.incQuantityOfBook(productID,quantity,adminID)
+
+
 
     @staticmethod
     def getColumnsOfTable(tableName):
@@ -89,12 +102,14 @@ class Admin:
     @staticmethod
     def insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,imageName,tags,adminID):
         cursor = connection.cursor()
-        query = 'insert into Товар(`book_title`,`author`,`description`,`cost_sale`,`cost_purchase`,`quantity`,`imageLink`,`tags`) \
-            values("{}","{}","{}",{},{},{},"{}","{}")'.format(title,author,desc,cost_sale,cost_purchase,quantity,imageName,tags)
+        query = 'insert into Товар(`book_title`,`author`,`description`,`cost_sale`,`quantity`,`imageLink`,`tags`) \
+            values("{}","{}","{}",{},{},"{}","{}")'.format(title,author,desc,cost_sale,quantity,imageName,tags)
         cursor.execute(query)
         Logger.log(adminID,query)
-        connection.commit()
         lastrowid = cursor.lastrowid
+        query = 'insert into Закупки(`product_id`,`cost_purchase`,`quantity`) values({},{},{});'.format(lastrowid,cost_purchase,quantity)
+        cursor.execute(query)
+        connection.commit()
         cursor.close()
         result = {}
         result['keys'] = ['new id']

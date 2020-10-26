@@ -25,6 +25,9 @@
          <input type="radio" id = 5 name="method" value=5>
          <label for=5>Set new image</label>
          <br>
+         <input type="radio" id = 7 name="method" value=7>
+         <label for=7>Add new delivery</label>
+         <br>
          <div id="method-2-block" hidden>
             <br>
             <input id=20 type="number" name="quantity" min="0">
@@ -67,6 +70,39 @@
             <input type="text" id=61 name="tags" hint='Enter new tags'></input>
             <label for=61 >New tags</label>
          </div>
+         <div id='method-7-block' hidden>
+            <br>
+            <input id=70 type="number" name="productID-7">
+            <label for=70 >Product ID</label>
+            <br>
+            <input id=71 type="number" name="supplierID">
+            <label for=71 >Supplier ID</label>
+            <br>
+            <input id=72 type="number" name="quantity-delivery">
+            <label for=72 >Quantity delivery</label>
+            <br>
+            <input id=73 type="number" step="0.01" name="cost-purchase-delivery">
+            <label for=73 >Product ID</label>
+            <table>
+               <caption>Suppliers</caption>
+               <tr>
+                   <th>Count</th>
+                   {% for key in suppliers['keys'] %}
+                       <th>{{key}}</th>
+                   {% endfor %}
+               </tr>
+   
+               {% for row in suppliers['data']%}
+               <tr>
+                   <th>{{ loop.index }}</th>
+                   {% for key in suppliers['keys'] %}
+                   <th>{{row[key]}}</th>
+                   {% endfor %}
+               </tr>
+               
+               {% endfor %}
+           </table>
+         </div>
          <div id="method-5-block" hidden>
             <br>
             <label>Image:</label><input type="file" name='image' accept="image/png,image/jpeg,image/jpg">
@@ -83,25 +119,8 @@
          
          $('input[type=radio][name=method]').change(function() {
            currentBlock.hide()
-           if (this.value == 1) {
-               currentBlock = $('#method-1-block')
-           }
-           else if (this.value == 2) {
-               currentBlock = $('#method-2-block')
-           }
-           else if (this.value == 3) {
-               currentBlock = $('#method-3-block')
-         
-           }
-           else if (this.value == 4) {
-               currentBlock = $('#method-4-block')
-           }
-           else if (this.value == 5) {
-               currentBlock = $('#method-5-block')
-           }
-           else if (this.value == 6) {
-               currentBlock = $('#method-6-block')
-           }
+         //   console.log('#method-{this.value}-block')
+           currentBlock = $(`#method-${this.value}-block`)
            currentBlock.show()
          
          });
