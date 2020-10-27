@@ -12,6 +12,7 @@ from utils import pageHelper
 import flask_login
 from utils import sqlQueryHelper, tagsHelper
 from werkzeug.utils import secure_filename
+from utils.security import Security
 import os
 
 
@@ -123,8 +124,8 @@ def loginUser():
     if(flask_login.current_user.is_authenticated): #Проверяем вошел ли уже пользователь
         return redirect(url_for('userInfo')) #Перекидываем на страницу профиля
     if(request.method == 'POST'): # Если метод обращения к url POST
-        email = request.form.get('email',type=str) # Получаем введенный email 
-        password = request.form.get('password',type=str) # Получаем введенный пароль
+        email = Security.escape_sql(request.form.get('email',type=str)) # Получаем введенный email 
+        password = Security.escape_sql(request.form.get('password',type=str)) # Получаем введенный пароль
         userID = User.validateUserAndReturnUserID(email,password) #Получаем ID пользователя по введенному email и паролю
         if(userID != -1):# Если пользователь найден
             flask_login.login_user(load_user(userID),remember=True)#Логиним пользователя в системе
@@ -139,12 +140,12 @@ def registrationUser():
     if(flask_login.current_user.is_authenticated):
         return redirect(url_for('userInfo'))
     if(request.method == 'POST'):
-        email = request.form.get('email',type=str) # Получаем введенный email пользователя
-        pswd = request.form.get('pswd',type=str) # Получаем введенный пароль пользователя
-        pswd2 = request.form.get('pswd2',type=str) # Получаем введенный 2 пароль пользователя
-        first_name = request.form.get('firstName',type=str) # Получаем введенныое имя пользователя
-        last_name = request.form.get('lastName',type=str) # Получаем введенную фамилию пользователя
-        birthdate = request.form.get('birthDate') # Получаем введенную дата рождения пользователя
+        email = Security.escape_sql(request.form.get('email',type=str)) # Получаем введенный email пользователя
+        pswd = Security.escape_sql(request.form.get('pswd',type=str)) # Получаем введенный пароль пользователя
+        pswd2 = Security.escape_sql(request.form.get('pswd2',type=str)) # Получаем введенный 2 пароль пользователя
+        first_name = Security.escape_sql(request.form.get('firstName',type=str)) # Получаем введенныое имя пользователя
+        last_name = Security.escape_sql(request.form.get('lastName',type=str)) # Получаем введенную фамилию пользователя
+        birthdate = Security.escape_sql(request.form.get('birthDate'))# Получаем введенную дата рождения пользователя
         if(pswd != pswd2):
             return render_template('registration.html',error = 'Password mismatch') # Возвращаем html с ошибкой
         resultRegisterOperation = User.registerUser(email,pswd,last_name,first_name,birthdate) # Создаем пользователя
@@ -182,6 +183,7 @@ def showBooks(page):
     tagsFilter = request.args.getlist('tags')
     tagsFilterStr = None
     if(userQuerySearch is not None):
+        userQuerySearch = Security.escape_sql(userQuerySearch)
         result = Product.getAllProfuctsFilteredByQuery(userQuerySearch,page,OFFSET)
         countOfRows = Product.getQuantityOfRowsInTable(
             'select count(*) as "count" from Товар where title like "%{0}% " \
@@ -190,6 +192,7 @@ def showBooks(page):
         countOfRows = Product.getQuantityOfRowsInTable(sqlQueryHelper.buildSqlQueryByTags('select count(*) as "count" from Товар',tagsFilter))['count']
         result = Product.getAllProductsFilteredByTags(tagsFilter,page,OFFSET)
         tagsFilterStr = tagsHelper.makeArrayOfTagsToStr(tagsFilter)
+        tagsFilterStr = Security.escape_sql(tagsFilterStr)
     else:
         countOfRows = Product.getQuantityOfRowsInTable('select count(*) as "count" from Товар;')['count']
         result = Product.getAllProfuctsFilteredById(page,OFFSET)

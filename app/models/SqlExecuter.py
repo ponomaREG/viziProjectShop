@@ -14,6 +14,7 @@ connection = pymysql.connect(
 )
 
 
+
 class SqlExecuter:
 
 
