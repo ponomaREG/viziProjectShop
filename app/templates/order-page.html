@@ -86,14 +86,29 @@
                            <p>Status: Formalized</p>
                            {% endif %}
                            {% if orderInfo.status == 1 %}
-                           <p>Status: Collected</p>
+                           <p>Status: Confirmed</p>
                            {% endif %}
                            {% if orderInfo.status == 2 %}
-                           <p>Status: Delivered</p>
+                           <p>Status: Received by courier</p>
+                           {% endif %}
+                           {% if orderInfo.status == 3 %}
+                           <p>Status: Received by client</p>
+                           {% endif %}
+                           {% if orderInfo.status == 4 %}
+                           <p>Status: Canceled by client</p>
+                           {% endif %}
+                           {% if orderInfo.status == 5 %}
+                           <p>Status: Canceled by shop</p>
                            {% endif %}
                         </div>
                      </div>
                   </div>
+                  {% if orderInfo.status == 0 or orderInfo.status == 1 %}
+                  <div class="row">
+                        <a href="{{ url_for('cancelOrder',orderID = orderInfo.orderID) }}" class="primary-btn cart-btn">Cancel order</a>
+                  </div>
+                  {% endif %}
+                  
                </div>
             </div>
             <div class="row">

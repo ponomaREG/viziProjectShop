@@ -28,6 +28,26 @@ class Order:
         return result
 
     @staticmethod
+    def cancelOrder(userID,orderID):
+        result = {}
+        if(not Order.checkIfUserHaveOrderWith(userID,orderID)):
+            result['status'] = 3
+            result['message'] = 'Why are you so curious?'
+            result['data'] = []
+            return result
+        if(not Order.checkIfOrderExists(orderID)):
+            result['status'] = 40
+            result['message'] = 'Not founded'
+            result['data'] = []
+            return result
+        query = 'update Заказ set status = 4 where id = {};'.format(orderID)
+        SqlExecuter.executeModif(query)
+        result['status'] = 0
+        result['message'] = 'OK'
+        result['data'] = []
+        return result
+
+    @staticmethod
     def getDetailsOfOrder(userID,orderID):
         result = {}
         if(not Order.checkIfUserHaveOrderWith(userID,orderID)):

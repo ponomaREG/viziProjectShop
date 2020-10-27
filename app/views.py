@@ -31,6 +31,7 @@ def searchAdvanced():
     return render_template('advanced-search.html',user=flask_login.current_user,tags = availableTags['data'])
 
 @app.route('/checkout',methods=['GET'])
+@flask_login.login_required
 def checkout():
         cart = Cart.getCartOfUser(flask_login.current_user.userID) #TODO: CHECK STATUS
         if(cart['status'] == 0):
@@ -43,6 +44,15 @@ def checkout():
             error = cart['message']
             )
         
+
+@app.route('/order/<int:orderID>/cancel')
+@flask_login.login_required
+def cancelOrder(orderID):
+    cancelOrder = Order.cancelOrder(flask_login.current_user.userID,orderID)
+    if(cancelOrder['status'] == 0):
+        return redirect(url_for('showDetailsOfOrder',orderID = orderID))
+    elif(cancelOrder['status'] == 3 or cancelOrder['status'] == 40):
+        return redirect(url_for('main'))
 
 @app.route('/order/<int:orderID>')
 @flask_login.login_required
