@@ -58,13 +58,18 @@ def adminManageOrders():
             elif(method == 5):
                 newStatus = request.form.get('newStatus',type = int)
                 orderID = request.form.get('orderID-5',type=int)
-                resultOfResponse = Admin.setNewStatusOfOrder(newStatus,orderID,flask_login.current_user.userID)
-                return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
+                if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                    resultOfResponse = Admin.setNewStatusOfOrder(newStatus,orderID,flask_login.current_user.userID)
+
+                    return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
+                return render_template('admin-manage-orders.html',message = 'Access denied!')
 
             elif(method == 6):
                 supplierName = request.form.get('supplier-name')
-                resultOfResponse = Admin.addNewSupplier(supplierName,flask_login.current_user.userID)
-                return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
+                if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                    resultOfResponse = Admin.addNewSupplier(supplierName,flask_login.current_user.userID)
+                    return render_template('admin-manage-orders.html',resultOfResponse = resultOfResponse)
+                return render_template('admin-manage-orders.html',message = 'Access denied!')
          else:
             return render_template('admin-manage-orders.html')
     else:
@@ -117,19 +122,35 @@ def adminGetProductInfo():
              elif(method == 2):
                 quantity = request.form.get('quantity',type = int)
                 productID = request.form.get('productID-2',type = int)
-                resultOfResponseToDB = Admin.setNewValueBook(productID,"quantity",quantity,flask_login.current_user.userID)
+                if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                    resultOfResponseToDB = Admin.setNewValueBook(productID,"quantity",quantity,flask_login.current_user.userID)
+                else:
+                     resultOfResponseToDB = {}
+                     resultOfResponseToDB['status'] = 131
              elif(method == 3):
                  desc = request.form.get('desc')
                  productID = request.form.get('productID-3',type=int)
-                 resultOfResponseToDB = Admin.setNewValueBook(productID,"description",desc,flask_login.current_user.userID)
+                 if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                    resultOfResponseToDB = Admin.setNewValueBook(productID,"description",desc,flask_login.current_user.userID)
+                 else:
+                     resultOfResponseToDB = {}
+                     resultOfResponseToDB['status'] = 131
              elif(method == 4):
                  price = request.form.get('price',type=float)
                  productID = request.form.get('productID-4',type=int)
-                 resultOfResponseToDB = Admin.setNewValueBook(productID,'cost_sale',price,flask_login.current_user.userID)
+                 if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                    resultOfResponseToDB = Admin.setNewValueBook(productID,'cost_sale',price,flask_login.current_user.userID)
+                 else:
+                     resultOfResponseToDB = {}
+                     resultOfResponseToDB['status'] = 131
              elif(method == 6):
                  tags = request.form.get('tags',type=str)
                  productID = request.form.get('productID-6',type=int)
-                 resultOfResponseToDB = Admin.setNewValueBook(productID,'tags',tags,flask_login.current_user.userID)
+                 if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                    resultOfResponseToDB = Admin.setNewValueBook(productID,'tags',tags,flask_login.current_user.userID)
+                 else:
+                     resultOfResponseToDB = {}
+                     resultOfResponseToDB['status'] = 131
              elif(method == 5):
                  productID = request.form.get('productID-5',type=int)
                  if 'image' in request.files:
@@ -138,7 +159,11 @@ def adminGetProductInfo():
                         filename = secure_filename(file.filename)
                         filePath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
                         file.save(filePath)
-                        resultOfResponseToDB = Admin.setNewValueBook(productID,'imageLink',filename,flask_login.current_user.userID)
+                        if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                            resultOfResponseToDB = Admin.setNewValueBook(productID,'imageLink',filename,flask_login.current_user.userID)
+                        else:
+                            resultOfResponseToDB = {}
+                            resultOfResponseToDB['status'] = 131
                     else:
                         return render_template('admin-product.html',columnNames = columnNames['data'],message = 'Image not uploaded 1',suppliers=suppliers)
                  else:
@@ -148,7 +173,11 @@ def adminGetProductInfo():
                  quantity = request.form.get('quantity-delivery',type=int)
                  supplierID = request.form.get('supplierID',type=int)
                  cost_purchase = request.form.get('cost-purchase-delivery',type=float)
-                 resultOfResponseToDB = Admin.addNewDeliveryOfProducts(productID,quantity,cost_purchase,supplierID,flask_login.current_user.userID)
+                 if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                    resultOfResponseToDB = Admin.addNewDeliveryOfProducts(productID,quantity,cost_purchase,supplierID,flask_login.current_user.userID)
+                 else:
+                            resultOfResponseToDB = {}
+                            resultOfResponseToDB['status'] = 131
              else:
                  return render_template('admin-product.html',columnNames = columnNames['data'],message = 'What the fuck???Method:{}'.format(method),suppliers=suppliers)
              if(resultOfResponseToDB['status'] == 0):
@@ -157,6 +186,9 @@ def adminGetProductInfo():
                  return render_template('admin-product.html',message = 'Empty',columnNames = columnNames['data'],suppliers=suppliers)
              elif(resultOfResponseToDB['status'] == 130):
                  return render_template('admin-product.html',message = resultOfResponseToDB['message'],columnNames = columnNames['data'],suppliers=suppliers)
+             elif(resultOfResponseToDB['status'] == 131):
+                 return render_template('admin-product.html',message = 'ACCESS DENIED!',columnNames = columnNames['data'],suppliers=suppliers)
+                    
              
 
 
@@ -181,8 +213,10 @@ def adminAddNew():
                     filename = secure_filename(file.filename)
                     filePath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
                     file.save(filePath)
-
-            result = Admin.insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,filename,tags,flask_login.current_user.userID)
+            if(Admin.is_admin_can_write(flask_login.current_user.userID)):
+                result = Admin.insertNewBook(title,author,desc,cost_sale,cost_purchase,quantity,filename,tags,flask_login.current_user.userID)
+            else:
+                return render_template('admin-add.html',message = 'Access Denied!')
             if(result['status'] == 0):
                 return render_template('admin-add.html',message = 'Added!',productID = result['data'][0])
             else:

@@ -15,6 +15,7 @@ def load_user(userID):
     password_hash = row['password_hash'],last_name=row['last_name'],
     first_name =row['first_name'] ,birthdate = row['birthdate'])
     if(checkIfUserAdmin(userID)):
+        user.set_level_of_access(getLevelOfAccess(userID))
         user.set_admin(True)
     return user
 
@@ -22,3 +23,8 @@ def load_user(userID):
 
 def checkIfUserAdmin(userID):
     return SqlExecuter.getOneRowsPacked('select * from Админ where user_id = {};'.format(userID)) is not None
+
+def getLevelOfAccess(userID):
+    if(checkIfUserAdmin(userID)):
+        row = SqlExecuter.getOneRowsPacked('select * from Админ where user_id = {};'.format(userID))
+        return int(row['level_of_access'])

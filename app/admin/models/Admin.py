@@ -228,3 +228,11 @@ class Admin:
         query = 'select * from Заброннированная_книга where order_id = {};'.format(orderID)
         Logger.log(adminID,query)
         return Admin.__makeResultResponse(query)
+
+    @staticmethod
+    def is_admin_can_write(adminID):
+        query = 'select * from Админ where user_id = {};'.format(adminID)
+        cursor = connection.cursor()
+        cursor.execute(query)
+        row = cursor.fetchone()
+        return row['level_of_access']> 0

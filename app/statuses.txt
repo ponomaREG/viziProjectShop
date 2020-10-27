@@ -17,6 +17,7 @@ STATUSES OF RESPONSE
 //ADMIN
 125 = Not > 0
 130 - Incorrect input data
+131 - Access denied
 
 //ORDER STATUSES
 0 - Formalized
@@ -26,3 +27,7 @@ STATUSES OF RESPONSE
 4 - Canceled by client
 5 - Canceled by shop
 
+
+//LEVEL OF ACCESS
+0 - only read
+1 - read and write

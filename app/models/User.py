@@ -14,6 +14,7 @@ class User(UserMixin):
     email = None
     password_hash = None
     is_admin = False
+    level_of_access = -1
 
     def __init__(self,userID,email,password_hash,last_name,first_name,birthdate):
         self.userID = userID
@@ -23,6 +24,11 @@ class User(UserMixin):
         self.last_name = last_name
         self.birthdate = birthdate
     
+    def is_can_write(self):
+        return self.is_admin and self.level_of_access > 0
+    
+    def is_can_read(self):
+        return self.is_admin and self.level_of_access > -1
 
     def is_active(self):
         return True
@@ -35,6 +41,9 @@ class User(UserMixin):
 
     def set_admin(self,boolean):
         self.is_admin = boolean
+    
+    def set_level_of_access(self,level):
+        self.level_of_access = level
 
     def get_id(self):
         return str(self.userID)
