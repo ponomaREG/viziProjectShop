@@ -18,26 +18,26 @@
     </li>
     </ul>
     {% if user.is_authenticated %}
-    <div class="header__cart__price">Item: <span id="humberg__header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
+    <div class="header__cart__price">В корзине: <span id="humberg__header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
     {% else %}
-    <div class="header__cart__price">Item: <span>0.0P</span></div>
+    <div class="header__cart__price">В корзине: <span>0.0P</span></div>
     {% endif %}
     </div>
     <div class="humberger__menu__widget">
       {% if user.is_authenticated %}
       <div class="header__top__right__auth">
-        <a href="{{url_for('userInfo')}}"><i class="fa fa-user"></i> Profile</a>
+        <a href="{{url_for('userInfo')}}"><i class="fa fa-user"></i>Профиль</a>
         </div>
       {% else %}
     <div class="header__top__right__auth">
-    <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
+    <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i>Вход</a>
     </div>
       {% endif %}
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="humberger__menu__contact">
     <ul>
-    <li>Free Shipping for all Order of $99</li>
+    <li>Закажи, прочитай, поумней</li>
     </ul>
     </div>
     </div>

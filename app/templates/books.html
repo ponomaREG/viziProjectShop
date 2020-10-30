@@ -134,58 +134,7 @@
       <div id="preloder">
          <div class="loader"></div>
       </div>
-      <div class="humberger__menu__overlay"></div>
-      <div class="humberger__menu__wrapper">
-         <div class="humberger__menu__logo">
-            <a href="{{ url_for('showBooks',page = 1)}}"><img src="{{ url_for('static',filename='img/logo.png') }}" alt=""></a>
-         </div>
-         <div class="humberger__menu__cart">
-            <ul>
-               <li>
-                  <a href="/cart">
-                  <i class="fa fa-shopping-bag"></i>
-                  {% if user.is_authenticated %}
-                  <span id="humberg__fa__fa-shopping-bag__indicator__quantity">{{user.getCountOfItemsInCart()}}</span>
-                  {% else %}
-                  <span id="fa__fa-shopping-bag__indicator__quantity">0</span>
-                  {% endif %}
-                  </a>
-               </li>
-            </ul>
-            {% if user.is_authenticated %}
-            <div class="header__cart__price">Item: <span id="humberg__header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
-            {% else %}
-            <div class="header__cart__price">Item: <span>0.0P</span></div>
-            {% endif %}
-         </div>
-         <div class="humberger__menu__widget">
-            {% if user.is_authenticated %}
-            <div class="header__top__right__auth">
-               <div class="hero__categories">
-                  <div class="hero__categories__all">
-                     <i class="fa fa-bars"></i>
-                     <span><i class="fa fa-user"></i> Profile</span>
-                  </div>
-                  <ul class='for-toogle' style="display: none;">
-                     <li><a href="{{ url_for('userInfo')}}">Information</a></li>
-                     <li><a href="{{ url_for('showOrders')}}">Orders</a></li>
-                     <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
-                  </ul>
-               </div>
-            </div>
-            {% else %}
-            <div class="header__top__right__auth">
-               <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
-            </div>
-            {% endif %}
-         </div>
-         <div id="mobile-menu-wrap"></div>
-         <div class="humberger__menu__contact">
-            <ul>
-               <li>Free Shipping for all Order of $99</li>
-            </ul>
-         </div>
-      </div>
+      {% include 'base/humberger.html' %}
       {% include 'base/header.html' %}
       {% include 'base/hero.html' %}
       <section class="featured spad">

@@ -6,21 +6,21 @@
       <div class="hero__search__form">
       <form action="{{ url_for('showBooks',page=1) }}" method="GET">
         {% if q%}
-      <input name="q" type="text" placeholder="What do yo u need?" value = "{{ q }}">
+      <input name="q" type="text" placeholder="Введите запрос" value = "{{ q }}">
         {%else %}
-      <input name="q" type="text" placeholder="What do yo u need?">
+      <input name="q" type="text" placeholder="Введите запрос">
         {% endif %}
-      <button type="submit" class="site-btn">SEARCH</button>
+      <button type="submit" class="site-btn">ПОИСК</button>
       </form>
       </div>
-      <a class="site-btn" href="{{ url_for('searchAdvanced')}}">ADVANCED SEARCH</a>
+      <a class="site-btn" href="{{ url_for('searchAdvanced')}}">РАСШИРЕННЫЙ ПОИСК</a>
       <div class="hero__search__phone">
       <div class="hero__search__phone__icon">
       <i class="fa fa-phone"></i>
       </div>
       <div class="hero__search__phone__text">
       <h5>8(800)555-35-35</h5>
-      <span>support 24/7 time</span>
+      <span>Поддержка 24/7</span>
       </div>
       </div>
       </div>

@@ -11,11 +11,11 @@
         <div class="header__top__right__auth">
           <nav class="header__menu">
             <ul>
-                <li><a href="#"><span><i class="fa fa-user"></i> Profile</span></a>
+                <li><a href="#"><span><i class="fa fa-user"></i> Профиль</span></a>
                     <ul class="header__menu__dropdown">
-                      <li><a href="{{ url_for('userInfo')}}">Information</a></li>
-                      <li><a href="{{ url_for('showOrders')}}">Orders</a></li>
-                      <li><a href="{{ url_for('logoutUser')}}">Exit</a></li>
+                      <li><a href="{{ url_for('userInfo')}}">Информаци</a></li>
+                      <li><a href="{{ url_for('showOrders')}}">Заказы</a></li>
+                      <li><a href="{{ url_for('logoutUser')}}">Выход</a></li>
                     </ul>
                 </li>
             </ul>
@@ -23,7 +23,7 @@
       </div>
         {% else %}
       <div class="header__top__right__auth">
-      <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i> Login</a>
+      <a href="{{url_for('loginUser')}}"><i class="fa fa-user"></i>Вход</a>
       </div>
       {% endif %}
       </div>
@@ -60,9 +60,9 @@
         {% endif %}
       </ul>
         {% if user.is_authenticated %}
-      <div class="header__cart__price">item: <span id="header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
+      <div class="header__cart__price">В корзине:<span id="header__cart__price__totalCost">{{user.getTotalCostOfCart()}}P</span></div>
         {% else %}
-      <div class="header__cart__price">item: <span>0.0P</span></div>
+      <div class="header__cart__price">В корзине:<span>0.0P</span></div>
       
         {% endif %}
       </div>
