@@ -178,7 +178,7 @@ def showBooksDefault():
 def showBooks(page):
     if(page < 1):
         return render_template('books.html',error = 'Incorrect page',user = flask_login.current_user)
-    OFFSET = 5
+    OFFSET = 8
     userQuerySearch = request.args.get('q',default=None,type=str)
     tagsFilter = request.args.getlist('tags')
     tagsFilterStr = None
