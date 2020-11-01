@@ -4,37 +4,37 @@
       <title>Админ-статистика</title>
    </head>
    <body>
-      <h3>Columns</h3>
+      <h3>Столбцы</h3>
       <form method="POST" action="{{ url_for('adminGetProductInfo')  }}" enctype='multipart/form-data'>
-         <h3>Methods</h3>
+         <h3>Методы</h3>
          <input type="radio" id = 1 name="method" value=1 checked>
-         <label for=1>Get info of book</label>
+         <label for=1>Получить информацию о книге</label>
          <br>
          <input type="radio" id = 2 name="method" value=2>
-         <label for=2>Set new quantity</label>
+         <label for=2>Установить новое количество</label>
          <br>
          <input type="radio" id = 3 name="method" value=3>
-         <label for=3>Set new description</label>
+         <label for=3>Установить новое описание</label>
          <br>
          <input type="radio" id = 4 name="method" value=4>
-         <label for=4>Set new price</label>
+         <label for=4>Установить новую цену</label>
          <br>
          <input type="radio" id = 6 name="method" value=6>
-         <label for=6>Set new tags</label>
+         <label for=6>Установить новые теги</label>
          <br>
          <input type="radio" id = 5 name="method" value=5>
-         <label for=5>Set new image</label>
+         <label for=5>Установить новое изображение</label>
          <br>
          <input type="radio" id = 7 name="method" value=7>
-         <label for=7>Add new delivery</label>
+         <label for=7>Добавить новую поставку</label>
          <br>
          <div id="method-2-block" hidden>
             <br>
             <input id=20 type="number" name="quantity" min="0">
-            <label for=20 >New quantity</label>
+            <label for=20 >Новое количество</label>
             <br>
             <input id=21 type="number" name="productID-2">
-            <label for=21 >Product ID</label>
+            <label for=21 >Идентификатор продукта</label>
          </div>
          <br>
          <div id="method-1-block">
@@ -49,42 +49,42 @@
          <div id="method-4-block" hidden>
             <br>
             <input id=40 type="number" step="0.01" name="price" min="0.00">
-            <label for=40 >New price</label>
+            <label for=40 >Новая цена</label>
             <br>
             <input id=41 type="number" name="productID-4">
-            <label for=41 >Product ID</label>
+            <label for=41 >Идентификатор продукта</label>
          </div>
          <div id="method-3-block" hidden>
             <br>
             <input id=30 type="number" name="productID-3" min="0">
-            <label for=30 >Product ID</label>
+            <label for=30 >Идентификатор продукта</label>
             <br>
-            <textarea id=31 name="desc">Enter new desc</textarea>
-            <label for=31 >New desc</label>
+            <textarea id=31 name="desc">Введите новое описание</textarea>
+            <label for=31 >Новое описание</label>
          </div>
          <div id="method-6-block" hidden>
             <br>
             <input id=60 type="number" name="productID-6" min="0">
-            <label for=60 >Product ID</label>
+            <label for=60 >Идентификатор продукта</label>
             <br>
             <input type="text" id=61 name="tags" hint='Enter new tags'></input>
-            <label for=61 >New tags</label>
+            <label for=61 >Новые теги</label>
          </div>
          <div id='method-7-block' hidden>
             <br>
             <input id=70 type="number" name="productID-7">
-            <label for=70 >Product ID</label>
+            <label for=70 >Идентификатор продукта</label>
             <br>
             <input id=71 type="number" name="supplierID">
-            <label for=71 >Supplier ID</label>
+            <label for=71 >Идентификатор поставщика</label>
             <br>
             <input id=72 type="number" name="quantity-delivery">
-            <label for=72 >Quantity delivery</label>
+            <label for=72 >Количество в поставке</label>
             <br>
             <input id=73 type="number" step="0.01" name="cost-purchase-delivery">
-            <label for=73 >Cost purchase</label>
+            <label for=73 >Стоимость закупки</label>
             <table>
-               <caption>Suppliers</caption>
+               <caption>Поставщики</caption>
                <tr>
                    <th>Count</th>
                    {% for key in suppliers['keys'] %}
@@ -105,12 +105,12 @@
          </div>
          <div id="method-5-block" hidden>
             <br>
-            <label>Image:</label><input type="file" name='image' accept="image/png,image/jpeg,image/jpg">
+            <label>Изображение:</label><input type="file" name='image' accept="image/png,image/jpeg,image/jpg">
             <input id=50 type="number" name="productID-5" min="0">
-            <label for=50 >Product ID</label>
+            <label for=50 >Идентификатор продукта</label>
             <br>
          </div>
-         <button type="submit">Submit</button>
+         <button type="submit">ОК</button>
       </form>
       {% include 'base/admin-table.html' %}
       <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>

@@ -5,28 +5,28 @@
    </head>
    <body>
       <form method="POST" action="{{url_for('adminAddNew')}}" enctype='multipart/form-data'>
-         <label>Title:</label><input id='title' type="text" name="title" required>
+         <label>Название:</label><input id='title' type="text" name="title" required>
          <br>
-         <label>Author::</label><input type="text" name="author" required>
+         <label>Автор:</label><input type="text" name="author" required>
          <br>
-         <label>Description:</label><textarea name="desc"></textarea required>
+         <label>Описание:</label><textarea name="desc"></textarea required>
          <br>
-         <label>Image:</label><input type="file" name='image' accept="image/png,image/jpeg,image/jpg" required>
+         <label>Изображение:</label><input type="file" name='image' accept="image/png,image/jpeg,image/jpg" required>
          <br>
-         <label>Quantity:</label><input type="text" name="quantity" required>
+         <label>Количество:</label><input type="text" name="quantity" required>
          <br>
-         <label>Cost purchase:</label><input type="text" name="cost_purchase" required>
+         <label>Стоимость закупки:</label><input type="text" name="cost_purchase" required>
          <br>
-         <label>Cost sale:</label><input type="text" name="cost_sale" required>
+         <label>Стоимость продажи:</label><input type="text" name="cost_sale" required>
          <br>
-         <label>Tags(ex:tag1,tag2,....,tagN):</label><input type="text" name="tags" required>
+         <label>Теги(пример:тег1,тег2,....,тегN):</label><input type="text" name="tags" required>
          <button type="submit">Submit</button>
       </form>
       {% if message %}
       <h3>{{message}}</h3>
       {% if productID %}
       <br>
-      <a href="{{ url_for('showDetailsOfBook',productID=productID)}}">Link</a>
+      <a href="{{ url_for('showDetailsOfBook',productID=productID)}}">Ссылка</a>
       {% endif %}
       {% endif %}
    </body>

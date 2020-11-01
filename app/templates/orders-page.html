@@ -62,10 +62,10 @@
                      <table>
                         <thead>
                            <tr>
-                              <th class="shoping__product">Orders</th>
-                              <th>Status</th>
-                              <th>Date</th>
-                              <th>Total</th>
+                              <th class="shoping__product">Заказы</th>
+                              <th>Статус</th>
+                              <th>Дата</th>
+                              <th>Итого</th>
                               <th></th>
                            </tr>
                         </thead>
@@ -73,36 +73,36 @@
                            {%if not error%}
                            {% if ordersList|length == 0 %}
                            <tr>
-                              <td>Empty</td>
+                              <td>Пусто</td>
                            </tr>
                            {% else %}
                            {% for order in ordersList %}
                            <tr>
                               <td class="shoping__cart__item">
                                  {% if order.status == 4 or order.status == 5%}
-                                 <h5>Order№{{ order.id}}</h5>
+                                 <h5>Заказr№{{ order.id}}</h5>
                                  {% else %}
-                                 <h5><a style="text-decoration: none;" href="{{ url_for('showDetailsOfOrder',orderID=order.id)}}">Order№{{ order.id}}</a></h5>
+                                 <h5><a style="text-decoration: none;" href="{{ url_for('showDetailsOfOrder',orderID=order.id)}}">Заказ№{{ order.id}}</a></h5>
                                  {% endif %}
                               </td>
                               <td class="shoping__cart__price">
                                  {% if order.status == 0 %}
-                                 Formalized
+                                 Оформлен
                                  {% endif %}
                                  {% if order.status == 1 %}
-                                 Confirmed
+                                 Подтвержден
                                  {% endif %}
                                  {% if order.status == 2 %}
-                                 Received by courier
+                                 Получен курьером
                                  {% endif %}
                                  {% if order.status == 3 %}
-                                 Received by client
+                                 Получен Вами!
                                  {% endif %}
                                  {% if order.status == 4 %}
-                                 Canceled by client
+                                 Отменен Вами(
                                  {% endif %}
                                  {% if order.status == 5 %}
-                                 Canceled by shop
+                                 Отменен нами(
                                  {% endif %}
                               </td>
                               <td class="shoping__cart__quantity">
@@ -131,7 +131,7 @@
             <div class="row">
                <div class="col-lg-12">
                   <div class="shoping__cart__btns">
-                     <a href="{{ url_for('showBooks',page=1) }}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                     <a href="{{ url_for('showBooks',page=1) }}" class="primary-btn cart-btn">ПРОДОЛЖИТЬ ПОКУПКИ</a>
                   </div>
                </div>
             </div>

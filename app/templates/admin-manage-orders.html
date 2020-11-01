@@ -7,18 +7,18 @@
       <form method="POST" action="{{url_for('adminManageOrders')}}">
          <div id="period-block">
             {% if date_e and date_b %}
-            Date_b:<input type="date" name="date_b" value="{{ date_b }}">
-            Date_e:<input type="date" name="date_e" value="{{ date_e }}">
+            Дата начала периода:<input type="date" name="date_b" value="{{ date_b }}">
+            Дата конца периода:<input type="date" name="date_e" value="{{ date_e }}">
             {% else %}
-            Date_b:<input type="date" name="date_b">
-            Date_e:<input type="date" name="date_e">
+            Дата начала периода:<input type="date" name="date_b">
+            Дата конца периода:<input type="date" name="date_e">
             {% endif %}
             <br>
          </div>
          <div id="order-info-block" hidden>
             <br>
             <input id=31 type="number" name="orderID-3">
-            <label for=31 >Order ID</label>
+            <label for=31 >Идентификатор заказа</label>
          </div>
          <div id="order-info-by-status-block" hidden>
             <br>
@@ -34,7 +34,7 @@
          <div id="order-set-new-status-block" hidden>
             <br>
             <input id=51 type="number" name="orderID-5">
-            <label for=51 >Order ID</label>
+            <label for=51 >Идентификатор заказа</label>
             <br>
             <select name="newStatus">
                <option value=0>Оформлен</option>
@@ -48,28 +48,28 @@
          <div id="supplier-add-new" hidden>
             <br>
             <input id=61 type="text" name="supplier-name">
-            <label for=61 >Supplier name</label>
+            <label for=61 >Название поставщика</label>
          </div>
-         <h4>Methods</h4>
+         <h4></h4>
          <input id = 2 type="radio" name="method" value=2>
-         <label for=2>Get count of order by period</label>
+         <label for=2>Вывести количество заказов</label>
          <br>
          <input id = 1 type="radio" name="method" value=1 checked>
-         <label for=1>Get all orders by period</label>
+         <label for=1>Вывести всех заказы</label>
          <br>
          <input id = 3 type="radio" name="method" value=3>
-         <label for=3>Get order info</label>
+         <label for=3>Вывести информацию о заказе</label>
          <br>
          <input id = 4 type="radio" name="method" value=4>
-         <label for=4>Get orders by status</label>
+         <label for=4>Вывести заказы по статусу заказа</label>
          <br>
          <input id = 5 type="radio" name="method" value=5>
-         <label for=5>Set new status of order</label>
+         <label for=5>Установить новый статус заказа</label>
          <br>
          <input id = 6 type="radio" name="method" value=6>
-         <label for=6>Add new supplier</label>
+         <label for=6>Добавить поставщика</label>
          <br>
-         <button type="submit">Submit</button>
+         <button type="submit">ОК</button>
       </form>
       {% include 'base/admin-table.html' %}
    </body>

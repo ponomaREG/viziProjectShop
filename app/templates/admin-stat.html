@@ -6,21 +6,21 @@
    <body>
       <form method="POST" action="{{url_for('adminStat')}}">
          {% if date_e and date_b %}
-         Date_b:<input type="date" name="date_b" value="{{ date_b }}">
-         Date_e:<input type="date" name="date_e" value="{{ date_e }}">
+         Дата начала периода:<input type="date" name="date_b" value="{{ date_b }}">
+         Дата конца периода:<input type="date" name="date_e" value="{{ date_e }}">
          {% else %}
-         Date_b:<input type="date" name="date_b">
-         Date_e:<input type="date" name="date_e">
+         Дата начала периода:<input type="date" name="date_b">
+         Дата конца периода:<input type="date" name="date_e">
          {% endif %}
          <br>
-         <h4>Methods</h4>
+         <h4>Методы</h4>
          <input id = 2 type="radio" name="method" value=2>
-         <label for=2>Get top books</label>
+         <label for=2>Вывести топ книг</label>
          <br>
          <input id = 1 type="radio" name="method" value=1>
-         <label for=1>Get all income</label>
+         <label for=1>Получить всю прибыль</label>
          <br>
-         <button type="submit">Submit</button>
+         <button type="submit">ОК</button>
       </form>
       {% include 'base/admin-table.html' %}
    </body>

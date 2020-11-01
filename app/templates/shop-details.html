@@ -76,7 +76,7 @@
                            </div>
                         </div>
                      </div>
-                     <p class="primary-btn" id="primary__btn__add__to__cart" style="display:none">ADD TO CART</p>
+                     <p class="primary-btn" id="primary__btn__add__to__cart" style="display:none">ДОБАВИТЬ В КОРЗИНУ</p>
                      {% else %}
                      <div class="product__details__quantity">
                         <div class="quantity">
@@ -85,27 +85,27 @@
                            </div>
                         </div>
                      </div>
-                     <p class="primary-btn" id="primary__btn__add__to__cart">ADD TO CART</p>
+                     <p class="primary-btn" id="primary__btn__add__to__cart">ДОБАВИТЬ В КОРЗИНУ</p>
                      {% endif %}
                      {% else %}
-                     <a href="/login" class="primary-btn" id="primary-btn">ADD TO CART</a>
+                     <a href="/login" class="primary-btn" id="primary-btn">ДОБАВИТЬ В КОРЗИНУ</a>
                      {% endif %}
                      <ul>
                         {% if error%}
                         <li>{{ error }}</li>
                         {% else%}
-                        <li><b>Quantity</b> <span>{{details.quantity}}</span></li>
-                        <li><b>Rate</b> <span>{{details.rate}}/5.0</span></li>
+                        <li><b>Количество</b> <span>{{details.quantity}}</span></li>
+                        <li><b>Рейтинг</b> <span>{{details.rate}}/5.0</span></li>
                         {% if user.is_authenticated %}
                         {% if userMark %}
-                        <li><b>Your mark</b><span>{{userMark}}</span></li>
+                        <li><b>Ваша оценка</b><span>{{userMark}}</span></li>
                         {% endif %}
                         {% endif %}
                         {% endif %}
                      </ul>
                      {% if user.is_authenticated %}
                      {% if not userMark %}
-                     <h3>Rate this product!</h3>
+                     <h3>Оцените данную книгу!</h3>
                      <select id="rating-bar" value={{details.id}}>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -113,7 +113,7 @@
                         <option value="4">4</option>
                         <option value="5">5</option>
                      </select>
-                     <button id="rating-bar-submit">Rate</button>
+                     <button id="rating-bar-submit">Рейтинг</button>
                      <p id='rating-bar-status'></p>
                      {% endif %}
                      {% endif %}
@@ -124,7 +124,7 @@
                      <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                              aria-selected="true">Tags</a>
+                              aria-selected="true">Теги</a>
                         </li>
                         <!-- <li class="nav-item">
                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
@@ -134,7 +134,7 @@
                      <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
                            <div class="product__details__tab__desc">
-                              <h6>Products tags</h6>
+                              <h6>Теги продукта</h6>
                               {% if error%}
                               <p>{{ error }}</p>
                               {% else%}

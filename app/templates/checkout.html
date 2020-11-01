@@ -32,26 +32,26 @@
             <h4>{{ error }}</h4>
             {% else %}   
             <div class="checkout__form">
-               <h4>Billing Details</h4>
+               <h4>Оформление</h4>
                <form action="{{url_for('newOrder')}}" method="POST">
                   <div class="row">
                      <div class="col-lg-8 col-md-6">
                         <div class="row">
                            <div class="col-lg-6">
                               <div class="checkout__input">
-                                 <p>First Name<span>*</span></p>
+                                 <p>Имя<span>*</span></p>
                                  <input name="first_name" type="text" value="{{ user.first_name }}" required>
                               </div>
                            </div>
                            <div class="col-lg-6">
                               <div class="checkout__input">
-                                 <p>Last Name<span>*</span></p>
+                                 <p>Фамилия<span>*</span></p>
                                  <input name="last_name" type="text"  value="{{ user.last_name }}" required>
                               </div>
                            </div>
                         </div>
                         <div class="checkout__input">
-                           <p>Address<span>*</span></p>
+                           <p>Адрес<span>*</span></p>
                            <input name="district" type="text" placeholder="District*" class="checkout__input__add" required>
                            <input name="street" type="text" placeholder="Street Address*" class="checkout__input__add" required>
                            <input name="house" type="text" placeholder="House*" class="checkout__input__add" required>
@@ -62,7 +62,7 @@
                         <div class="row">
                            <div class="col-lg-6">
                               <div class="checkout__input">
-                                 <p>Phone<span>*</span></p>
+                                 <p>Телефон<span>*</span></p>
                                  <input name="phone" type="text" required>
                               </div>
                            </div>
@@ -78,25 +78,25 @@
                            <input type="text">
                            </div> -->
                         <div class="checkout__input">
-                           <p>Order notes</p>
+                           <p>Дополнительное описание</p>
                            <input type="text" name='desc'
                               placeholder="Notes about your order, e.g. special notes for delivery.">
                         </div>
                      </div>
                      <div class="col-lg-4 col-md-6">
                         <div class="checkout__order">
-                           <h4>Your Order</h4>
-                           <div class="checkout__order__products">Products <span>Total</span></div>
+                           <h4>Ваш заказ</h4>
+                           <div class="checkout__order__products">Книги <span>Всего</span></div>
                            <ul>
                               {% for product in productsInCart %}
                               <li>{{product.title}}<span>{{ product.total }}</span></li>
                               {% endfor %}
                            </ul>
                            <!-- <div class="checkout__order__subtotal">Subtotal <span>{{total}}</span></div> -->
-                           <div class="checkout__order__total">Total <span>{{user.getTotalCostOfCart()}}</span></div>
+                           <div class="checkout__order__total">Итого <span>{{user.getTotalCostOfCart()}}</span></div>
                            <div class="checkout__input__checkbox">
                            </div>
-                           <button type="submit" class="site-btn">PLACE ORDER</button>
+                           <button type="submit" class="site-btn">ОФОРМИТЬ</button>
                         </div>
                      </div>
                   </div>

@@ -58,17 +58,17 @@
          <div class="container">
             <div class="row">
                <div class="col-lg-6">
-                  <h3>Order Info</h3>
+                  <h3>Информация о заказе</h3>
                   <div class="row">
                      <div class="col-lg-6">
                         <div class="checkout__input">
-                           <p>Date</p>
+                           <p>Дата</p>
                            <input type="text" value="{{ orderInfo.date }}" disabled>
                         </div>
                      </div>
                      <div class="col-lg-6">
                         <div class="checkout__input">
-                           <p>Address</p>
+                           <p>Адрес</p>
                            <input type="text"  value="{{ address.address}}" disabled>
                         </div>
                      </div>
@@ -83,29 +83,29 @@
                      <div class="col-lg-6">
                         <div class="checkout__input">
                            {% if orderInfo.status == 0 %}
-                           <p>Status: Formalized</p>
+                           <p>Статус: оформлен</p>
                            {% endif %}
                            {% if orderInfo.status == 1 %}
-                           <p>Status: Confirmed</p>
+                           <p>Статус: подтвержден</p>
                            {% endif %}
                            {% if orderInfo.status == 2 %}
-                           <p>Status: Received by courier</p>
+                           <p>Статус: получен курьером</p>
                            {% endif %}
                            {% if orderInfo.status == 3 %}
-                           <p>Status: Received by client</p>
+                           <p>Статус: получен Вами!</p>
                            {% endif %}
                            {% if orderInfo.status == 4 %}
-                           <p>Status: Canceled by client</p>
+                           <p>Статус: отменен Вами(</p>
                            {% endif %}
                            {% if orderInfo.status == 5 %}
-                           <p>Status: Canceled by shop</p>
+                           <p>Статус: отменен нами(</p>
                            {% endif %}
                         </div>
                      </div>
                   </div>
                   {% if orderInfo.status == 0 or orderInfo.status == 1 %}
                   <div class="row">
-                        <a href="{{ url_for('cancelOrder',orderID = orderInfo.orderID) }}" class="primary-btn cart-btn">Cancel order</a>
+                        <a href="{{ url_for('cancelOrder',orderID = orderInfo.orderID) }}" class="primary-btn cart-btn">Отменить заказ</a>
                   </div>
                   {% endif %}
                   
@@ -117,10 +117,10 @@
                      <table>
                         <thead>
                            <tr>
-                              <th class="shoping__product">Products</th>
+                              <th class="shoping__product">Книги</th>
                               <!-- <th>Price</th> -->
-                              <th>Quantity</th>
-                              <th>Total</th>
+                              <th>Количество</th>
+                              <th>Итого</th>
                               <th></th>
                            </tr>
                         </thead>
@@ -162,9 +162,9 @@
             </div>
             <div class="col-lg-6">
                <div class="shoping__checkout">
-                  <h5>Order total</h5>
+                  <h5>Итоговая стоимость</h5>
                   <ul>
-                     <li>Total <span>{{  orderInfo.total  }}P</span></li>
+                     <li>Итого <span>{{  orderInfo.total  }}P</span></li>
                   </ul>
                   {% if error %}
                   <h3>{{error}}</h3>
@@ -174,7 +174,7 @@
             <div class="row">
                <div class="col-lg-6" style="margin-top: 10px; margin-left: 15px;">
                   <div class="shoping__cart__btns">
-                     <a href="{{ url_for('showBooks',page=1) }}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                     <a href="{{ url_for('showBooks',page=1) }}" class="primary-btn cart-btn">ПРОДОЛЖИТЬ ПОКУПКИ</a>
                   </div>
                </div>
             </div>
